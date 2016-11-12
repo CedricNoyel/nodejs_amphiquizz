@@ -1,0 +1,131 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Mon Questionnaire</title>
+		<link rel="stylesheet" type="text/css" href="../../css/commun.css"/>
+	<link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/questionnaire.css"/>
+
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script>
+			$(function() {
+			    $("#sortable").sortable();
+			    $("#sortable").disableSelection();
+			});
+		</script>
+	</head>
+
+	<body>
+		<header>
+			<img src="../../img/logoAQLite.png" alt="Logo" class="logo">
+			<p class="titre">Mon Questionnaire</p>
+
+			<div class="compte">
+			<p class="msgBienvenue"></p>
+			<button type="button" id='logout' class="deconnexion" >Deconnexion</button>
+		</div>
+		</header>
+		
+		<container>
+			<div class="btnRetour">
+				<button type="button" onclick="document.location.href='../../admin'">Retour</button>
+			</div>
+
+			<ol id="sortable" class="listeQuestions"></ol>
+
+			<div class="infosQuestionnaire">
+				<div class="group">
+					<input class="textField" name="nom" type="text" id="nom" required>
+					<span class="highlight"></span>
+					<span class="bar"></span>
+					<label>Nom du questionnaire</label>
+					
+					<button class="bouton" type="button" id="addQuestion">Ajouter une question</button>
+				</div>
+				<div class="buttonContainer">
+					<button id='delQuestionnaire' class="bouton suppr" type="button">Supprimer</button>
+					<button id='saveQuestionnaire' class="bouton save" type="button">Enregistrer</button>
+				</div>
+			</div>
+		</container>
+	</body>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://localhost:8080');
+    var ID_QUESTIONNAIRE;
+    var NOM_QUESTIONNAIRE;
+
+    // Demande et affichage informations utilisateur
+    socket.emit('req_user_info');
+    socket.on('res_user_info', function(user){
+    	$('.msgBienvenue').append('Bienvenue M/Mme ' + user.nom.toUpperCase());
+    });
+
+	// Demande questions du questionnaire
+    socket.emit('req_question_by_questionnaire_id');
+    socket.on('res_question_by_questionnaire_id', function(questions, questionnaire, id_questionnaire){
+    	ID_QUESTIONNAIRE = questionnaire[0].id_questionnaire;
+    	NOM_QUESTIONNAIRE = questionnaire[0].nom_questionnaire;
+		$('#nom').val(NOM_QUESTIONNAIRE);
+
+    	for(var i in questions) {
+    		var liString = "<li onclick='affQuestion("+ questions[i].id_question +");' id='"+ questions[i].id_question +"' class='incomplet'>" + questions[i].nom_question + "</li>";
+    		$('#sortable').append(liString);
+    	}
+    });
+
+    $('#addQuestion').click(function(){
+		document.location.href = '../nouvellequestion';
+
+    	/*
+		var question = $('#nom').val();
+		if (question.length>0)
+		{
+	    	$('#sortable').append("<li class='incomplet'>" + question + "</li>");
+	    	$('#nom').val('');
+    		socket.emit('req_add_question', question, id_quest);
+	    	socket.on('res_add_question', function(message){
+	    		$('container').append('<p id="InfoMsg">' + message + '</p>');
+	    	});
+		} else {
+	    	$('container').append('<p id="InfoMsg">' + 'La question doit être renseignée !' + '</p>');
+		}
+
+		setTimeout(removeInfoMsg, 3000); 
+		*/
+	});
+
+    // Click sur supprimer le questionnaire
+    $('#delQuestionnaire').click(function(){
+    	socket.emit('req_del_questionnaire', ID_QUESTIONNAIRE);
+    	// socket.on('res_del_questionnaire');
+    	document.location.href='../../admin';
+    });
+
+    // Click sur loggout
+    $('#logout').click(function(){
+		document.location.href = '/logout';
+	});
+
+    // Click sur sauvegarder le questionnaire
+	$('#saveQuestionnaire').click(function(){
+		if($('#nom').val()!=NOM_QUESTIONNAIRE){
+			alert("Le questionnaire a été sauvegardé !");
+			socket.emit('req_save_questionnaire', ID_QUESTIONNAIRE, $('#nom').val());
+		}
+		else{
+			alert("Aucune modification effectuée !");
+		}
+	});
+
+	// Click sur une question
+	function affQuestion(id_question){
+		alert("Demande d'affichage de la question " + id_question);
+	};
+
+</script>
+</html>

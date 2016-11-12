@@ -1,0 +1,20 @@
+{
+  "name": "Amphiquizz",
+  "version": "0.1.0",
+  "license": "BSD-3-Clause",
+  "description": "Application de vote en amphiteatre",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "colors": "^1.1.2",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "fs": "0.0.1-security",
+    "mysql": "^2.11.1",
+    "socket.io": "^1.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cedricouf/nodejs_amphiquizz"
+  }
+}

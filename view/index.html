@@ -1,0 +1,66 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>AmphiQuizz</title>
+        <link rel="stylesheet" type="text/css" href="css/commun.css"/>
+        <link rel="stylesheet" type="text/css" href="css/connexion.css"/>
+    </head>
+
+    <body>
+
+        <img src="img/logoAQ.png" alt="Logo" class="logo">
+        <form action='/login' method='POST'>
+            <div class="container">
+                <div class="group">
+                    <input class="textField" name="login" type="text" id="login" required>
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Login</label>
+                </div>
+                
+                <div class="group">
+                    <input class="textField" name="mdp" type="password" id="mdp" required>
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Mot de passe</label>
+                </div>
+
+                <div class="connexion">
+                    <input type="submit" value="Connexion" />
+                </div>
+            </div>
+        </form>
+
+    </body>
+
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://localhost:8080');
+
+
+        function verifLogin(){
+        	var username = document.getElementById("login").value;
+        	var password = document.getElementById("mdp").value;
+		    socket.emit('login', {'username' : username, 'password' : password});
+		};
+
+        socket.on('news', function (data) {
+            $('body').remove();
+        });
+
+		socket.on('test', function(message){
+            alert(message.text);
+            /*
+            $('#errorMessage').remove();
+            $('body').append("<p id='errorMessage'>" + message.text + "</p>");
+            if (typeof(message.url) != 'undefined'){
+                document.location.href = message.url;
+            }
+            */
+        });
+
+    </script>
+</html>

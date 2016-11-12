@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Amphiquizz - Admin</title>
+	<link rel="stylesheet" type="text/css" href="./css/commun.css"/>
+	<link rel="stylesheet" type="text/css" href="./css/dashboard.css"/>
+	<link rel="stylesheet" type="text/css" href="./css/questionnaire.css"/>
+</head>
+
+<body>
+	<header>
+		<img src="./img/logoAQLite.png" alt="Logo" class="logo">
+		<p class="titre">Mes Questionnaires</p>
+
+		<div class="compte">
+			<p class="msgBienvenue"></p>
+			<button type="button" id='logout' class="deconnexion" >Deconnexion</button>
+		</div>
+	</header>
+	
+	<container>
+
+	    <!-- QUESTIONNAIRE LISTE -->
+		<div id='listeQuestionnaires'>
+			<table>
+				<thead>
+				    <tr>
+						<th>nom du questionnaire</th> <th>nombres <br>de questions</th><th>etat</th> <!-- ✓ ✔ ✕ ✖ ✗ -->
+					</tr>
+				</thead>
+				<tbody>
+				    <!--	QUESTIONNAIRES	-->
+				</tbody>
+		    </table>
+		    <div class="buttonContainer">
+		    	<button class="bouton" type="button" id='addQuestionnaire' >Nouveau questionnaire</button>
+		    	<button class="bouton" type="button" onclick="alert('Question rapide')">Question rapide</button>
+		    </div>
+	    </div>
+	</container>
+</body>
+
+
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+	function removeInfoMsg() {
+		$('#InfoMsg').empty();
+		$('#InfoMsg').remove();
+	}
+
+	// Connection SOCKET
+    var socket = io.connect('http://localhost:8080');
+
+	// Demande et affichage informations utilisateur
+    socket.emit('req_user_info');
+    socket.on('res_user_info', function(user){
+    	$('.msgBienvenue').append('Bienvenue M/Mme ' + user.nom.toUpperCase());
+    });
+
+    // Demande et affichage questionnaires de l'utilisateur
+    socket.emit('req_user_quest');
+    socket.on('res_user_quest', function(user_quest){
+    	for(var i in user_quest){
+    		if (user_quest[i].etat_questionnaire == "Valide"){
+    			var trString = '<tr onclick="quest_show(\'' + user_quest[i].id_questionnaire + '\');" ><td>' + user_quest[i].nom_questionnaire + '</td><td>' + user_quest[i].nb_questions + '</td> <td class="complet">' + user_quest[i].etat_questionnaire + '</td></tr>';
+    		} else {
+    			var trString = '<tr onclick="quest_show(\'' + user_quest[i].id_questionnaire + '\');" ><td>' + user_quest[i].nom_questionnaire + '</td><td>' + user_quest[i].nb_questions + '</td> <td class="imcomplet">' + user_quest[i].etat_questionnaire + '</td></tr>';
+    		}
+    		$('table').append(trString);
+    	}
+    });
+
+    // Ajout d'un questionnaire
+    $('#addQuestionnaire').click(function(){
+    	var nom_questionnaire = '';
+    	socket.emit('req_add_questionnaire', nom_questionnaire);
+    	socket.on('res_add_questionnaire');
+		document.location.href = '';
+    });
+
+    // Affichage d'un questionnaire
+	function quest_show(id_questionnaire){
+		document.location.href=  "/admin/questionnaire/" + id_questionnaire;
+	};
+
+	// Deconnexion utilisateur
+	$('#logout').click(function(){
+		document.location.href = '/logout';
+	});
+
+</script>
+</html>
