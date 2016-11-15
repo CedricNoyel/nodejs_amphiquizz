@@ -6,21 +6,14 @@
 	<link rel="stylesheet" type="text/css" href="./css/commun.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/dashboard.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/questionnaire.css"/>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="../../js/commun.js"></script>
 </head>
 
-<body>
-	<header>
-		<img src="./img/logoAQLite.png" alt="Logo" class="logo">
-		<p class="titre">Mes Questionnaires</p>
-
-		<div class="compte">
-			<p class="msgBienvenue"></p>
-			<button type="button" id='logout' class="deconnexion" >Deconnexion</button>
-		</div>
-	</header>
-	
+<body>	
 	<container>
-
 	    <!-- QUESTIONNAIRE LISTE -->
 		<div id='listeQuestionnaires'>
 			<table>
@@ -47,19 +40,8 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
-	function removeInfoMsg() {
-		$('#InfoMsg').empty();
-		$('#InfoMsg').remove();
-	}
-
 	// Connection SOCKET
     var socket = io.connect('http://localhost:8080');
-
-	// Demande et affichage informations utilisateur
-    socket.emit('req_user_info');
-    socket.on('res_user_info', function(user){
-    	$('.msgBienvenue').append('Bienvenue M/Mme ' + user.nom.toUpperCase());
-    });
 
     // Demande et affichage questionnaires de l'utilisateur
     socket.emit('req_user_quest');
@@ -86,11 +68,6 @@
 	function quest_show(id_questionnaire){
 		document.location.href=  "/admin/questionnaire/" + id_questionnaire;
 	};
-
-	// Deconnexion utilisateur
-	$('#logout').click(function(){
-		document.location.href = '/logout';
-	});
 
 </script>
 </html>

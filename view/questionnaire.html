@@ -4,11 +4,12 @@
 		<meta charset="UTF-8">
 		<title>Mon Questionnaire</title>
 		<link rel="stylesheet" type="text/css" href="../../css/commun.css"/>
-	<link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/questionnaire.css"/>
-
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script src="../../js/commun.js"></script>
 		<script>
 			$(function() {
 			    $("#sortable").sortable();
@@ -18,23 +19,11 @@
 	</head>
 
 	<body>
-		<header>
-			<img src="../../img/logoAQLite.png" alt="Logo" class="logo">
-			<p class="titre">Mon Questionnaire</p>
-
-			<div class="compte">
-			<p class="msgBienvenue"></p>
-			<button type="button" id='logout' class="deconnexion" >Deconnexion</button>
-		</div>
-		</header>
-		
 		<container>
 			<div class="btnRetour">
 				<button type="button" onclick="document.location.href='../../admin'">Retour</button>
 			</div>
-
 			<ol id="sortable" class="listeQuestions"></ol>
-
 			<div class="infosQuestionnaire">
 				<div class="group">
 					<input class="textField" name="nom" type="text" id="nom" required>
@@ -59,12 +48,6 @@
     var ID_QUESTIONNAIRE;
     var NOM_QUESTIONNAIRE;
 
-    // Demande et affichage informations utilisateur
-    socket.emit('req_user_info');
-    socket.on('res_user_info', function(user){
-    	$('.msgBienvenue').append('Bienvenue M/Mme ' + user.nom.toUpperCase());
-    });
-
 	// Demande questions du questionnaire
     socket.emit('req_question_by_questionnaire_id');
     socket.on('res_question_by_questionnaire_id', function(questions, questionnaire, id_questionnaire){
@@ -79,7 +62,7 @@
     });
 
     $('#addQuestion').click(function(){
-		document.location.href = '../nouvellequestion';
+		document.location.href = '../question';
 
     	/*
 		var question = $('#nom').val();
@@ -106,10 +89,6 @@
     	document.location.href='../../admin';
     });
 
-    // Click sur loggout
-    $('#logout').click(function(){
-		document.location.href = '/logout';
-	});
 
     // Click sur sauvegarder le questionnaire
 	$('#saveQuestionnaire').click(function(){
@@ -124,7 +103,7 @@
 
 	// Click sur une question
 	function affQuestion(id_question){
-		alert("Demande d'affichage de la question " + id_question);
+    	document.location.href='../../admin/question/' + id_question;
 	};
 
 </script>

@@ -55,10 +55,15 @@ app.get('/admin/questionnaire/:id', [requireLogin], function(req, res){
     res.end(fs.readFileSync('./view/questionnaire.html').toString());
 });
 
-app.get('/admin/nouvellequestion', [requireLogin], function(req, res){
+app.get('/admin/question/:id', [requireLogin], function(req, res){
     sess=req.session;
+    var id_question = req.params.id;
+
+    data[0] = findByFieldHasValue('question', 'id_question', id_question);
+    data[1] = findByFieldHasValue('reponse', 'id_question', id_question);
+
     res.writeHead(200, {"Content-Type": "text/html"});
-    res.end(fs.readFileSync('./view/questions.html').toString());
+    res.end(fs.readFileSync('./view/question.html').toString());
 });
 
 app.get('/logout',function(req,res){
@@ -142,6 +147,22 @@ io.on('connection', function(socket) {
             var message = 'Erreur, La question n\'a pas pu être ajoutée !'
         }
         socket.emit('res_add_question', message);
+    });
+
+    socket.on('req_question_reponse', function(){
+        socket.emit('res_question_reponse', data[0], data[1]);
+    });
+    socket.on('add_answer', function(answer, id_question){
+        addAnswer(answer, id_question);
+    });
+    socket.on('del_answer', function(id_answer){
+        del('reponse', 'id_reponse', id_answer);
+    });
+    socket.on('edit_answer', function(answer_name, ID_QUESTION){
+        editGoodAnswer(answer_name, ID_QUESTION);
+    });
+    socket.on('del_question', function(id_question){
+        del('question', 'id_question', id_question);
     });
 });
 
@@ -281,7 +302,35 @@ http.listen(8080,function(){
         if(err) throw err;
       });
       return true;
-  } 
+  }
+
+  function del(table, field, value){
+      var queryString = "DELETE FROM "+ table +" WHERE "+ field +"=" + value;
+      console.log(queryString.yellow);
+      db.query(queryString, function(err,rows){
+        if(err) throw err;
+      });
+      return true;
+  }
+
+  function addAnswer(answer, id_question){
+      var queryString = "INSERT INTO `reponse` (`id_question`, `nom_reponse`) VALUES("+ id_question +", '"+ answer +"')";
+      console.log(queryString.yellow);
+      db.query(queryString, function(err,rows){
+        if(err) throw err;
+      });
+      return true;
+  }
+
+  function editGoodAnswer(answer_name, ID_QUESTION){
+      var queryString = "UPDATE question SET reponse_question='"+ answer_name +"' WHERE id_question="+ ID_QUESTION;
+      console.log(queryString.yellow);
+      db.query(queryString, function(err,rows){
+        if(err) throw err;
+      });
+      return true;
+
+  }
 
 /** Middleware for limited access and admin interface */
 function requireLogin (req, res, next) {
