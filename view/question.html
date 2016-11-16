@@ -1,0 +1,132 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Question</title>
+		<link rel="stylesheet" type="text/css" href="../../css/commun.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/question.css"/>
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script src="../../js/commun.js"></script>
+		<script>
+			$(function() {
+			    $("#sortable").sortable();
+			    $("#sortable").disableSelection();
+			});
+		</script>
+	</head>
+
+	<body>
+		<container>
+			<div class="btnRetour">
+				<button type="button" id="btnRetour" >Retour</button>
+			</div>
+
+			<div class="nomQuestion">
+				<div class="group">
+					<input class="textField" name="nom" type="text" id="question" required>
+					<span class="highlight"></span>
+					<span class="bar"></span>
+					<label>Question</label>
+				</div>
+				<button class="bouton suppr" id="btnSupprimerQuestion" type="button">Supprimer</button>
+				<button class="bouton save" id="btnSauvegarderQuestion" type="button">Sauvegarder</button>
+			</div>
+			<div class="reponses">
+				<div class="ajouterReponses">
+					<div class="group">
+						<input class="textField" name="nom" type="text" id="nom" value="" required>
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label>Ajouter une réponse</label>
+					</div>
+					<button class="bouton" id="btnAjouterReponse" type="button">Ajouter une réponse</button>
+				</div>
+				<div class="listeReponses">
+					<table>
+						<thead>
+							<tr>
+								<th>Réponses possibles</th><th>Bonne<br>réponse</th><th></th>
+							</tr>
+						</thead>
+						<tbody>		<!-- REPONSES -->		</tbody>
+					</table>
+				</div>
+			</div>
+		</container>
+	</body>
+
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	var socket = io.connect('http://localhost:8080');
+	var ID_QUESTION;
+	var ID_QUESTIONNAIRE;
+
+	// INIT (demande question et reponses)
+	loadAnswers();
+	// FIN INIT
+
+	$('#btnSupprimerQuestion').click(function(){
+		socket.emit('del_question', ID_QUESTION);
+		document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
+	});
+
+	$('#btnSauvegarderQuestion').click(function(){
+		socket.emit('req_save_question', ID_QUESTION, $('#question').val());
+		document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
+	});
+
+	$('#btnRetour').click(function(){
+		document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
+	});
+
+	$('#btnAjouterReponse').click(function(){
+		socket.emit('add_answer', $('#nom').val(), ID_QUESTION);
+		$('#nom').val('');
+		loadAnswers();
+	});
+
+
+
+
+	function loadAnswers(){
+		$('tbody tr').remove();
+		socket.emit('req_question_reponse');
+		socket.on('res_question_reponse', function(question, reponses){
+			ID_QUESTION = question[0].id_question;
+			ID_QUESTIONNAIRE = question[0].id_questionnaire;
+			$('#question').val(question[0].nom_question);
+
+			for (var i in reponses)
+			{
+				var row = $('<tr id=answer'+ reponses[i].id_reponse +'>');
+				var column1 = $('<td>'), column2 = $('<td class="radio">');
+				column1.append(reponses[i].nom_reponse);
+
+				var isChecked = " ";
+				if (question[0].reponse_question == reponses[i].nom_reponse)
+					isChecked = " checked ";
+				column2.append('<input onclick=\'radioClicked("'+ reponses[i].nom_reponse +'")\' type="radio"'+ isChecked +'name="bonneReponse">');
+
+				$(row).append(column1, column2);
+				row.append('<td onclick="delAnswer('+ reponses[i].id_reponse +')" class="supprimerReponse">✖</td>')
+				$('tbody').append(row);
+			}
+		});
+	}
+
+	function delAnswer(id_answer){
+		socket.emit('del_answer', id_answer);
+		$("#answer"+ id_answer).remove();
+	}
+
+	function radioClicked(answer_name){
+		socket.emit('edit_answer', answer_name, ID_QUESTION);
+	}
+
+
+	</script>
+</html>
