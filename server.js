@@ -26,7 +26,7 @@ config.set();
 
 var questList;
 var data = new Array();
-var profList = findAll('professeur');
+var profList = findAll('PROFESSEUR');
 var id_questionnaire;
 
 // ========================================
@@ -49,8 +49,8 @@ app.get('/admin', [requireLogin], function(req, res){
 app.get('/admin/questionnaire/:id', [requireLogin], function(req, res){
     ID_QUESTIONNAIRE = req.params.id;
     sess=req.session;
-    data[0] = findByFieldHasValue('question', 'id_questionnaire', ID_QUESTIONNAIRE);
-    data[1] = findByFieldHasValue('questionnaire', 'id_questionnaire', ID_QUESTIONNAIRE);
+    data[0] = findByFieldHasValue('QUESTION', 'id_questionnaire', ID_QUESTIONNAIRE);
+    data[1] = findByFieldHasValue('QUESTIONNAIRE', 'id_questionnaire', ID_QUESTIONNAIRE);
     res.writeHead(200, {"Content-Type": "text/html"});
     res.end(fs.readFileSync('./view/questionnaire.html').toString());
 });
@@ -59,8 +59,8 @@ app.get('/admin/question/:id', [requireLogin], function(req, res){
     sess=req.session;
     var id_question = req.params.id;
 
-    data[0] = findByFieldHasValue('question', 'id_question', id_question);
-    data[1] = findByFieldHasValue('reponse', 'id_question', id_question);
+    data[0] = findByFieldHasValue('QUESTION', 'ID_QUESTION', id_question);
+    data[1] = findByFieldHasValue('REPONSE', 'ID_QUESTION', id_question);
 
     res.writeHead(200, {"Content-Type": "text/html"});
     res.end(fs.readFileSync('./view/question.html').toString());
@@ -79,14 +79,14 @@ app.post('/login', function(req, res){
     var password = req.body.mdp;
     var logged = 0;
     for(var k in profList){
-        if (username==profList[k].identifiant_professeur){
-            if (password==profList[k].password_professeur){
+        if (username==profList[k].IDENTIFIANT_PROFESSEUR){
+            if (password==profList[k].PASSWORD_PROFESSEUR){
                 logged++;
                 sess=req.session;
-                sess.id_professeur = profList[k].id_professeur;
-                sess.nom = profList[k].nom_professeur;
-                sess.prenom = profList[k].prenom_professeur;
-                sess.identifiant = profList[k].identifiant_professeur;
+                sess.id_professeur = profList[k].ID_PROFESSEUR;
+                sess.nom = profList[k].NOM_PROFESSEUR;
+                sess.prenom = profList[k].PRENOM_PROFESSEUR;
+                sess.identifiant = profList[k].IDENTIFIANT_PROFESSEUR;
                 console.log(sess.identifiant + " is connected -> creating session".grey);
                 res.redirect('/admin');
             }
@@ -176,10 +176,10 @@ io.on('connection', function(socket) {
     });
   
     socket.on('del_answer', function(id_answer){
-        del('reponse', 'id_reponse', id_answer);
+        del('REPONSE', 'ID_REPONSE', id_answer);
     });
     socket.on('del_question', function(id_question){
-        del('question', 'id_question', id_question);
+        del('QUESTION', 'ID_QUESTION', id_question);
     });
 
 });
@@ -216,7 +216,7 @@ http.listen(8080,function(){
 
   function findQuestionnaireByIdProf(idprof){
       var list = new Array();
-      var queryString = "SELECT DISTINCT(q.id_questionnaire), nom_questionnaire, count(id_question) as 'nb_questions', etat_questionnaire FROM questionnaire q LEFT JOIN question qu ON qu.id_questionnaire=q.id_questionnaire WHERE id_professeur=" + idprof + " GROUP BY qu.id_questionnaire, nom_questionnaire, etat_questionnaire";
+      var queryString = "SELECT DISTINCT(q.ID_QUESTIONNAIRE), NOM_QUESTIONNAIRE, count(ID_QUESTION) as 'nb_questions', ETAT_QUESTIONNAIRE FROM QUESTIONNAIRE q LEFT JOIN QUESTION qu ON qu.ID_QUESTIONNAIRE=q.ID_QUESTIONNAIRE WHERE ID_PROFESSEUR=" + idprof + " GROUP BY qu.ID_QUESTIONNAIRE, NOM_QUESTIONNAIRE, ETAT_QUESTIONNAIRE";
       console.log(queryString.yellow);
       db.query(queryString, function(err,rows){
         if(err) throw err;
@@ -251,7 +251,7 @@ http.listen(8080,function(){
 
   function findQuestionByIdProf(idprof){
       var list = new Array();
-      var queryString = 'SELECT * FROM question q LEFT JOIN questionnaire qu ON qu.id_questionnaire = q.id_questionnaire WHERE qu.id_professeur=' + idprof;
+      var queryString = 'SELECT * FROM QUESTION q LEFT JOIN QUESTIONNAIRE qu ON qu.ID_QUESTIONNAIRE = q.ID_QUESTIONNAIRE WHERE qu.ID_PROFESSEUR=' + idprof;
       console.log(queryString.yellow);
 
       db.query(queryString, function(err,rows){
@@ -268,7 +268,7 @@ http.listen(8080,function(){
 
   function findQuestionByIdQuestionaire(idQuestionnaire){
       var list = new Array();
-      var queryString = 'SELECT * FROM question q LEFT JOIN questionnaire qu ON qu.id_questionnaire = q.id_questionnaire WHERE qu.id_questionnaire=' + idQuestionnaire;
+      var queryString = 'SELECT * FROM QUESTION q LEFT JOIN QUESTIONNAIRE qu ON qu.ID_QUESTIONNAIRE = q.ID_QUESTIONNAIRE WHERE qu.ID_QUESTIONNAIRE=' + idQuestionnaire;
       console.log(queryString.yellow);
 
       db.query(queryString, function(err,rows){
@@ -284,7 +284,7 @@ http.listen(8080,function(){
   };
 
   function addQuestion(id_questionnaire, callback){
-      var queryString = "INSERT INTO `question`(`id_questionnaire`, `nom_question`, `reponse_question`) VALUES (" + id_questionnaire + ", '', '0');";
+      var queryString = "INSERT INTO `QUESTION`(`ID_QUESTIONNAIRE`, `NOM_QUESTION`, `REPONSE_QUESTION`) VALUES (" + id_questionnaire + ", '', '0');";
       console.log(queryString.yellow);
       db.query(queryString, function(err,rows){
         if(err) throw err;
@@ -293,7 +293,7 @@ http.listen(8080,function(){
   };
 
   function addQuestionnaire(id_professeur, nom_questionnaire, callback){
-      var queryString = "INSERT INTO `questionnaire`(`id_professeur`, `nom_questionnaire`, `etat_questionnaire`) VALUES (" + id_professeur + ", '" + nom_questionnaire + "', 'Invalide');";
+      var queryString = "INSERT INTO `QUESTIONNAIRE`(`ID_PROFESSEUR`, `NOM_QUESTIONNAIRE`, `ETAT_QUESTIONNAIRE`) VALUES (" + id_professeur + ", '" + nom_questionnaire + "', 'Invalide');";
       console.log(queryString.yellow);
       db.query(queryString, function(err,rows){
         if(err) throw err;
@@ -302,7 +302,7 @@ http.listen(8080,function(){
   };
 
   function editQuestionnaire(id_questionnaire, nom_questionnaire){
-      var queryString = "UPDATE questionnaire SET nom_questionnaire='"+ nom_questionnaire +"' WHERE id_questionnaire="+ id_questionnaire;
+      var queryString = "UPDATE QUESTIONNAIRE SET NOM_QUESTIONNAIRE='"+ nom_questionnaire +"' WHERE ID_QUESTIONNAIRE="+ id_questionnaire;
       console.log(queryString.yellow);
       db.query(queryString, function(err,rows){
         if(err) throw err;
@@ -310,7 +310,7 @@ http.listen(8080,function(){
   }
 
   function editQuestion(id_question, nom_question){
-      var queryString = "UPDATE question SET nom_question='"+ nom_question +"' WHERE id_question="+ id_question;
+      var queryString = "UPDATE QUESTION SET NOM_QUESTION='"+ nom_question +"' WHERE ID_QUESTION="+ id_question;
       console.log(queryString.yellow);
       db.query(queryString, function(err,rows){
         if(err) throw err;
@@ -318,7 +318,7 @@ http.listen(8080,function(){
   }
 
   function delQuestionnaire(idQuestionnaire){
-      var queryString = "DELETE FROM `questionnaire` WHERE id_questionnaire=" + idQuestionnaire;
+      var queryString = "DELETE FROM `QUESTIONNAIRE` WHERE ID_QUESTIONNAIRE=" + idQuestionnaire;
       console.log(queryString.yellow);
       db.query(queryString, function(err,rows){
         if(err) throw err;
@@ -334,7 +334,7 @@ http.listen(8080,function(){
   }
 
   function addAnswer(answer, id_question){
-      var queryString = "INSERT INTO `reponse` (`id_question`, `nom_reponse`) VALUES("+ id_question +", '"+ answer +"')";
+      var queryString = "INSERT INTO `REPONSE` (`ID_QUESTION`, `NOM_REPONSE`) VALUES("+ id_question +", '"+ answer +"')";
       console.log(queryString.yellow);
       db.query(queryString, function(err,rows){
         if(err) throw err;
@@ -342,7 +342,7 @@ http.listen(8080,function(){
   }
 
   function editGoodAnswer(answer_name, ID_QUESTION){
-      var queryString = "UPDATE question SET reponse_question='"+ answer_name +"' WHERE id_question="+ ID_QUESTION;
+      var queryString = "UPDATE QUESTION SET REPONSE_QUESTION='"+ answer_name +"' WHERE ID_QUESTION="+ ID_QUESTION;
       console.log(queryString.yellow);
       db.query(queryString, function(err,rows){
         if(err) throw err;

@@ -48,10 +48,10 @@
     socket.on('res_user_quest', function(user_quest){
     	console.log(user_quest);
     	for(var i in user_quest){
-    		if (user_quest[i].etat_questionnaire == "Valide"){
-    			var trString = '<tr onclick="quest_show(\'' + user_quest[i].id_questionnaire + '\');" ><td>' + user_quest[i].nom_questionnaire + '</td><td>' + user_quest[i].nb_questions + '</td> <td class="complet">' + user_quest[i].etat_questionnaire + '</td></tr>';
+    		if (user_quest[i].ETAT_QUESTIONNAIRE == "Valide"){
+    			var trString = '<tr onclick="quest_show(\'' + user_quest[i].ID_QUESTIONNAIRE + '\');" ><td>' + user_quest[i].NOM_QUESTIONNAIRE + '</td><td>' + user_quest[i].nb_questions + '</td> <td class="complet">' + user_quest[i].ETAT_QUESTIONNAIRE + '</td></tr>';
     		} else {
-    			var trString = '<tr onclick="quest_show(\'' + user_quest[i].id_questionnaire + '\');" ><td>' + user_quest[i].nom_questionnaire + '</td><td>' + user_quest[i].nb_questions + '</td> <td class="imcomplet">' + user_quest[i].etat_questionnaire + '</td></tr>';
+    			var trString = '<tr onclick="quest_show(\'' + user_quest[i].ID_QUESTIONNAIRE + '\');" ><td>' + user_quest[i].NOM_QUESTIONNAIRE + '</td><td>' + user_quest[i].nb_questions + '</td> <td class="imcomplet">' + user_quest[i].ETAT_QUESTIONNAIRE + '</td></tr>';
     		}
     		$('table').append(trString);
     	}

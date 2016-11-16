@@ -28,19 +28,6 @@
 				</ol>
 				<button class="bouton" type="button" id="addQuestion">Ajouter une question</button>
 			</div>
-			<!-- <div class="infosQuestionnaire">
-				<div class="group">
-					<input class="textField" name="nom" type="text" id="nom" required>
-					<span class="highlight"></span>
-					<span class="bar"></span>
-					<label>Nom du questionnaire</label>
-					
-					<button class="bouton" type="button" id="addQuestion">Ajouter une question</button>
-				</div>
-			</div> -->
-
-			
-
 			<div class="infosQuestionnaire">
 				<div class="nomQuestionnaire">
 					<div class="group">
@@ -74,27 +61,15 @@
 	// Demande questions du questionnaire
     socket.emit('req_question_by_questionnaire_id');
     socket.on('res_question_by_questionnaire_id', function(questions, questionnaire, id_questionnaire){
-    	ID_QUESTIONNAIRE = questionnaire[0].id_questionnaire;
-    	NOM_QUESTIONNAIRE = questionnaire[0].nom_questionnaire;
+    	ID_QUESTIONNAIRE = questionnaire[0].ID_QUESTIONNAIRE;
+    	NOM_QUESTIONNAIRE = questionnaire[0].NOM_QUESTIONNAIRE;
 		$('#nom').val(NOM_QUESTIONNAIRE);
 
     	for(var i in questions) {
-    		var liString = "<li onclick='affQuestion("+ questions[i].id_question +");' id='"+ questions[i].id_question +"' class='incomplet'>" + questions[i].nom_question + "</li>";
+    		var liString = "<li onclick='affQuestion("+ questions[i].ID_QUESTION +");' id='"+ questions[i].ID_QUESTION +"' class='incomplet'>" + questions[i].NOM_QUESTION + "</li>";
     		$('#sortable').append(liString);
     	}
     });
-/*
-    $('#sortable li').draggable({
-    	start: function(event, ui){
-    		$(this).data('dragging', true);
-    	}, 
-    	stop: function(event, ui){
-    		setTimeout(function(){
-    			$(event.target).data('dragging', false);
-    		}, 1);
-    	}, 
-    });
-*/
 
 	// Click ajouter question
     $('#addQuestion').click(function(){

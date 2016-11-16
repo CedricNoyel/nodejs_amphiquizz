@@ -7,12 +7,12 @@ module.exports.set = function(){
 
 
 	var db = mysql.createConnection({ // Mysql Connection
-	    host     : 'srv-peda.iut-acy.local',
-	    user     : 'noyelc',
-	    password : '1kEAUI',
-	    database : 'noyelc',
+	    host     : '10.100.100.170',
+	    user     : 'info-prj04',
+	    password : 'L5L9CeWDeS7PLuta',
+	    database : 'info-prj04',
 	});
-
+	
 	return db;
 
 
