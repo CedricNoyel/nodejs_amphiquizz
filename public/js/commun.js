@@ -1,3 +1,5 @@
+// Connection SOCKET
+var socket = io.connect('http://localhost:8080');
 $(document).ready(function() {
 
 	// INIT HEADER
@@ -11,7 +13,7 @@ $(document).ready(function() {
 	mes_quest.addClass('titre');
 	p_welcome.addClass('msgBienvenue');
 
-	mes_quest.html('Mes questionnaire');
+	mes_quest.html('Mes questionnaires');
 	div_compte.html('<button type="button" id="logout" class="deconnexion" >Deconnexion</button>');
 
 	$('body').prepend(div_header);
@@ -31,6 +33,7 @@ $(document).ready(function() {
 	socket.on('res_user_info', function(user){
 		$('.msgBienvenue').append('Bienvenue M/Mme ' + user.nom.toUpperCase());
 	});
+
 
 });
 

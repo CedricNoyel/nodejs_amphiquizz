@@ -2,8 +2,7 @@
 
 console.log('config.js loaded');
 
-module.exports.set = function(app){
-
+module.exports.set = function(http){
 
 
 };

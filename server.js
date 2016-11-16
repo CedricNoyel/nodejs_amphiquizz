@@ -7,6 +7,7 @@ var http = require('http').Server(app);
 var bodyParser = require('body-parser');
 var io = require('socket.io')(http);
 var fs = require('fs');
+var crypto = require('crypto');
 
 var db = require('./db.js');
 var config = require('./config.js')
@@ -49,21 +50,35 @@ app.get('/admin', [requireLogin], function(req, res){
 app.get('/admin/questionnaire/:id', [requireLogin], function(req, res){
     ID_QUESTIONNAIRE = req.params.id;
     sess=req.session;
-    data[0] = findByFieldHasValue('QUESTION', 'id_questionnaire', ID_QUESTIONNAIRE);
-    data[1] = findByFieldHasValue('QUESTIONNAIRE', 'id_questionnaire', ID_QUESTIONNAIRE);
-    res.writeHead(200, {"Content-Type": "text/html"});
-    res.end(fs.readFileSync('./view/questionnaire.html').toString());
+
+    checkIdQuestionnaire(sess, ID_QUESTIONNAIRE, function(ok){
+      if(!ok) {
+          res.redirect('/rip');
+      } else {
+          data[0] = findByFieldHasValue('QUESTION', 'ID_QUESTIONNAIRE', ID_QUESTIONNAIRE);
+          data[1] = findByFieldHasValue('QUESTIONNAIRE', 'ID_QUESTIONNAIRE', ID_QUESTIONNAIRE);
+          res.writeHead(200, {"Content-Type": "text/html"});
+          res.end(fs.readFileSync('./view/questionnaire.html').toString());
+      }
+    });
+
 });
 
 app.get('/admin/question/:id', [requireLogin], function(req, res){
     sess=req.session;
     var id_question = req.params.id;
 
-    data[0] = findByFieldHasValue('QUESTION', 'ID_QUESTION', id_question);
-    data[1] = findByFieldHasValue('REPONSE', 'ID_QUESTION', id_question);
+    checkIdQuestion(sess, id_question, function(ok){
+        if (!ok) { 
+            res.redirect('/rip');
+        } else {
+            data[0] = findByFieldHasValue('QUESTION', 'ID_QUESTION', id_question);
+            data[1] = findByFieldHasValue('REPONSE', 'ID_QUESTION', id_question);
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.end(fs.readFileSync('./view/question.html').toString());
+        }
+    });
 
-    res.writeHead(200, {"Content-Type": "text/html"});
-    res.end(fs.readFileSync('./view/question.html').toString());
 });
 
 app.get('/logout',function(req,res){
@@ -75,25 +90,11 @@ app.get('/logout',function(req,res){
 });
 
 app.post('/login', function(req, res){
-    var username = req.body.login;
-    var password = req.body.mdp;
-    var logged = 0;
-    for(var k in profList){
-        if (username==profList[k].IDENTIFIANT_PROFESSEUR){
-            if (password==profList[k].PASSWORD_PROFESSEUR){
-                logged++;
-                sess=req.session;
-                sess.id_professeur = profList[k].ID_PROFESSEUR;
-                sess.nom = profList[k].NOM_PROFESSEUR;
-                sess.prenom = profList[k].PRENOM_PROFESSEUR;
-                sess.identifiant = profList[k].IDENTIFIANT_PROFESSEUR;
-                console.log(sess.identifiant + " is connected -> creating session".grey);
-                res.redirect('/admin');
-            }
-        }
-    }
-    if (logged==0)
-        res.redirect('/');
+    sess=req.session;
+    checkUserPass(req.body.login, req.body.mdp, sess, function(logged){
+      if (logged==1) res.redirect('/admin');
+      else if (logged==0) res.redirect('/');
+    });
 });
 
 app.use(function(req, res){
@@ -361,3 +362,50 @@ function requireLogin (req, res, next) {
     res.redirect("/");
   }
 }
+
+
+
+
+function checkUserPass(username, password, sess, callback){   
+  var logged = 0;
+  for(var k in profList){
+      if (username==profList[k].IDENTIFIANT_PROFESSEUR){
+          if (crypto.createHash('md5').update(password).digest("hex")==profList[k].PASSWORD_PROFESSEUR){
+              logged++;
+              sess.id_professeur = profList[k].ID_PROFESSEUR;
+              sess.nom = profList[k].NOM_PROFESSEUR;
+              sess.prenom = profList[k].PRENOM_PROFESSEUR;
+              sess.identifiant = profList[k].IDENTIFIANT_PROFESSEUR;
+              console.log(sess.identifiant + " is connected -> creating session".grey);
+          }
+      }
+  }
+  callback(logged);
+}
+
+
+function checkIdQuestion(sess, id_question, callback){
+  var ok = true;
+  var queryString = 'SELECT * FROM QUESTION q LEFT JOIN QUESTIONNAIRE qu ON qu.ID_QUESTIONNAIRE = q.ID_QUESTIONNAIRE WHERE qu.ID_PROFESSEUR=' + sess.id_professeur +' AND q.ID_QUESTION=' + id_question ;
+  db.query(queryString, function(err,rows){
+    if(err) throw err;
+    console.log(rows.length);
+    if(rows.length==0) 
+      ok = false;
+    console.log(ok);
+    callback(ok);
+  });
+};
+
+function checkIdQuestionnaire(sess, id_questionnaire, callback){
+  var ok = true;
+  var queryString = 'SELECT * FROM QUESTIONNAIRE WHERE ID_PROFESSEUR=' + sess.id_professeur +' AND ID_QUESTIONNAIRE=' + id_questionnaire ;
+  db.query(queryString, function(err,rows){
+    if(err) throw err;
+    console.log(rows.length);
+    if(rows.length==0) 
+      ok = false;
+    console.log(ok);
+    callback(ok);
+  });
+};

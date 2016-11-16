@@ -9,23 +9,19 @@
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 	<script src="../../js/commun.js"></script>
 </head>
 
 <body>	
 	<container>
-	    <!-- QUESTIONNAIRE LISTE -->
 		<div id='listeQuestionnaires'>
 			<table>
-				<thead>
-				    <tr>
-						<th>nom du questionnaire</th> <th>nombres <br>de questions</th><th>etat</th> <!-- ✓ ✔ ✕ ✖ ✗ -->
-					</tr>
-				</thead>
-				<tbody>
-				    <!--	QUESTIONNAIRES	-->
-				</tbody>
+				<thead><tr><th>nom du questionnaire</th> <th>nombres <br>de questions</th><th>etat</th></tr></thead>
+				<tbody>	    <!--	QUESTIONNAIRES	-->		</tbody>
 		    </table>
+		    
 		    <div class="buttonContainer">
 		    	<button class="bouton" type="button" id='addQuestionnaire' >Nouveau questionnaire</button>
 		    	<button class="bouton" type="button" onclick="alert('Question rapide')">Question rapide</button>
@@ -34,15 +30,7 @@
 	</container>
 </body>
 
-
-
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-
 <script>
-	// Connection SOCKET
-    var socket = io.connect('http://localhost:8080');
-
     // Demande et affichage questionnaires de l'utilisateur
     socket.emit('req_user_quest');
     socket.on('res_user_quest', function(user_quest){
