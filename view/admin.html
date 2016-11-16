@@ -46,6 +46,7 @@
     // Demande et affichage questionnaires de l'utilisateur
     socket.emit('req_user_quest');
     socket.on('res_user_quest', function(user_quest){
+    	console.log(user_quest);
     	for(var i in user_quest){
     		if (user_quest[i].etat_questionnaire == "Valide"){
     			var trString = '<tr onclick="quest_show(\'' + user_quest[i].id_questionnaire + '\');" ><td>' + user_quest[i].nom_questionnaire + '</td><td>' + user_quest[i].nb_questions + '</td> <td class="complet">' + user_quest[i].etat_questionnaire + '</td></tr>';
@@ -60,8 +61,9 @@
     $('#addQuestionnaire').click(function(){
     	var nom_questionnaire = '';
     	socket.emit('req_add_questionnaire', nom_questionnaire);
-    	socket.on('res_add_questionnaire');
-		document.location.href = '';
+    	socket.on('res_add_questionnaire', function(id_quest){
+			document.location.href = './admin/questionnaire/'+ id_quest;
+    	});
     });
 
     // Affichage d'un questionnaire

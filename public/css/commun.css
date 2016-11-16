@@ -187,7 +187,8 @@ input:focus ~ .highlight {
 
 .bouton {
 	height: 50px;
-	margin-left: 20px;
+	margin: 20px 0 20px 20px;
+	float: right;
 	padding: 0 16px;
 	background-color: #FFF;
 	color: #5264AE;

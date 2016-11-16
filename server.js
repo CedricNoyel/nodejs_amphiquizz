@@ -103,14 +103,35 @@ app.use(function(req, res){
 
 
 
-io.on('connection', function(socket) {    
+io.on('connection', function(socket) {
+
+    /* ================ */
+    /* ==== CREATE ==== */
+    /* ================ */
+
+    socket.on('req_add_question', function(id_questionnaire){
+        addQuestion(id_questionnaire, function(id_question){
+          socket.emit('res_add_question', id_question);
+        });
+    });
+
+     socket.on('req_add_questionnaire', function(nom_questionnaire){
+        addQuestionnaire(sess.id_professeur, nom_questionnaire, function(id_quest){
+          socket.emit('res_add_questionnaire', id_quest);
+        });
+    });
+
+     socket.on('add_answer', function(answer, id_question){
+        addAnswer(answer, id_question);
+    });
+
+    /* ============== */
+    /* ==== READ ==== */
+    /* ============== */
+
     // Requete user info
     socket.on('req_user_info', function(){
-        socket.emit('res_user_info', { 
-            nom : sess.nom,
-            prenom : sess.prenom,
-            identifiant : sess.identifiant,
-        });
+        socket.emit('res_user_info', { nom : sess.nom, prenom : sess.prenom, identifiant : sess.identifiant });
     });
 
     // Demande questionnaire de l'utilisateur
@@ -123,51 +144,48 @@ io.on('connection', function(socket) {
         socket.emit('res_question_by_questionnaire_id', data[0], data[1], ID_QUESTIONNAIRE); // data[0] -> Questions / data[1] -> quesionnaire
     });
 
-    // Demande ajout questionnaire
-     socket.on('req_add_questionnaire', function(nom_questionnaire){
-        var x = addQuestionnaire(sess.id_professeur, nom_questionnaire);
+    // Demande des question/réponses
+    socket.on('req_question_reponse', function(){
+        socket.emit('res_question_reponse', data[0], data[1]);
     });
 
+    /* ================ */
+    /* ==== UPDATE ==== */
+    /* ================ */
+
      socket.on('req_save_questionnaire', function(id_questionnaire, nom_questionnaire){
-        console.log(id_questionnaire + " " + nom_questionnaire);
         editQuestionnaire(id_questionnaire, nom_questionnaire);
      });
+
+     socket.on('req_save_question', function(id_question, nom_question){
+        editQuestion(id_question, nom_question);
+     });
+
+    socket.on('edit_answer', function(answer_name, ID_QUESTION){
+        editGoodAnswer(answer_name, ID_QUESTION);
+    });
+
+    /* ================ */
+    /* ==== DELETE ==== */
+    /* ================ */
 
     // Demande suppression questionnaire
      socket.on('req_del_questionnaire', function(id_questionnaire){
         delQuestionnaire(id_questionnaire);
         socket.emit('res_del_questionnaire');
     });
-
-    socket.on('req_add_question', function(question, id_quest){
-        if(addQuestionToQuestionnaire(id_quest, question)){
-            var message = 'La question a bien été ajoutée au questionnaire !';
-        }
-        else{
-            var message = 'Erreur, La question n\'a pas pu être ajoutée !'
-        }
-        socket.emit('res_add_question', message);
-    });
-
-    socket.on('req_question_reponse', function(){
-        socket.emit('res_question_reponse', data[0], data[1]);
-    });
-    socket.on('add_answer', function(answer, id_question){
-        addAnswer(answer, id_question);
-    });
+  
     socket.on('del_answer', function(id_answer){
         del('reponse', 'id_reponse', id_answer);
-    });
-    socket.on('edit_answer', function(answer_name, ID_QUESTION){
-        editGoodAnswer(answer_name, ID_QUESTION);
     });
     socket.on('del_question', function(id_question){
         del('question', 'id_question', id_question);
     });
+
 });
 
 
-
+// ===== SERVER ====== 
 http.listen(8080,function(){
     console.log('\n' + "=== App Started on PORT 8080 ===".green + '\n');
 });
@@ -265,34 +283,38 @@ http.listen(8080,function(){
       return list;
   };
 
-  function addQuestionToQuestionnaire(id_questionnaire, question){
-      var queryString = "INSERT INTO `question`(`id_questionnaire`, `nom_question`, `reponse_question`) VALUES (" + id_questionnaire + ",'" + question + "', '0')";
+  function addQuestion(id_questionnaire, callback){
+      var queryString = "INSERT INTO `question`(`id_questionnaire`, `nom_question`, `reponse_question`) VALUES (" + id_questionnaire + ", '', '0');";
       console.log(queryString.yellow);
-
       db.query(queryString, function(err,rows){
         if(err) throw err;
+        callback(rows.insertId);
       });
-      return true;
   };
 
-  function addQuestionnaire(id_professeur, nom_questionnaire){
+  function addQuestionnaire(id_professeur, nom_questionnaire, callback){
       var queryString = "INSERT INTO `questionnaire`(`id_professeur`, `nom_questionnaire`, `etat_questionnaire`) VALUES (" + id_professeur + ", '" + nom_questionnaire + "', 'Invalide');";
       console.log(queryString.yellow);
-
       db.query(queryString, function(err,rows){
         if(err) throw err;
+        callback(rows.insertId);
       });
-      return true;
   };
 
   function editQuestionnaire(id_questionnaire, nom_questionnaire){
       var queryString = "UPDATE questionnaire SET nom_questionnaire='"+ nom_questionnaire +"' WHERE id_questionnaire="+ id_questionnaire;
       console.log(queryString.yellow);
-
       db.query(queryString, function(err,rows){
         if(err) throw err;
       });
-      return true;
+  }
+
+  function editQuestion(id_question, nom_question){
+      var queryString = "UPDATE question SET nom_question='"+ nom_question +"' WHERE id_question="+ id_question;
+      console.log(queryString.yellow);
+      db.query(queryString, function(err,rows){
+        if(err) throw err;
+      });
   }
 
   function delQuestionnaire(idQuestionnaire){
@@ -301,7 +323,6 @@ http.listen(8080,function(){
       db.query(queryString, function(err,rows){
         if(err) throw err;
       });
-      return true;
   }
 
   function del(table, field, value){
@@ -310,7 +331,6 @@ http.listen(8080,function(){
       db.query(queryString, function(err,rows){
         if(err) throw err;
       });
-      return true;
   }
 
   function addAnswer(answer, id_question){
@@ -319,7 +339,6 @@ http.listen(8080,function(){
       db.query(queryString, function(err,rows){
         if(err) throw err;
       });
-      return true;
   }
 
   function editGoodAnswer(answer_name, ID_QUESTION){
@@ -328,9 +347,9 @@ http.listen(8080,function(){
       db.query(queryString, function(err,rows){
         if(err) throw err;
       });
-      return true;
-
   }
+
+
 
 /** Middleware for limited access and admin interface */
 function requireLogin (req, res, next) {

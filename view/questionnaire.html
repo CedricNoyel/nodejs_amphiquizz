@@ -23,8 +23,12 @@
 			<div class="btnRetour">
 				<button type="button" onclick="document.location.href='../../admin'">Retour</button>
 			</div>
-			<ol id="sortable" class="listeQuestions"></ol>
-			<div class="infosQuestionnaire">
+			<div class="listeQuestions">
+				<ol id="sortable">
+				</ol>
+				<button class="bouton" type="button" id="addQuestion">Ajouter une question</button>
+			</div>
+			<!-- <div class="infosQuestionnaire">
 				<div class="group">
 					<input class="textField" name="nom" type="text" id="nom" required>
 					<span class="highlight"></span>
@@ -33,9 +37,28 @@
 					
 					<button class="bouton" type="button" id="addQuestion">Ajouter une question</button>
 				</div>
-				<div class="buttonContainer">
-					<button id='delQuestionnaire' class="bouton suppr" type="button">Supprimer</button>
-					<button id='saveQuestionnaire' class="bouton save" type="button">Enregistrer</button>
+			</div> -->
+
+			
+
+			<div class="infosQuestionnaire">
+				<div class="nomQuestionnaire">
+					<div class="group">
+						<input class="textField" name="nom" type="text" id="nom" value="Questionnaire ABC" required>
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label>Nom du questionnaire</label>
+					</div>
+					<div class="boutonContainer">
+						<div>
+							<button id='statsQuestionnaire' class="bouton stats" type="button">Stats</button>
+							<button id='launchQuestionnaire' class="bouton launch" type="button">Lancer le questionnaire</button>
+						</div>
+						<div>
+							<button id='delQuestionnaire' class="bouton suppr" type="button">Supprimer</button>
+							<button id='saveQuestionnaire' class="bouton save" type="button">Enregistrer</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</container>
@@ -60,26 +83,25 @@
     		$('#sortable').append(liString);
     	}
     });
+/*
+    $('#sortable li').draggable({
+    	start: function(event, ui){
+    		$(this).data('dragging', true);
+    	}, 
+    	stop: function(event, ui){
+    		setTimeout(function(){
+    			$(event.target).data('dragging', false);
+    		}, 1);
+    	}, 
+    });
+*/
 
+	// Click ajouter question
     $('#addQuestion').click(function(){
-		document.location.href = '../question';
-
-    	/*
-		var question = $('#nom').val();
-		if (question.length>0)
-		{
-	    	$('#sortable').append("<li class='incomplet'>" + question + "</li>");
-	    	$('#nom').val('');
-    		socket.emit('req_add_question', question, id_quest);
-	    	socket.on('res_add_question', function(message){
-	    		$('container').append('<p id="InfoMsg">' + message + '</p>');
-	    	});
-		} else {
-	    	$('container').append('<p id="InfoMsg">' + 'La question doit être renseignée !' + '</p>');
-		}
-
-		setTimeout(removeInfoMsg, 3000); 
-		*/
+    	socket.emit('req_add_question', ID_QUESTIONNAIRE);
+    	socket.on('res_add_question', function(id_question){
+    		document.location.href='../../admin/question/' + id_question;
+    	});
 	});
 
     // Click sur supprimer le questionnaire
