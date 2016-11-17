@@ -64,8 +64,12 @@
     	NOM_QUESTIONNAIRE = questionnaire[0].NOM_QUESTIONNAIRE;
 		$('#nom').val(NOM_QUESTIONNAIRE);
 
+		var etat_question;
     	for(var i in questions) {
-    		var liString = "<li onclick='affQuestion("+ questions[i].ID_QUESTION +");' id='"+ questions[i].ID_QUESTION +"' class='incomplet'>" + questions[i].NOM_QUESTION + "</li>";
+    		etat_question =  "class='incomplet'>";
+    		if (questions[i].ETAT_QUESTION==1) etat_question = "class='complet'>";
+
+    		var liString = "<li onclick='affQuestion("+ questions[i].ID_QUESTION +");' id='"+ questions[i].ID_QUESTION +"' "+ etat_question + " " + questions[i].NOM_QUESTION + "</li>";
     		$('#sortable').append(liString);
     	}
     });

@@ -348,6 +348,12 @@ http.listen(8080,function(){
       db.query(queryString, function(err,rows){
         if(err) throw err;
       });
+      // MISE A JOUR ETAT QUESTION
+      var queryString = "UPDATE QUESTION SET ETAT_QUESTION='1' WHERE ID_QUESTION="+ ID_QUESTION;
+      console.log(queryString.yellow);
+      db.query(queryString, function(err,rows){
+        if(err) throw err;
+      });
   }
 
 
