@@ -1,0 +1,54 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>AmphiQuizz - Question Rapide</title>
+		<link rel="stylesheet" type="text/css" href="css/commun.css"/>
+		<link rel="stylesheet" type="text/css" href="css/question.css"/>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery-ui.js"></script>	
+		<script src="../../js/commun.js"></script>
+		<script src="js/questionRapide.js"></script>
+	</head>
+
+	<body>
+		<container>
+			<div class="btnRetour">
+				<button type="button" onclick="document.location.href='dashboard.html'">Retour</button>
+			</div>
+			<div class="nomQuestion">
+				<div class="group">
+					<input class="textField" name="nom" type="text" id="question" value="De quelle couleur est le cheval blanc d'Henry IV ?" required>
+					<span class="highlight"></span>
+					<span class="bar"></span>
+					<label>Question</label>
+				</div>
+				<button class="bouton suppr" id="btnSupprimerQuestion" type="button">Supprimer</button>
+				<button class="bouton" id="launchBtn" type="button">Lancer</button>
+			</div>
+			
+			<div class="reponses">
+				<div class="ajouterReponses">
+					<div class="group">
+						<input class="textField" name="nom" type="text" id="rep_A" value="" required>
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label>Réponse A</label>
+					</div>
+					
+					<div class="group">
+						<input class="textField" name="nom" type="text" id="rep_B" value="" required>
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label>Réponse B</label>
+					</div>
+					
+					<button class="bouton" id="oui_non" type="button">Oui / Non</button>
+				</div>
+			</div>
+		</container>
+
+		
+	</body>
+</html>
