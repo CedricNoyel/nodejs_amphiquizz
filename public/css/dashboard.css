@@ -59,17 +59,17 @@ tr {
 	width: 100%;
 }
 
-.complet {
+table .complet {
 	color: #2ECC71;
 }
 
-.imcomplet {
+table .imcomplet {
 	color: #E74C3C;
 }
 
 .boutonContainer {
 	width: 800px;
-	margin: 20px auto;
+	margin: auto;
 }
 
 

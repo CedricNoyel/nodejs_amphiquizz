@@ -6,9 +6,8 @@
 		<link rel="stylesheet" type="text/css" href="../../css/commun.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/question.css"/>
-		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script src="../../js/jquery.js"></script>
+		<script src="../../js/jquery-ui.js"></script>	
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="../../js/commun.js"></script>
 		<script>
@@ -59,11 +58,12 @@
 		</container>
 	</body>
 
-
 	<script>
 	var ID_QUESTION;
 	var ID_QUESTIONNAIRE;
 
+    var pos_id_quest = document.URL.lastIndexOf('/');
+    var ID_QUESTION = document.URL.substr(pos_id_quest+1);
 	// INIT (demande question et reponses)
 	loadAnswers();
 	// FIN INIT
@@ -93,9 +93,8 @@
 
 	function loadAnswers(){
 		$('tbody tr').remove();
-		socket.emit('req_question_reponse');
+		socket.emit('req_question_reponse', ID_QUESTION);
 		socket.on('res_question_reponse', function(question, reponses){
-			ID_QUESTION = question[0].ID_QUESTION;
 			ID_QUESTIONNAIRE = question[0].ID_QUESTIONNAIRE;
 			$('#question').val(question[0].NOM_QUESTION);
 
@@ -123,7 +122,7 @@
 	}
 
 	function radioClicked(answer_name){
-		socket.emit('edit_answer', answer_name, ID_QUESTION);
+		socket.emit('edit_answer', answer_name, ID_QUESTION, ID_QUESTIONNAIRE);
 	}
 
 

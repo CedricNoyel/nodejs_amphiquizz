@@ -6,9 +6,8 @@
 		<link rel="stylesheet" type="text/css" href="../../css/commun.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/questionnaire.css"/>
-		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script src="../../js/jquery.js"></script>
+		<script src="../../js/jquery-ui.js"></script>	
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="../../js/commun.js"></script>
 		<script>
@@ -54,13 +53,13 @@
 
 
 <script>
-    var ID_QUESTIONNAIRE;
+    var pos_id_quest = document.URL.lastIndexOf('/');
+    var ID_QUESTIONNAIRE = document.URL.substr(pos_id_quest+1);
     var NOM_QUESTIONNAIRE;
 
 	// Demande questions du questionnaire
-    socket.emit('req_question_by_questionnaire_id');
-    socket.on('res_question_by_questionnaire_id', function(questions, questionnaire, id_questionnaire){
-    	ID_QUESTIONNAIRE = questionnaire[0].ID_QUESTIONNAIRE;
+    socket.emit('req_question_by_questionnaire_id', ID_QUESTIONNAIRE);
+    socket.on('res_question_by_questionnaire_id', function(questions, questionnaire){
     	NOM_QUESTIONNAIRE = questionnaire[0].NOM_QUESTIONNAIRE;
 		$('#nom').val(NOM_QUESTIONNAIRE);
 
