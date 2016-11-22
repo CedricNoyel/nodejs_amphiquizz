@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Mon Questionnaire</title>
+		<title>AmphiQuizz - Admin</title>
 		<link rel="stylesheet" type="text/css" href="../../css/commun.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/questionnaire.css"/>
@@ -77,7 +77,7 @@
     $('#addQuestion').click(function(){
     	socket.emit('req_add_question', ID_QUESTIONNAIRE);
     	socket.on('res_add_question', function(id_question){
-    		document.location.href='../../admin/question/' + id_question;
+    		document.location.href='../../question/' + id_question;
     	});
 	});
 
@@ -88,21 +88,16 @@
     	document.location.href='../../admin';
     });
 
-
     // Click sur sauvegarder le questionnaire
 	$('#saveQuestionnaire').click(function(){
 		if($('#nom').val()!=NOM_QUESTIONNAIRE){
-			alert("Le questionnaire a été sauvegardé !");
 			socket.emit('req_save_questionnaire', ID_QUESTIONNAIRE, $('#nom').val());
-		}
-		else{
-			alert("Aucune modification effectuée !");
 		}
 	});
 
 	// Click sur une question
 	function affQuestion(id_question){
-    	document.location.href='../../admin/question/' + id_question;
+    	document.location.href='../../question/' + id_question;
 	};
 
 </script>

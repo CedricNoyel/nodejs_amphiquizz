@@ -22,7 +22,7 @@
 		    
 		    <div class="buttonContainer">
 		    	<button class="bouton" type="button" id='addQuestionnaire' >Nouveau questionnaire</button>
-		    	<button class="bouton" type="button" onclick="alert('Question rapide')">Question rapide</button>
+		    	<button class="bouton" type="button" id='fastQuestion' >Question rapide</button>
 		    </div>
 	    </div>
 	</container>
@@ -48,14 +48,18 @@
     	var nom_questionnaire = '';
     	socket.emit('req_add_questionnaire', nom_questionnaire);
     	socket.on('res_add_questionnaire', function(id_quest){
-			document.location.href = './admin/questionnaire/'+ id_quest;
+			document.location.href = './questionnaire/'+ id_quest;
     	});
     });
 
     // Affichage d'un questionnaire
 	function quest_show(id_questionnaire){
-		document.location.href=  "/admin/questionnaire/" + id_questionnaire;
+		document.location.href=  "/questionnaire/" + id_questionnaire;
 	};
+
+	$('#fastQuestion').click(function(){
+		document.location.href=  "/fastquestion/" + '1';
+	});
 
 </script>
 </html>
