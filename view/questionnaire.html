@@ -83,9 +83,10 @@
 
     // Click sur supprimer le questionnaire
     $('#delQuestionnaire').click(function(){
-    	socket.emit('req_del_questionnaire', ID_QUESTIONNAIRE);
-    	// socket.on('res_del_questionnaire');
-    	document.location.href='../../admin';
+		if (confirm("Souhaitez-vous vraiment supprimer le questionnaire ainsi que toutes les questions associées ?")) {
+    		socket.emit('req_del_questionnaire', ID_QUESTIONNAIRE);
+    		document.location.href='../../admin';
+		}
     });
 
     // Click sur sauvegarder le questionnaire

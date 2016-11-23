@@ -18,5 +18,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/cedricouf/nodejs_amphiquizz"
+  },
+  "devDependencies": {
+    "mocha": "^3.1.2"
+  },
+  "scripts": {
+    "test": "mocha"
   }
 }

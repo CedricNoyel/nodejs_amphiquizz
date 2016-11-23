@@ -83,9 +83,18 @@
 	});
 
 	$('#btnAjouterReponse').click(function(){
-		socket.emit('add_answer', $('#nom').val(), ID_QUESTION);
+		var reponse = $('#nom').val();
 		$('#nom').val('');
-		loadAnswers();
+		if (reponse.length != 0)
+		{
+			socket.emit('req_add_answer', reponse, ID_QUESTION);
+			socket.on('res_add_answer', function(id_reponse){
+				var reponse_id = "answer" + id_reponse;
+				$('tbody').append("<tr id='" + reponse_id + "'><td>"+ reponse +"</td>" +
+															  "<td class='radio'><input onclick='radioClicked("+ id_reponse +")' type='radio' name='bonneReponse'</td>" +
+															  "<td onclick='delAnswer("+ id_reponse +")' class='supprimerReponse'>✖</td></tr>");
+			});
+		}
 	});
 
 
@@ -101,13 +110,14 @@
 			for (var i in reponses)
 			{
 				var row = $('<tr id=answer'+ reponses[i].ID_REPONSE +'>');
-				var column1 = $('<td>'), column2 = $('<td class="radio">');
+				var column1 = $('<td>'), 
+					column2 = $('<td class="radio">');
 				column1.append(reponses[i].NOM_REPONSE);
 
 				var isChecked = " ";
-				if (question[0].REPONSE_QUESTION == reponses[i].NOM_REPONSE)
+				if (question[0].ID_REPONSE_BONNE == reponses[i].ID_REPONSE)
 					isChecked = " checked ";
-				column2.append('<input onclick=\'radioClicked("'+ reponses[i].NOM_REPONSE +'")\' type="radio"'+ isChecked +'name="bonneReponse">');
+				column2.append('<input onclick="radioClicked('+ reponses[i].ID_REPONSE +')" type="radio"'+ isChecked +'name="bonneReponse">');
 
 				$(row).append(column1, column2);
 				row.append('<td onclick="delAnswer('+ reponses[i].ID_REPONSE +')" class="supprimerReponse">✖</td>')
@@ -121,8 +131,8 @@
 		$("#answer"+ id_answer).remove();
 	}
 
-	function radioClicked(answer_name){
-		socket.emit('edit_answer', answer_name, ID_QUESTION, ID_QUESTIONNAIRE);
+	function radioClicked(id_bonne_reponse){
+		socket.emit('edit_answer', id_bonne_reponse, ID_QUESTION, ID_QUESTIONNAIRE);
 	}
 
 
