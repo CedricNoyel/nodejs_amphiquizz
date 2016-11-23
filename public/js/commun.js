@@ -1,5 +1,7 @@
+
 // Connection SOCKET
 var socket = io.connect('http://localhost:8080');
+
 $(document).ready(function() {
 
 	// INIT HEADER
