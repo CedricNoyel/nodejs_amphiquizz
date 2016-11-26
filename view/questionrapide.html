@@ -75,6 +75,7 @@ $(document).ready(function(){
 	});
 
 	$('#saveQuestion').click(function(){
+		socket.emit('del_answer_question', ID_QUESTION);
 		socket.emit('req_add_answer', $('#rep_A').val(), ID_QUESTION);
 		socket.emit('req_add_answer', $('#rep_B').val(), ID_QUESTION);
 		socket.emit('req_save_question', ID_QUESTION, $('#question').val());
