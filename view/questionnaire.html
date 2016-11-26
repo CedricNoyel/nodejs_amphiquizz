@@ -107,7 +107,10 @@
 	});
 
 	$('#exportQuestionnaire').click(function(){
-		alert('Export Excel');
+		socket.emit('req_export_info', ID_QUESTIONNAIRE);
+		socket.on('res_export_info', function(data){
+			console.log(data);
+		});
 	});
 </script>
 </html>

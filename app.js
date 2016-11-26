@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(express.static(__dirname + "/public"));
 
 var expiryDate = new Date( Date.now() + 60 * 60 * 1000 );
+
 app.use(session({
 	secret: 'u9fdsS4d.#Zd8a/4J*',
 	name : 'sesSionId478',
