@@ -4,7 +4,7 @@ var socket = io.connect('http://localhost:8080');
 
 $(document).ready(function() {
 
-	// INIT HEADER
+		// INIT HEADER
 	var div_header = $('<div>');
 	var div_compte = $('<div>');
 	var p_welcome = $("<p>");
@@ -36,6 +36,22 @@ $(document).ready(function() {
 		$('.msgBienvenue').append('Bienvenue M/Mme ' + user.nom.toUpperCase());
 	});
 
+    socket.on('message', function(message){
+		notif(message, "#39CA74");
+    });
+
+    function notif(text, color) {
+		$('.pop').remove();
+		pop = $('<div/>')
+				.addClass('pop')
+				.text(text)
+				.css({color: '#FFF', backgroundColor: color });
+		$('body').append(pop);
+
+		setTimeout(function (argument) {
+			$(pop).fadeOut('200');
+		}, 1400);
+	}
 
 });
 

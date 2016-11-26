@@ -57,7 +57,11 @@
 	};
 
 	$('#fastQuestion').click(function(){
-		document.location.href=  "./fastquestion";
+		var questionnaire_name = "Questionnaire rapide";
+		socket.emit('req_fastquestion_add', questionnaire_name);
+		socket.on('res_fastquestion_add', function(id_question){
+			document.location.href=  "./fastquestion/" + id_question;
+		});
 	});
 
 </script>

@@ -75,7 +75,7 @@
 
 	$('#btnSauvegarderQuestion').click(function(){
 		socket.emit('req_save_question', ID_QUESTION, $('#question').val());
-		document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
+		// document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
 	});
 
 	$('#btnRetour').click(function(){
@@ -88,6 +88,7 @@
 		if (reponse.length != 0)
 		{
 			socket.emit('req_add_answer', reponse, ID_QUESTION);
+    		socket.off('res_add_answer');
 			socket.on('res_add_answer', function(id_reponse){
 				var reponse_id = "answer" + id_reponse;
 				$('tbody').append("<tr id='" + reponse_id + "'><td>"+ reponse +"</td>" +
@@ -96,9 +97,6 @@
 			});
 		}
 	});
-
-
-
 
 	function loadAnswers(){
 		$('tbody tr').remove();

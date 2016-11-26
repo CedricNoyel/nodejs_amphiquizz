@@ -19,7 +19,7 @@
 			</div>
 			<div class="nomQuestion">
 				<div class="group">
-					<input class="textField" name="nom" type="text" id="question" value="De quelle couleur est le cheval blanc d'Henry IV ?" required>
+					<input class="textField" name="nom" type="text" id="question" value="" required>
 					<span class="highlight"></span>
 					<span class="bar"></span>
 					<label>Question</label>
@@ -43,12 +43,45 @@
 						<span class="bar"></span>
 						<label>Réponse B</label>
 					</div>
-					
 					<button class="bouton" id="oui_non" type="button">Oui / Non</button>
+					<button id='saveQuestion' class="bouton save" type="button">Enregistrer</button>
 				</div>
 			</div>
 		</container>
 
-		
+	<script>
+
+$(document).ready(function(){
+
+	var ID_QUESTION;
+
+    var pos_id_quest = document.URL.lastIndexOf('/');
+    var ID_QUESTION = document.URL.substr(pos_id_quest+1);
+	
+	$('#launchBtn').click(function(){
+	});
+
+	$('#question').blur(function(){
+		// socket.emit('req_save_question', ID_QUESTION, $('#question').val());
+	});
+
+	$('#btnSupprimerQuestion').click(function(){
+		alert("question supprimée");
+	});
+
+	$('#oui_non').click(function(){
+		$("#rep_A").val("Oui");
+		$("#rep_B").val("Non");
+	});
+
+	$('#saveQuestion').click(function(){
+		socket.emit('req_add_answer', $('#rep_A').val(), ID_QUESTION);
+		socket.emit('req_add_answer', $('#rep_B').val(), ID_QUESTION);
+		socket.emit('req_save_question', ID_QUESTION, $('#question').val());
+	});
+
+});
+
+	</script>
 	</body>
 </html>

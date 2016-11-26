@@ -38,6 +38,7 @@
 					</div>
 					<div class="boutonContainer">
 						<div>
+							<button id='exportQuestionnaire' class="bouton launch" type="button">Exporter</button>
 							<button id='statsQuestionnaire' class="bouton stats" type="button">Stats</button>
 							<button id='launchQuestionnaire' class="bouton launch" type="button">Lancer le questionnaire</button>
 						</div>
@@ -101,5 +102,12 @@
     	document.location.href='../../question/' + id_question;
 	};
 
+	$('#statsQuestionnaire').click(function(){
+    	document.location.href='../stats/' + ID_QUESTIONNAIRE;
+	});
+
+	$('#exportQuestionnaire').click(function(){
+		alert('Export Excel');
+	});
 </script>
 </html>
