@@ -4,12 +4,12 @@ var socket = io.connect('http://localhost:8080');
 
 $(document).ready(function() {
 
-		// INIT HEADER
-	var div_header = $('<div>');
+	// INIT HEADER
+	var div_header = $('<header>');
+	var img_logo = '<img src="../../img/logoAQLite.png" alt="Logo" class="logo">';
+	var mes_quest = $("<p>");
 	var div_compte = $('<div>');
 	var p_welcome = $("<p>");
-	var mes_quest = $("<p>");
-	var img_logo = '<img src="../../img/logoAQLite.png" alt="Logo" class="logo">';
 
 	div_compte.addClass('compte');
 	mes_quest.addClass('titre');

@@ -185,13 +185,13 @@ input:focus ~ .highlight {
 
 /* BOUTON ============== */
 
+
+
 .bouton {
 	height: 50px;
 	margin: 20px 0 20px 20px;
 	float: right;
 	padding: 0 16px;
-	background-color: #FFF;
-	color: #5264AE;
 	border-radius: 1px;
 	border: none;
 	font-size: 16px;
@@ -201,27 +201,38 @@ input:focus ~ .highlight {
 	transition: all .2s;
 }
 
-.bouton:hover {
+.bouton:enabled {
+	background-color: #FFF;
+	color: #5264AE;
+}
+
+.bouton:disabled {
+	background-color: #CECECE;
+	color: rgba(255, 255, 255, .5);
+	cursor: default;
+	box-shadow: none;
+}
+.bouton:hover:enabled {
 	color: #FFF;
 	background-color: #5264AE;
 }
 
 .suppr {
-	color: #E74C3C;
+	color: #E74C3C !important;
 }
 
 .suppr:hover {
-	color: #FFF;
-	background-color: #E74C3C;
+	color: #FFF !important;
+	background-color: #E74C3C !important;
 }
 
 .save {
-	color: #2ECC71;
+	color: #2ECC71 !important;
 }
 
 .save:hover {
-	color: #FFF;
-	background-color: #2ECC71;
+	color: #FFF !important;
+	background-color: #2ECC71 !important;
 }
 
 .btnRetour {

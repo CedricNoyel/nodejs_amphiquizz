@@ -15,7 +15,7 @@
 	<body>
 		<container>
 			<div class="btnRetour">
-				<button type="button" onclick="document.location.href='../admin'">Retour</button>
+				<button type="button" id="backButton" onclick="document.location.href='../admin'">Retour</button>
 			</div>
 			<div class="nomQuestion">
 				<div class="group">
@@ -24,7 +24,7 @@
 					<span class="bar"></span>
 					<label>Question</label>
 				</div>
-				<button class="bouton suppr" id="btnSupprimerQuestion" type="button">Supprimer</button>
+				<!-- <button class="bouton suppr" id="btnSupprimerQuestion" type="button">Supprimer</button> -->
 				<button class="bouton" id="launchBtn" type="button">Lancer</button>
 			</div>
 			
@@ -42,6 +42,11 @@
 						<span class="highlight"></span>
 						<span class="bar"></span>
 						<label>Réponse B</label>
+					</div>
+					<div>
+						<p>Bonne réponse :</p>
+						<input type="radio" name="radioAnswer" value="A"> A<br>
+  						<input type="radio" name="radioAnswer" value="B"> B<br>
 					</div>
 					<button class="bouton" id="oui_non" type="button">Oui / Non</button>
 					<button id='saveQuestion' class="bouton save" type="button">Enregistrer</button>
@@ -61,27 +66,51 @@ $(document).ready(function(){
 	$('#launchBtn').click(function(){
 	});
 
-	$('#question').blur(function(){
-		// socket.emit('req_save_question', ID_QUESTION, $('#question').val());
-	});
-
-	$('#btnSupprimerQuestion').click(function(){
-		alert("question supprimée");
-	});
-
 	$('#oui_non').click(function(){
 		$("#rep_A").val("Oui");
 		$("#rep_B").val("Non");
 	});
 
 	$('#saveQuestion').click(function(){
-		socket.emit('del_answer_question', ID_QUESTION);
-		socket.emit('req_add_answer', $('#rep_A').val(), ID_QUESTION);
-		socket.emit('req_add_answer', $('#rep_B').val(), ID_QUESTION);
-		socket.emit('req_save_question', ID_QUESTION, $('#question').val());
+		if ( $('#question').val() ){
+			if ( $('#rep_A').val() ){
+				if ( $('#rep_B').val() ){
+					if ( $("input[name='radioAnswer']:checked").val() )
+					{
+						var questionName = $('#question').val();
+						var answer_A = $('#rep_A').val();
+						var answer_B = $('#rep_B').val();
+						var goodAnswer = $("input[name='radioAnswer']:checked").val(); // A or B
+
+						socket.emit('req_addQuestionRapide', ID_QUESTION, questionName, answer_A, answer_B, goodAnswer);
+						socket.on('res_addQuestionRapide', function(){ });
+						notif("La question a été enregistrée", "#2ECC71")
+					}
+					else notif("Veuillez choisir une bonne réponse", "#E74C3C");
+				} else notif("Veuillez indiquer le champ \"Réponse B\"", "#E74C3C");
+			} else notif("Veuillez indiquer le champ \"Réponse A\"", "#E74C3C");
+		} else notif("Veuillez indiquer le champ \"Question\"", "#E74C3C");
+	});
+
+	$('#backButton').click(function(){
+		if (confirm("Souhaitez-vous vraiment supprimer la question rapide ?")) {
+    		socket.emit('req_del_questionnaire', ID_QUESTIONNAIRE);
+    		document.location.href='../../admin';
+		}
 	});
 
 });
+
+
+
+    function notif(text, color) {
+		$('.pop').remove();
+		pop = $('<div/>').addClass('pop').text(text).css({color: '#FFF', backgroundColor: color });
+		$('body').append(pop);
+		setTimeout(function (argument) {
+			$(pop).fadeOut('200');
+		}, 2000);
+	}
 
 	</script>
 	</body>
