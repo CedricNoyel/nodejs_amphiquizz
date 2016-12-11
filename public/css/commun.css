@@ -208,9 +208,8 @@ input:focus ~ .highlight {
 
 .bouton:disabled {
 	background-color: #CECECE;
-	color: rgba(255, 255, 255, .5);
+	color: #000;
 	cursor: default;
-	box-shadow: none;
 }
 .bouton:hover:enabled {
 	color: #FFF;
