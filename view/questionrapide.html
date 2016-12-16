@@ -15,7 +15,7 @@
 	<body>
 		<container>
 			<div class="btnRetour">
-				<button type="button" id="backButton" onclick="document.location.href='../admin'">Retour</button>
+				<button type="button" id="backButton">Retour</button>
 			</div>
 			<div class="nomQuestion">
 				<div class="group">
@@ -25,7 +25,7 @@
 					<label>Question</label>
 				</div>
 				<!-- <button class="bouton suppr" id="btnSupprimerQuestion" type="button">Supprimer</button> -->
-				<button class="bouton" id="launchBtn" type="button">Lancer</button>
+				<button class="bouton" id="launchQuestionnaire" type="button">Lancer</button>
 			</div>
 			
 			<div class="reponses">
@@ -63,15 +63,34 @@ $(document).ready(function(){
     var pos_id_quest = document.URL.lastIndexOf('/');
     var ID_QUESTION = document.URL.substr(pos_id_quest+1);
 	
-	$('#launchBtn').click(function(){
-	});
-
 	$('#oui_non').click(function(){
 		$("#rep_A").val("Oui");
 		$("#rep_B").val("Non");
 	});
 
 	$('#saveQuestion').click(function(){
+		saveQuestion();
+	});
+
+	$('#backButton').click(function(){
+		document.location.href='../../admin';
+	});
+
+	$('#launchQuestionnaire').click(function(){
+		if (saveQuestion()){
+			socket.emit('req_id_questionnaire_by_id_question', ID_QUESTION);
+			socket.on('res_id_questionnaire_by_id_question', function(idquestionnaire){
+				socket.emit('req_launch_questionnaire', idquestionnaire);
+				socket.on('res_launch_questionnaire', function(id_session){
+					alert(id_session);
+		    		document.location.href='../launched/' + id_session;
+				});	
+			});
+		}
+
+	});
+
+	function saveQuestion(){
 		if ( $('#question').val() ){
 			if ( $('#rep_A').val() ){
 				if ( $('#rep_B').val() ){
@@ -84,24 +103,16 @@ $(document).ready(function(){
 
 						socket.emit('req_addQuestionRapide', ID_QUESTION, questionName, answer_A, answer_B, goodAnswer);
 						socket.on('res_addQuestionRapide', function(){ });
-						notif("La question a été enregistrée", "#2ECC71")
+						notif("La question a été enregistrée", "#2ECC71");
+						return true;
 					}
 					else notif("Veuillez choisir une bonne réponse", "#E74C3C");
 				} else notif("Veuillez indiquer le champ \"Réponse B\"", "#E74C3C");
 			} else notif("Veuillez indiquer le champ \"Réponse A\"", "#E74C3C");
 		} else notif("Veuillez indiquer le champ \"Question\"", "#E74C3C");
-	});
-
-	$('#backButton').click(function(){
-		if (confirm("Souhaitez-vous vraiment supprimer la question rapide ?")) {
-    		socket.emit('req_del_questionnaire', ID_QUESTIONNAIRE);
-    		document.location.href='../../admin';
-		}
-	});
-
+	}
+	return false;
 });
-
-
 
     function notif(text, color) {
 		$('.pop').remove();
