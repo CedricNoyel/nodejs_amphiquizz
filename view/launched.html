@@ -6,6 +6,8 @@
 		<script src="../../js/jquery.js"></script>
 		<script src="../../js/jquery-ui.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<script src="../../js/stats.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../css/commun.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/diapo.css"/>
 	</head>
@@ -17,8 +19,13 @@
 			<h2 id="numQuestion" class="numQuestion"></h2>
 			<h1 id="nomQuestion" class="question"></h1>
 
-			<ol class="listeReponses">
+			<ol class="listeReponses" type="A">
 			</ol>
+
+			<div class="stats">
+				<div id="pieChart"></div>
+				<div id="columnChart"></div>
+			</div>
 
 			<div class="commands">
 				<button type="button" id="nextQuestion" class="bouton">></button>
@@ -37,6 +44,8 @@
 	var idQuestion;
 	var nbQuestion;
 	var idGoodAnswer;
+	var displayStat = false;
+	var listeReponses;
 	var q;
 
 	var goodAnswerDisplayed = false;
@@ -46,6 +55,9 @@
 
     // Chargement du JS
 	$(document).ready(function(){
+		// ========= INIT =========
+		$('#previousQuestion').attr("disabled", true);
+		$('.stats').hide();
 
 		// loading questions
 		socket.emit('req_question_byQuest', id_session);
@@ -55,7 +67,7 @@
 			loadQuestion(numQuestion, nbQuestion);
 		});
 
-		// LEAVE
+		// ========= LEAVE EVENT ========= //
 		$('#btnQuitterDiapo').click(function(){
 			socket.emit('req_stop_questionnaire', id_session);
 			socket.on('req_stop_questionnaire', function(){
@@ -63,46 +75,42 @@
 			});
 		});
 
+		jQuery(window).bind("beforeunload", function() { 
+				socket.emit('req_stop_questionnaire', id_session);
+		    }
+		)
+		// ========= KEY PRESS ========= //
+		$(window).keydown(function (e){
+		    if(e.keyCode == 39) // RIGHT
+				nextQuestion();
+		    else if(e.keyCode == 37) // LEFT
+		    	previousQuestion();
+		    else if(e.keyCode == 32 || e.keyCode == 13) // SPACEBAR
+				$('#goodAnswer').toggleClass('goodAnswer');
+		});
+
+		// ========= DISPLAY NEXT AND PREV ========= //
+		$('#previousQuestion').click(function(){
+			previousQuestion();
+		});
+
 		// NEXT
 		$('#nextQuestion').click(function(){
 			nextQuestion();
 		});
 
-		$('html').keydown(function (e){
-		    if(e.keyCode == 39){ // RIGHT
-				nextQuestion();
-		    } 
-		    else if(e.keyCode == 37){ // LEFT
-		    	previousQuestion();
-		    }
-		    else if(e.keyCode == 32 || e.keyCode == 13){ // SPACEBAR
-				showAnswer();
-		    }
-		});
-
-		$('#previousQuestion').click(function(){
-			previousQuestion();
-		});
-
 		$('#showAnswer').click(function(){
-			showAnswer();
+			$('#goodAnswer').toggleClass('goodAnswer');
 		});
 
+		// ========= FUNCTIONS ========= //
 		function loadQuestion(numQuestion, nbQuestions){
+			$('.listeReponses').empty();
 			idQuestion = q[numQuestion-1].ID_QUESTION;
-			$('#numQuestion').empty();
-			$('#numQuestion').append("Question " + numQuestion + "/" + nbQuestions);
-			$('#nomQuestion').empty();
-			$('#nomQuestion').append(q[numQuestion-1].NOM_QUESTION);
+			$('#numQuestion').empty().append("Question " + numQuestion + "/" + nbQuestions);
+			$('#nomQuestion').empty().append(q[numQuestion-1].NOM_QUESTION);
 			idGoodAnswer = q[numQuestion-1].ID_REPONSE_BONNE;
 			loadAnswers(idQuestion);
-
-			// Bouton précédent
-			if (numQuestion==1) $('#previousQuestion').attr("disabled", true); 
-			else $('#previousQuestion').attr("disabled", false);
-			// Bouton suivant
-			if (numQuestion == nbQuestion) $('#nextQuestion').attr("disabled", true);
-			else $('#nextQuestion').attr("disabled", false);
 		}
 
 		function loadAnswers(idQuestion){
@@ -110,7 +118,9 @@
 			socket.emit('req_answer_by_idQuestion', idQuestion);
 			socket.on('res_answer_by_idQuestion', function(data){
 				$('.listeReponses').empty();
+				listeReponses = [];
 				for(var rep in data){
+					listeReponses.push(data[rep].NOM_REPONSE);
 					if (data[rep].ID_REPONSE == idGoodAnswer){
 						$('.listeReponses').append('<li id="goodAnswer" class="reponse">' + data[rep].NOM_REPONSE + '</li>');
 					} else {
@@ -120,34 +130,59 @@
 			});
 		}
 
+		function loadStats(){
+				displayStat = true;
+				socket.emit('req_stats_question', id_session, idQuestion);
+				socket.on('res_stats_question', function(result){
+					google.charts.load('current', {'packages':['corechart']});
+					google.charts.setOnLoadCallback(function(){
+						drawChart(listeReponses, result);
+						$('.stats').show();
+						$('.listeReponses').hide();
+					});
+				});
+		}
+
 		function nextQuestion(){
+			$('.stats').hide();
 			goodAnswerDisplayed = false;
-			if (numQuestion < nbQuestion){
-				numQuestion++;
-				loadQuestion(numQuestion, nbQuestion);				
+			if (displayStat==true && nbQuestion==numQuestion){
+				// FIN DU DIAPO
+			} else {
+				if (displayStat){ // SI les stats sont affichés, alors on affiche la question suivante
+					if (numQuestion < nbQuestion){
+						numQuestion++;
+						loadQuestion(numQuestion, nbQuestion);
+						$('.listeReponses').show();			
+					}
+					displayStat = false;
+				} else { // SI la question est affiché, on affiche les stats
+					loadStats();
+				}
 			}
+			refreshDisplayPrevNext();
 		}
 
 		function previousQuestion(){
+			$('.stats').hide();
+			displayStat = false;
 			goodAnswerDisplayed = false;
-			if (numQuestion > 0){
+			if (numQuestion > 1){
 				numQuestion--;
-				loadQuestion(numQuestion, nbQuestion);				
+				loadQuestion(numQuestion, nbQuestion);	
+				$('.listeReponses').show();			
 			}
+			refreshDisplayPrevNext();
 		}
 
-		function showAnswer(){
-			if (!goodAnswerDisplayed) {
-				goodAnswerDisplayed = true;
-				$('#goodAnswer').css({"background":"#2ECC71"});
-			} else {
-				goodAnswerDisplayed = false;
-				$('#goodAnswer').css({"background":"transparent"});
-			}
+		function refreshDisplayPrevNext(){
+			// Bouton précédent
+			if (numQuestion==1 && displayStat==false) $('#previousQuestion').attr("disabled", true); 
+			else $('#previousQuestion').attr("disabled", false);
+			// Bouton suivant
+			if (numQuestion==nbQuestion && displayStat==true) $('#nextQuestion').attr("disabled", true);
+			else $('#nextQuestion').attr("disabled", false);
 		}
-
-
-
 	});
 
 	</script>

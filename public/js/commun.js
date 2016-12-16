@@ -2,6 +2,19 @@
 // Connection SOCKET
 var socket = io.connect('http://localhost:8080');
 
+function notif(text, color) {
+	$('.pop').remove();
+	pop = $('<div/>')
+			.addClass('pop')
+			.text(text)
+			.css({color: '#FFF', backgroundColor: color });
+	$('body').append(pop);
+
+	setTimeout(function (argument) {
+		$(pop).fadeOut('200');
+	}, 1400);
+}	
+
 $(document).ready(function() {
 
 	// INIT HEADER
@@ -40,18 +53,6 @@ $(document).ready(function() {
 		notif(message, "#39CA74");
     });
 
-    function notif(text, color) {
-		$('.pop').remove();
-		pop = $('<div/>')
-				.addClass('pop')
-				.text(text)
-				.css({color: '#FFF', backgroundColor: color });
-		$('body').append(pop);
-
-		setTimeout(function (argument) {
-			$(pop).fadeOut('200');
-		}, 1400);
-	}
 
 });
 

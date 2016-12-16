@@ -40,14 +40,16 @@ li {
 	font-size: 30px;
 }
 
-.reponse {
+.listeReponses li {
 	padding: 10px 20px;
 	border-radius: 2px;
+	color: #000;
 	transition: all .5s;
 }
 
-.correct {
+.goodAnswer {
 	background-color: #2ECC71;
+	color: #FFF !important;
 }
 
 .commands {

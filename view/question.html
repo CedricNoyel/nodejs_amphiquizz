@@ -12,9 +12,17 @@
 		<script src="../../js/commun.js"></script>
 		<script>
 			$(function() {
-			    $("#sortable").sortable();
-			    $("#sortable").disableSelection();
-			});
+                $("#sortable").sortable({
+                    start: function(event, ui) {
+                        ui.item.bind("click.prevent",
+                            function(event) { event.preventDefault(); });
+                    },
+                    stop: function(event, ui) {
+                        setTimeout(function(){ui.item.unbind("click.prevent");}, 300);
+                    }
+                    });
+                $("#sortable").disableSelection();
+            });
 		</script>
 	</head>
 
@@ -51,7 +59,7 @@
 								<th>Réponses possibles</th><th>Bonne réponse</th><th></th>
 							</tr>
 						</thead>
-						<tbody>		<!-- REPONSES -->		</tbody>
+						<tbody id='sortable'>		<!-- REPONSES -->		</tbody>
 					</table>
 				</div>
 			</div>
@@ -59,6 +67,7 @@
 	</body>
 
 	<script>
+
 	var ID_QUESTION;
 	var ID_QUESTIONNAIRE;
 
@@ -93,7 +102,7 @@
 				console.log(id_reponse);
 				var reponse_id = "answer" + id_reponse;
 				$('tbody').append("<tr id='" + reponse_id + "'><td>"+ reponse +"</td>" +
-															  "<td><input onclick='radioClicked("+ id_reponse +")' type='radio' name='bonneReponse'</td>" +
+															  "<td><div class='radio'><input onclick='radioClicked("+ id_reponse +")' type='radio' name='bonneReponse' /><label class='radio-label'></label></div></td>" +
 															  "<td onclick='delAnswer("+ id_reponse +")' class='supprimerReponse'>✖</td></tr>");
 			});
 		}
@@ -110,13 +119,13 @@
 			{
 				var row = $('<tr id=answer'+ reponses[i].ID_REPONSE +'>');
 				var column1 = $('<td>'), 
-					column2 = $('<td class="radio">');
+					column2 = $('<td>');
 				column1.append(reponses[i].NOM_REPONSE);
 
 				var isChecked = " ";
 				if (question[0].ID_REPONSE_BONNE == reponses[i].ID_REPONSE)
 					isChecked = " checked ";
-				column2.append('<input onclick="radioClicked('+ reponses[i].ID_REPONSE +')" type="radio"'+ isChecked +'name="bonneReponse">');
+				column2.append('<div class="radio"><input onclick="radioClicked('+ reponses[i].ID_REPONSE +')" type="radio"'+ isChecked +'name="bonneReponse"><label class="radio-label"></label></div>');
 
 				$(row).append(column1, column2);
 				row.append('<td onclick="delAnswer('+ reponses[i].ID_REPONSE +')" class="supprimerReponse">✖</td>')
@@ -134,6 +143,8 @@
 		socket.emit('edit_answer', id_bonne_reponse, ID_QUESTION, ID_QUESTIONNAIRE);
 	}
 
-
+	$('#sortable tr td:nth-child(2)').click(function(event) {
+            $(this).children('.radio').children('input').prop('checked', true);
+    });	
 	</script>
 </html>

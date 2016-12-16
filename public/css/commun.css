@@ -13,7 +13,7 @@
 	outline: none;
 }
 
-html {
+html, body {
 
 	width: 100%;
 	height: 100%;
@@ -185,8 +185,6 @@ input:focus ~ .highlight {
 
 /* BOUTON ============== */
 
-
-
 .bouton {
 	height: 50px;
 	margin: 20px 0 20px 20px;
@@ -207,10 +205,11 @@ input:focus ~ .highlight {
 }
 
 .bouton:disabled {
-	background-color: #CECECE;
-	color: #000;
+	background-color: #F7F7F7;
+	color: #D8D8D8;
 	cursor: default;
 }
+
 .bouton:hover:enabled {
 	color: #FFF;
 	background-color: #5264AE;
@@ -291,7 +290,38 @@ input:focus ~ .highlight {
     }
 }
 
+/* Override Alert() function */
 
+.info {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(204, 204, 204, .5);
+	z-index: 1000;
+}
+
+.alert {
+	position: relative;
+	width: 500px;
+	height: 200px;
+	margin: auto;
+	top: 20%;
+	color: #000;
+	background-color: #FFF;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.textAlert {
+	width: 100%;
+	padding: 40px;
+	/* background-color: red; */
+	font-size: 19px;
+	height: 110px;
+}
+
+.alert .bouton {
+	margin: 20px 20px 0 0;
+}
 
 
 
