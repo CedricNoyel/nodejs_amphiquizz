@@ -3,12 +3,6 @@ body {
 	color: #383838;
 }
 
-.logo {
-	width: 100px;
-	margin: 0 20px;
-	position: absolute;
-}
-
 container {
 	position: absolute;
 	display: block;
@@ -22,14 +16,15 @@ container div {
 	display: inline-block;
 }
 
+/* Liste des questions */
+
 .listeQuestions {
 	width: calc(50% - 15px);
 }
 
-.listeQuestions ol {
+ol {
 	display: inline-block;
 	width: 100%;
-	max-height: 400px;
 	float: left;
 	background-color: #FFF;
 	border-radius: 1px;
@@ -38,7 +33,7 @@ container div {
 	overflow-y: auto;
 }
 
-.listeQuestions ol li {
+ol li {
 	background-color: #FFF;
 	width: 100%;
 	min-width: 550px;
@@ -50,11 +45,11 @@ container div {
 	overflow-x: scroll;
 }
 
-.listeQuestions li:nth-child(even) {
+li:nth-child(even) {
     background-color: #F7F7F7;
 }
 
-.listeQuestions li:hover {
+li:hover {
 	border-width: 10px;
 	transition: border-width .3s;
 }
@@ -66,9 +61,18 @@ container div {
 .listeQuestions .complet {
 	border-left: 3px solid #2ECC71;
 }
+
+/* Right part */
+
+.rightSide {
+    width: calc(50% - 15px);
+    float: right;
+}
+
+/* Infos du questionnaire */
+
 .infosQuestionnaire {
-	width: calc(50% - 15px);
-	float: right;
+	width: 100%;
 }
 
 .nomQuestionnaire {
@@ -102,10 +106,64 @@ container div {
 	width: 100%;
 }
 
+/* Historique des questionnaires */
 
+.historiqueQuestionnaire {
+    width: 100%;
+	max-height: 300px;
+	margin-top: 20px;
+	background-color: #FFF;
+	border-radius: 1px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	overflow-y: scroll;
+}
 
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
 
+th {
+	height: 50px;
+	background-color: #B8B8B8;
+	color: #FFF;
+	text-transform: uppercase;
+}
 
+tr {
+	height: 50px;
+	width: 100%;
+	cursor: pointer;
+}
 
+td:nth-child(1) {
+	width: 40px;
+	padding-left: 15px;
+}
 
+tr:nth-child(odd) {
+	background-color: #FFF;
+}
 
+tr:nth-child(even) {
+	background-color: #F7F7F7;
+}
+
+tr:hover {
+	background-color: #DFDFDF;
+	transition: all .4s;
+}
+
+td {
+	height: 50px;
+	line-height: 45px;
+	overflow: hidden;
+}
+
+.supprimerReponse {
+	color: #FFF;
+	background-color: #E74C3C;
+	text-align: center;
+	padding: 0 10px;
+	cursor: pointer;
+}

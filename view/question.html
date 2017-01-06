@@ -99,7 +99,6 @@
 			socket.emit('req_add_answer', reponse, ID_QUESTION);
     		socket.off('res_add_answer');
 			socket.on('res_add_answer', function(id_reponse){
-				console.log(id_reponse);
 				var reponse_id = "answer" + id_reponse;
 				$('tbody').append("<tr id='" + reponse_id + "'><td>"+ reponse +"</td>" +
 															  "<td><div class='radio'><input onclick='radioClicked("+ id_reponse +")' type='radio' name='bonneReponse' /><label class='radio-label'></label></div></td>" +

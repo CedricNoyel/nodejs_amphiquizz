@@ -10,6 +10,7 @@
 		<script src="../../js/jquery-ui.js"></script>	
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="../../js/commun.js"></script>
+		<script src="../../js/functions.js"></script>
 		<script>
 			$(function() {
 			    $("#sortable").sortable();
@@ -28,25 +29,41 @@
 				</ol>
 				<button class="bouton" type="button" id="addQuestion">Ajouter une question</button>
 			</div>
-			<div class="infosQuestionnaire">
-				<div class="nomQuestionnaire">
-					<div class="group">
-						<input class="textField" name="nom" type="text" id="nom" value="" required>
-						<span class="highlight"></span>
-						<span class="bar"></span>
-						<label>Nom du questionnaire</label>
-					</div>
-					<div class="boutonContainer">
-						<div>
-							<button id='launchQuestionnaire' class="bouton launch" type="button">Lancer le questionnaire</button>
+			<div class="rightSide">
+				<div class="infosQuestionnaire">
+					<div class="nomQuestionnaire">
+						<div class="group">
+							<input class="textField" name="nom" type="text" id="nom" value="" required>
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label>Nom du questionnaire</label>
 						</div>
-						<div>
-							<button id='delQuestionnaire' class="bouton suppr" type="button">Supprimer</button>
-							<button id='saveQuestionnaire' class="bouton save" type="button">Enregistrer</button>
+						<div class="boutonContainer">
+							<div>
+							</div>
+							<div>
+								<button id='delQuestionnaire' class="bouton suppr" type="button">Supprimer</button>
+								<button id='saveQuestionnaire' class="bouton save" type="button">Enregistrer</button>
+								<button id='launchQuestionnaire' class="bouton launch" type="button">Lancer le questionnaire</button>
+							</div>
 						</div>
 					</div>
 				</div>
+				<div class="historiqueQuestionnaire">
+                    <table>
+						<thead>
+							<tr>
+								<th colspan="3">Historique des questionnaires</th>
+							</tr>
+						</thead>
+						<tbody id="listSession">
+						<!-- 
+						-->
+						</tbody>
+					</table>
+                </div>
 			</div>
+			
 		</container>
 	</body>
 
@@ -55,6 +72,19 @@
     var pos_id_quest = document.URL.lastIndexOf('/');
     var ID_QUESTIONNAIRE = document.URL.substr(pos_id_quest+1);
     var NOM_QUESTIONNAIRE;
+
+	socket.emit('req_historique_sessions', ID_QUESTIONNAIRE);
+	socket.on('res_historique_sessions', function(result){
+		var k = 0;
+		for (var i in result){
+			k++;
+			var date = new Date(result[i].DATE_SESSION);
+			var ligne = $('<tr id="session'+result[i].ID_SESSION+'"><td onclick="clickSessionHisto('+result[i].ID_SESSION+')">'+ k +'</td><td onclick="clickSessionHisto('+result[i].ID_SESSION+')">' + date.toString().substr(4, 17) + '</td><td class="supprimerReponse" onclick="delSession('+result[i].ID_SESSION+')">✖</td></tr>');
+			/*var ligne = $('<tr id="session'+result[i].ID_SESSION+'"><td onclick="clickSessionHisto('+result[i].ID_SESSION+')">'+ k +'</td><td onclick="clickSessionHisto('+result[i].ID_SESSION+')">' + date.toUTCString().substr(5,17) + '</td><td class="supprimerReponse" onclick="delSession('+result[i].ID_SESSION+')">✖</td></tr>');
+*/
+			$('#listSession').prepend(ligne);	
+		}
+	});
 
 	// Demande questions du questionnaire
     socket.emit('req_question_by_questionnaire_id', ID_QUESTIONNAIRE);
@@ -114,5 +144,45 @@
     		document.location.href='../launched/' + id_session;
 		});	
 	});
+
+	function clickSessionHisto(idSession){
+		alert("Vous allez etre redirigé vers l'historique sélectioné pour la session : " + idSession);
+		socket.emit('req_export_data', ID_QUESTIONNAIRE, idSession);
+		socket.on('res_export_data', function(data){
+			console.log(data);
+			var dataQuestions = new Array();
+			for (var i in data)
+			{
+				if (dataQuestions.indexOf(data[i].Question)== -1)
+					dataQuestions.push(data[i].Question);
+			}
+			console.log(dataQuestions);
+
+			var newArray = new Object();
+			for (var i in data)
+			{
+				newArray["Téléphone"] = data[i].Numtel;
+				for (var j in dataQuestions)
+				{
+					newArray[dataQuestions[j]] = data[i].Reponse;
+				}
+			}
+			console.log(newArray);
+
+
+		});
+	}
+
+	function delSession(idSession){
+		info("Voulez-vous vraiment vous supprimer ?", "yesCancel");
+		socket.emit('req_del_session', idSession);
+		socket.on('res_del_session', function(res){
+			idSession = "#session"+idSession
+			$(idSession).remove();
+		});
+	}
+
+
 </script>
+
 </html>

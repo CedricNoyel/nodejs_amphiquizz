@@ -29,7 +29,8 @@
 
 			<div class="commands">
 				<button type="button" id="nextQuestion" class="bouton">></button>
-				<button type="button" id="showAnswer" class="bouton">Afficher la réponse</button>
+				<button type="button" id="showAnswer" class="bouton">Réponse</button>
+				<button type="button" id="ButtonStats" class="bouton">Stats</button>
 				<button type="button" id="previousQuestion" class="bouton"><</button>
 			</div>
 		</div>
@@ -47,8 +48,6 @@
 	var displayStat = false;
 	var listeReponses;
 	var q;
-
-	var goodAnswerDisplayed = false;
     	
     var pos_id_session = document.URL.lastIndexOf('/');
     var id_session = document.URL.substr(pos_id_session+1);
@@ -56,6 +55,7 @@
     // Chargement du JS
 	$(document).ready(function(){
 		// ========= INIT =========
+		$('#ButtonStats').attr('disabled', false)
 		$('#previousQuestion').attr("disabled", true);
 		$('.stats').hide();
 
@@ -84,25 +84,25 @@
 		    if(e.keyCode == 39) // RIGHT
 				nextQuestion();
 		    else if(e.keyCode == 37) // LEFT
-		    	previousQuestion();
-		    else if(e.keyCode == 32 || e.keyCode == 13) // SPACEBAR
-				$('#goodAnswer').toggleClass('goodAnswer');
+		    	previousQuestion();/*
+		    else if(e.keyCode == 32) // SPACEBAR
+				$('#goodAnswer').toggleClass('goodAnswer');*/
 		});
 
 		// ========= DISPLAY NEXT AND PREV ========= //
 		$('#previousQuestion').click(function(){
 			previousQuestion();
 		});
-
 		// NEXT
 		$('#nextQuestion').click(function(){
 			nextQuestion();
 		});
-
 		$('#showAnswer').click(function(){
 			$('#goodAnswer').toggleClass('goodAnswer');
 		});
-
+		$('#ButtonStats').click(function(){
+			showStats();
+		});
 		// ========= FUNCTIONS ========= //
 		function loadQuestion(numQuestion, nbQuestions){
 			$('.listeReponses').empty();
@@ -130,43 +130,30 @@
 			});
 		}
 
-		function loadStats(){
-				displayStat = true;
-				socket.emit('req_stats_question', id_session, idQuestion);
-				socket.on('res_stats_question', function(result){
-					google.charts.load('current', {'packages':['corechart']});
-					google.charts.setOnLoadCallback(function(){
-						drawChart(listeReponses, result);
-						$('.stats').show();
-						$('.listeReponses').hide();
-					});
+		function showStats(){
+			socket.emit('req_stats_question', id_session, idQuestion);
+			socket.on('res_stats_question', function(result){
+				google.charts.load('current', {'packages':['corechart']});
+				google.charts.setOnLoadCallback(function(){
+					drawChart(listeReponses, result);
+					$('.stats').show();
+					$('.listeReponses').hide();
 				});
+			});
 		}
 
 		function nextQuestion(){
 			$('.stats').hide();
-			goodAnswerDisplayed = false;
-			if (displayStat==true && nbQuestion==numQuestion){
-				// FIN DU DIAPO
-			} else {
-				if (displayStat){ // SI les stats sont affichés, alors on affiche la question suivante
-					if (numQuestion < nbQuestion){
-						numQuestion++;
-						loadQuestion(numQuestion, nbQuestion);
-						$('.listeReponses').show();			
-					}
-					displayStat = false;
-				} else { // SI la question est affiché, on affiche les stats
-					loadStats();
-				}
+			if (numQuestion < nbQuestion){
+				numQuestion++;
+				loadQuestion(numQuestion, nbQuestion);
+				$('.listeReponses').show();			
 			}
 			refreshDisplayPrevNext();
 		}
 
 		function previousQuestion(){
 			$('.stats').hide();
-			displayStat = false;
-			goodAnswerDisplayed = false;
 			if (numQuestion > 1){
 				numQuestion--;
 				loadQuestion(numQuestion, nbQuestion);	
@@ -177,10 +164,10 @@
 
 		function refreshDisplayPrevNext(){
 			// Bouton précédent
-			if (numQuestion==1 && displayStat==false) $('#previousQuestion').attr("disabled", true); 
+			if (numQuestion<=1) $('#previousQuestion').attr("disabled", true); 
 			else $('#previousQuestion').attr("disabled", false);
 			// Bouton suivant
-			if (numQuestion==nbQuestion && displayStat==true) $('#nextQuestion').attr("disabled", true);
+			if (numQuestion>=nbQuestion) $('#nextQuestion').attr("disabled", true);
 			else $('#nextQuestion').attr("disabled", false);
 		}
 	});
