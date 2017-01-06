@@ -10,6 +10,7 @@
 		<script src="../../js/jquery-ui.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="../../js/commun.js"></script>
+		<script src="../../js/functions.js"></script>
 		<script>
 			$(function() {
                 $("#sortable").sortable({
@@ -73,13 +74,20 @@
 
     var pos_id_quest = document.URL.lastIndexOf('/');
     var ID_QUESTION = document.URL.substr(pos_id_quest+1);
-	// INIT (demande question et reponses)
-	loadAnswers();
-	// FIN INIT
+
+	$(document).ready(function() {
+		// INIT (demande question et reponses)
+		loadAnswers();
+		// FIN INIT
+	});
 
 	$('#btnSupprimerQuestion').click(function(){
-		socket.emit('del_question', ID_QUESTION);
-		document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
+		info("Voulez-vous vraiment supprimer la question sélectionnée ainsi que toutes les réponses liées ?", "yesCancel", function(res){
+			if (res){
+				socket.emit('del_question', ID_QUESTION);
+				document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
+			}
+		});
 	});
 
 	$('#btnSauvegarderQuestion').click(function(){
@@ -134,8 +142,10 @@
 	}
 
 	function delAnswer(id_answer){
-		socket.emit('del_answer', id_answer);
-		$("#answer"+ id_answer).remove();
+		info("Voulez-vous vraiment supprimer la réponse sélectionnée ?", "yesCancel", function(res){
+			socket.emit('del_answer', id_answer);
+			$("#answer"+ id_answer).remove();
+		});
 	}
 
 	function radioClicked(id_bonne_reponse){
@@ -145,5 +155,7 @@
 	$('#sortable tr td:nth-child(2)').click(function(event) {
             $(this).children('.radio').children('input').prop('checked', true);
     });	
+
+
 	</script>
 </html>

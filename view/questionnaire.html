@@ -116,10 +116,12 @@
 
     // Click sur supprimer le questionnaire
     $('#delQuestionnaire').click(function(){
-		if (confirm("Souhaitez-vous vraiment supprimer le questionnaire ainsi que toutes les questions associées ?")) {
-    		socket.emit('req_del_questionnaire', ID_QUESTIONNAIRE);
-    		document.location.href='../../admin';
-		}
+		info("Voulez-vous vraiment supprimer le questionnaire ?", "yesCancel", function(res){
+			if (res) {
+	    		socket.emit('req_del_questionnaire', ID_QUESTIONNAIRE);
+	    		document.location.href='../../admin';
+			} else { }
+		});
     });
 
     // Click sur sauvegarder le questionnaire
@@ -174,11 +176,17 @@
 	}
 
 	function delSession(idSession){
-		info("Voulez-vous vraiment vous supprimer ?", "yesCancel");
-		socket.emit('req_del_session', idSession);
-		socket.on('res_del_session', function(res){
-			idSession = "#session"+idSession
-			$(idSession).remove();
+		info("Voulez-vous vraiment supprimer l'historique sélectionné ?", "yesCancel", function(res){
+			if (res){
+				socket.emit('req_del_session', idSession);
+					socket.on('res_del_session', function(res){
+						idSession = "#session"+idSession
+						$(idSession).remove();
+					});
+			} else {
+
+			}
+			
 		});
 	}
 

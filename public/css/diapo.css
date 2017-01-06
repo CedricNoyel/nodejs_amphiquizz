@@ -59,6 +59,16 @@ li {
 	height: 90px;
 }
 
+.nbReponses {
+	line-height: 50px;
+	background-color: #FFF;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
 
+.stats {
+	height: calc(100% - 250px);
+}
 
-
+.stats div {
+	display: inline-block;
+}
