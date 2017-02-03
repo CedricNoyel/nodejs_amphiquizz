@@ -136,15 +136,20 @@
     	document.location.href='../../question/' + id_question;
 	};
 
-	$('#statsQuestionnaire').click(function(){
-    	document.location.href='../stats/' + ID_QUESTIONNAIRE;
-	});
-
 	$('#launchQuestionnaire').click(function(){
-		socket.emit('req_launch_questionnaire', ID_QUESTIONNAIRE);
-		socket.on('res_launch_questionnaire', function(id_session){
-    		document.location.href='../launched/' + id_session;
-		});	
+		info("Souhaitez-vous récupérer le nom des votants ?", "yesNo", function(res){
+			var anonyme;
+			if (res == 'no') anonyme = true; // ANONYME
+			else if (res=="yes") anonyme = false; // NON ANONYME
+			else return; // on execute pas la suite
+
+			socket.emit('req_launch_questionnaire', ID_QUESTIONNAIRE, anonyme);
+			socket.on('res_launch_questionnaire', function(id_session){
+				document.location.href='../launched/' + id_session;
+			});
+
+		});
+
 	});
 
 	function clickSessionHisto(idSession){

@@ -63,12 +63,40 @@ function info(text, button="yesCancel", callback) {
 			$(boxAlert).append(buttonCancel);
 			$(boxAlert).append(buttonYes);
 			break;
+		case 'yesNo':
+			buttonNo = $('<button/>')
+					.addClass('bouton suppr')
+					.text('Non')
+					.click(function(event) {
+						$('.info').fadeOut('fast');
+						callback("no");
+					});
+
+			buttonYes = $('<button/>')
+					.addClass('bouton save')
+					.text('Oui')
+					.click(function(event) {
+						$('.info').fadeOut('fast');
+						callback("yes");
+					});
+
+			buttonCancel = $('<button/>')
+					.addClass('bouton')
+					.text('Retour')
+					.click(function(event) {
+						$('.info').fadeOut('fast');
+						callback("cancel");
+					});
+
+			$(boxAlert).append(buttonNo);
+			$(boxAlert).append(buttonCancel);
+			$(boxAlert).append(buttonYes);
+			break;
 		default:
 			break;
 	}
 
 	$(bloc).append(boxAlert);
-
 	$('body').append(bloc);
 	$('.info').fadeIn('fast');
 }

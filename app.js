@@ -8,6 +8,8 @@ var session = require('express-session');
 var fs = require('fs');
 var io_route = require('./lib/sockets')(http);
 var helmet = require('helmet');
+var childProcess = require('child_process'); // POUR MODULE SMS
+
 
 app.use(helmet());
 app.use(bodyParser.json()); // support json encoded bodies
@@ -30,6 +32,25 @@ var db = require('./lib/db');
 var dataAccess = require('./lib/dataAccess');
 var routes = require('./lib/router')(app);
 var functions = require('./lib/functions');
+
+var smsReceived = [];
+
+// SMS HANDLE
+var smsDaemon = childProcess.exec('sudo python sms.py');
+smsDaemon.stdout.on('data',function(data){
+	var smsParts = data.split("\t");
+	smsReceived.push({ 
+		from: smsParts[0], 
+		date: smsParts[1], 
+		content: smsParts[2].trim()
+	});
+	console.log(smsReceived);
+	dataAccess.addSms(smsReceived[0].from, smsReceived[0].content); // Ajout a la base de donnee
+});
+smsDaemon.stderr.on('data',function(data){
+	// Pour le debug, avec la ligne logging décommentée dans sms.py
+    console.log("err: "+data); 
+});
 
 
 
