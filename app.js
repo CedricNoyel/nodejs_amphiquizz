@@ -1,5 +1,9 @@
 // app.js
 
+var SMS_MODULE =  false; // Désactiver pour test sans le module
+var DISPLAY_SMS = true; // Afficher dans la console les SMS reçus
+var DEBUG = false;
+
 var express = require('express');
 var app = express(); 
 var http = require('http').Server(app);
@@ -33,24 +37,36 @@ var dataAccess = require('./lib/dataAccess');
 var routes = require('./lib/router')(app);
 var functions = require('./lib/functions');
 
-var smsReceived = [];
 
 // SMS HANDLE
-var smsDaemon = childProcess.exec('sudo python sms.py');
-smsDaemon.stdout.on('data',function(data){
-	var smsParts = data.split("\t");
-	smsReceived.push({ 
-		from: smsParts[0], 
-		date: smsParts[1], 
-		content: smsParts[2].trim()
+if (SMS_MODULE)
+{
+	console.log("Activating SMS Device".green);
+	var smsReceived = [];
+	var smsDaemon = childProcess.exec('sudo python sms.py');
+	smsDaemon.stdout.on('data',function(data){
+		var smsParts = data.split("\t");
+		smsReceived.push({ from: smsParts[0], date: smsParts[1], content: smsParts[2].trim() });
+
+		functions.requireSMS_Add(smsReceived[0].from, smsReceived[0].content, function(res){ 
+			if (DISPLAY_SMS) console.log(smsReceived.yellow);
+			console.log("SMS Entre en base");
+		}); 
 	});
-	console.log(smsReceived);
-	dataAccess.addSms(smsReceived[0].from, smsReceived[0].content); // Ajout a la base de donnee
-});
-smsDaemon.stderr.on('data',function(data){
-	// Pour le debug, avec la ligne logging décommentée dans sms.py
-    console.log("err: "+data); 
-});
+
+	smsDaemon.stderr.on('data',function(data){
+		// Pour le debug, avec la ligne logging décommentée dans sms.py
+	    // console.log("err: " + data); 
+	});
+
+} else {
+	console.log("App is running without SMS device !".red);
+	functions.requireSMS_Add("+33649713933", "Hello world !", function(res){ /* Ajout a la base de donnee */ }); 
+	functions.requireSMS_Add("+33649713999", "Hello world !", function(res){ /* Ajout a la base de donnee */ }); 
+	functions.requireSMS_Add("+33649714242", "Hello world !", function(res){ /* Ajout a la base de donnee */ }); 
+	functions.requireSMS_Add("+33649710938", "Hello world !", function(res){ /* Ajout a la base de donnee */ }); 
+	functions.requireSMS_Add("+33749716322", "Hello world !", function(res){ /* Ajout a la base de donnee */ }); 
+}
 
 
 
