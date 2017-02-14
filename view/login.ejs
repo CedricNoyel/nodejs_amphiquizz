@@ -26,7 +26,20 @@
                     <input type="submit" value="Connexion" />
                     <a href="/register">Creer un compte</a>
                 </div>
+                <p id="erreurLogin"></p>
             </div>
         </form>
     </body>
 </html>
+
+<script>
+
+    // If login or password wrong
+    var erreur = <%- JSON.stringify(erreur) %>;
+    if (erreur){
+        notif("Les identifiants sont incorrects", "#E74C3C");
+        $('#erreurLogin').append('Les identifiants sont incorrects');
+    }
+
+
+</script>

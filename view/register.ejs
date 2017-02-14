@@ -3,14 +3,7 @@
 <!DOCTYPE html> 
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>AmphiQuizz - Connexion</title>
-        <link rel="stylesheet" type="text/css" href="css/commun.css"/>
-        <link rel="stylesheet" type="text/css" href="css/connexion.css"/>
-        <script src="../../js/jquery.js"></script>
-        <script src="../../js/jquery-ui.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-		<script src="../../js/socket.js"></script>
+        <%- include('./partials/head'); %> 
     </head>
     <body>
         <img src="img/logoAQ.png" alt="Logo" class="logo">
@@ -50,7 +43,22 @@
                     <input type="submit" value="Inscription" id="submitRegister" />
                     <a href="/">Retour</a>
                 </div>
+                <p id="erreurLogin" ><p>
             </div>
         </form>
     </body>
 </html>
+
+
+<script>
+
+$(document).ready(function(){
+
+    // If error on creating account
+    var erreur = <%- JSON.stringify(erreur) %>;
+    if (erreur){
+        notif("Le mot de passe ne correspond pas", "#E74C3C");
+        $('#erreurLogin').append("Impossible de créer le compte, vérfiez vos identifiants et essayez de changer de login");
+    }
+});
+</script>
