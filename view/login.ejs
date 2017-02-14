@@ -1,16 +1,10 @@
 <!DOCTYPE html> 
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>AmphiQuizz - Connexion</title>
-        <link rel="stylesheet" type="text/css" href="css/commun.css"/>
-        <link rel="stylesheet" type="text/css" href="css/connexion.css"/>
-        <script src="../../js/jquery.js"></script>
-        <script src="../../js/jquery-ui.js"></script>   
+        <%- include('./partials/head'); %> 
     </head>
 
     <body>
-
         <img src="img/logoAQ.png" alt="Logo" class="logo">
         <form action='/login' method='POST'>
             <div class="container">
@@ -30,6 +24,7 @@
 
                 <div class="connexion">
                     <input type="submit" value="Connexion" />
+                    <a href="/register">Creer un compte</a>
                 </div>
             </div>
         </form>

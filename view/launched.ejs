@@ -36,7 +36,7 @@
 		</div>
 	</body>
 	<script>
-	
+	var verifStat=true;
 	// Connection SOCKET
 	var socket = io.connect('http://localhost:8080');
 
@@ -92,17 +92,20 @@
 		// ========= DISPLAY NEXT AND PREV ========= //
 		$('#previousQuestion').click(function(){
 			previousQuestion();
+			verifStat=true;
 		});
 		// NEXT
 		$('#nextQuestion').click(function(){
 			nextQuestion();
+			verifStat=true;
 		});
 		$('#showAnswer').click(function(){
 			$('#goodAnswer').toggleClass('goodAnswer');
 		});
 		$('#ButtonStats').click(function(){
-			showStats();
+			verifStat==false?verifStat=true:verifStat=false; // false : stats afficher
 		});
+		
 		// ========= FUNCTIONS ========= //
 		function loadQuestion(numQuestion, nbQuestions){
 			$('.listeReponses').empty();
@@ -131,6 +134,7 @@
 		}
 
 		function showStats(){
+		
 			socket.emit('req_stats_question', id_session, idQuestion);
 			socket.on('res_stats_question', function(result){
 				google.charts.load('current', {'packages':['corechart']});
@@ -170,7 +174,20 @@
 			if (numQuestion>=nbQuestion) $('#nextQuestion').attr("disabled", true);
 			else $('#nextQuestion').attr("disabled", false);
 		}
+		
+	function actualise(){
+		if (!verifStat){
+			showStats();
+			$("#showAnswer").hide();
+		}
+		setTimeout(actualise, 5000);	
+	}
+	
+	
+	actualise();
+	
 	});
+	
 
 	</script>
 </html>

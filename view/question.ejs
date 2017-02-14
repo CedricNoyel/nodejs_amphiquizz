@@ -1,16 +1,8 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>AmphiQuizz - Admin</title>
-		<link rel="stylesheet" type="text/css" href="../../css/commun.css"/>
-		<link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
-		<link rel="stylesheet" type="text/css" href="../../css/question.css"/>
-		<script src="../../js/jquery.js"></script>
-		<script src="../../js/jquery-ui.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="../../js/commun.js"></script>
-		<script src="../../js/functions.js"></script>
+<head>
+    <%- include('./partials/head'); %> 
+</head>
 		<script>
 			$(function() {
                 $("#sortable").sortable({
@@ -25,9 +17,10 @@
                 $("#sortable").disableSelection();
             });
 		</script>
-	</head>
-
 	<body>
+	<header>
+    	<%- include('./partials/header') -%> 
+	</header>
 		<container>
 			<div class="btnRetour">
 				<button type="button" id="btnRetour" >Retour</button>

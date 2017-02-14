@@ -2,10 +2,10 @@
 
 // ======== GLOBAL VAR ========
 global.NUM_SMS = "0769110568";
-global.FAKE_SMS = false;
+global.FAKE_SMS = true;
 global.SMS_MODULE =  false; // Désactiver pour test sans le module
 global.DISPLAY_SMS = true; // Afficher dans la console les SMS reçus
-global.DEBUG = false;
+global.DEBUG = true;
 global.session = false; // false => no session running
 global.currentQuestion = false;
 
@@ -24,6 +24,7 @@ app.use(helmet());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(express.static(__dirname + "/public"));
+app.set('view engine', 'ejs');
 
 var expiryDate = new Date(Date.now() + 60 * 60 * 1000 );
 
