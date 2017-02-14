@@ -1,20 +1,32 @@
-@import 'https://fonts.googleapis.com/css?family=Roboto';
+@font-face {
+	font-family: "Product";
+	src: url("../font/Product Sans.ttf");
+}
 
 @font-face {
-	font-family: Lemon;
-	src: url("font/LemonMilk.otf");
+	font-family: "ProductBold";
+	src: url("../font/Product Sans Bold.ttf");
+}
+
+@font-face {
+	font-family: "ProductItalic";
+	src: url("../font/Product Sans Italic.ttf");
+}
+
+@font-face {
+	font-family: "ProductBoldItalic";
+	src: url("../font/Product Sans Bold Italic.ttf");
 }
 
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Product', sans-serif;
 	outline: none;
 }
 
 html, body {
-
 	width: 100%;
 	height: 100%;
 }
