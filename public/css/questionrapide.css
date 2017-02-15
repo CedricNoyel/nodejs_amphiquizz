@@ -1,0 +1,162 @@
+#questionrapide container {
+	position: absolute;
+	display: block;
+	padding: 0 30px;
+	top: 100px;
+	width: 100%;
+	height: calc(100% - 100px);
+}
+
+	#questionrapide container div {
+		display: inline-block;
+	}
+
+.group {
+	width: calc(100%);
+	height: 45px;
+}
+
+#questionrapide .nomQuestion {
+	width: calc(50% - 15px);
+	float: left;
+	padding: 0 20px;
+	border-radius: 1px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+#questionrapide .reponses {
+	width: calc(50% - 15px);
+	float: right;
+	background-color: #FFF;
+	border-radius: 1px;
+}
+
+#questionrapide .ajouterReponses {
+	width: 100%;
+	float: left;
+	padding: 0 20px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+#oui_non {
+	margin-right: 20px;
+}
+
+/* Liste des réponses */
+
+#questionrapide .listeReponses {
+	width: 100%;
+	min-height: 100px;
+	max-height: 300px;
+	margin-top: 20px;
+	background-color: #FFF;
+	border-radius: 1px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    overflow-y: scroll;
+}
+
+#questionrapide .listeReponses table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#questionrapide .listeReponses th {
+	display: inline-block;
+	height: 50px;
+	background-color: #B8B8B8;
+	color: #FFF;
+	text-transform: uppercase;
+	border-right: 1px solid #DFDFDF;
+	border-left: 1px solid #DFDFDF;
+}
+
+#questionrapide .listeReponses tr {
+	height: 50px;
+	width: 100%;
+}
+
+#questionrapide .listeReponses td:nth-child(1), .listeReponses th:nth-child(1) {
+	width: calc(100% - 240px);
+	line-height: 45px;
+	padding-left: 15px;
+}
+
+#questionrapide .listeReponses td:nth-child(2), .listeReponses th:nth-child(2) {
+	width: 180px;
+	line-height: 45px;
+	cursor: pointer;
+}
+
+#question .listeReponses td:nth-child(3), .listeReponses th:nth-child(3) {
+	width: 60px;
+}
+
+#question .listeReponses tr:nth-child(odd) {
+	background-color: #FFF;
+}
+
+#question .listeReponses tr:nth-child(even) {
+	background-color: #F7F7F7;
+}
+
+#question .listeReponses td {
+	display: inline-block;
+	height: 50px;
+	line-height: 45px;
+	border-right: 1px solid #DFDFDF;
+	border-left: 1px solid #DFDFDF;
+	overflow: hidden;
+}
+
+#question .supprimerReponse {
+	color: #FFF;
+	background-color: #E74C3C;
+	text-align: center;
+	padding: 0 10px;
+	cursor: pointer;
+}
+
+/* RADIO BUTTONS */
+
+.radio input[type="radio"] {
+	margin-left: 85px;
+	height: 50px;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.radio input[type="radio"] + .radio-label {
+	position: relative;
+}
+
+.radio input[type="radio"] + .radio-label:before {
+	content: '';
+	background: #F4F4F4;
+	border: 1px solid #b4b4b4;
+	border-radius: 50%;
+	position: absolute;
+	top: -30px;
+	left: -25px;
+	width: 1.4em;
+	height: 1.4em;
+	transition: all 250ms ease;
+}
+
+.radio input[type="radio"]:checked + .radio-label:before {
+	background-color: #2ECC71;
+	box-shadow: inset 0 0 0 4px #f4f4f4;
+}
+
+.radio input[type="radio"]:focus + .radio-label:before {
+	border-color: #2ECC71;
+}
+
+.radio input[type="radio"]:disabled + .radio-label:before {
+	box-shadow: inset 0 0 0 4px #F4F4F4;
+	border-color: #b4b4b4;
+	background: #b4b4b4;
+}
+
+.radio input[type="radio"] + .radio-label:empty:before {
+	margin-right: 0;
+}

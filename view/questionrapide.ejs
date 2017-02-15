@@ -1,18 +1,13 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-		<title>AmphiQuizz - Admin</title>
-		<link rel="stylesheet" type="text/css" href="../../css/question.css"/>
-		<link rel="stylesheet" type="text/css" href="../../css/commun.css"/>
-		<script src="../../js/jquery.js"></script>
-		<script src="../../js/jquery-ui.js"></script>	
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="../../js/questionRapide.js"></script>
-		<script src="../../js/commun.js"></script>
+		<%- include('./partials/head'); %>
 	</head>
 
-	<body>
+	<body id="questionrapide">
+		<header>
+	    	<%- include('./partials/header') -%>
+		</header>
 		<container>
 			<div class="btnRetour">
 				<button type="button" id="backButton">Retour</button>
@@ -27,7 +22,7 @@
 				<!-- <button class="bouton suppr" id="btnSupprimerQuestion" type="button">Supprimer</button> -->
 				<button class="bouton" id="launchQuestionnaire" type="button">Lancer</button>
 			</div>
-			
+
 			<div class="reponses">
 				<div class="ajouterReponses">
 					<div class="group">
@@ -36,7 +31,7 @@
 						<span class="bar"></span>
 						<label>Réponse A</label>
 					</div>
-					
+
 					<div class="group">
 						<input class="textField" name="nom" type="text" id="rep_B" value="" required>
 						<span class="highlight"></span>
@@ -62,7 +57,7 @@ $(document).ready(function(){
 
     var pos_id_quest = document.URL.lastIndexOf('/');
     var ID_QUESTION = document.URL.substr(pos_id_quest+1);
-	
+
 	$('#oui_non').click(function(){
 		$("#rep_A").val("Oui");
 		$("#rep_B").val("Non");
@@ -84,7 +79,7 @@ $(document).ready(function(){
 				socket.on('res_launch_questionnaire', function(id_session){
 					alert(id_session);
 		    		document.location.href='../launched/' + id_session;
-				});	
+				});
 			});
 		}
 
@@ -102,7 +97,7 @@ $(document).ready(function(){
 						var goodAnswer = $("input[name='radioAnswer']:checked").val(); // A or B
 
 						socket.emit('req_addQuestionRapide', ID_QUESTION, questionName, answer_A, answer_B, goodAnswer);
-						socket.on('res_addQuestionRapide', function(){ });
+						socket.on('req_addQuestionRapide', function(){ });
 						notif("La question a été enregistrée", "#2ECC71");
 						return true;
 					}

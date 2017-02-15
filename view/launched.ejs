@@ -169,16 +169,15 @@
 			else $('#nextQuestion').attr("disabled", false);
 		}
 
-	function actualise(){
-		if (!verifStat){
-			showStats();
-			$("#showAnswer").hide();
+		function actualise(){
+			if (!verifStat){
+				showStats();
+				$("#showAnswer").hide();
+			}
+			setTimeout(actualise, 5000);
 		}
-		setTimeout(actualise, 5000);
-	}
 
-
-	actualise();
+		actualise();
 
 	});
 

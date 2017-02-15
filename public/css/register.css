@@ -1,0 +1,45 @@
+#register .logo {
+	width: 200px;
+	margin: auto;
+	display: block;
+	position: static;
+}
+
+#register form {
+	width: 400px;
+	margin: auto;
+	position: relative;
+	background-color: #FFF;
+	border-radius: 1px;
+	padding: 20px 40px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+#register .connexion {
+	width: 100%;
+	height: 40px;
+	margin-top: 20px;
+}
+
+	#register .connexion input {
+		float: right;
+		background-color: #FFF;
+		border: none;
+		border-radius: 1px;
+		width: 120px;
+		height: 40px;
+		font-size: 18px;
+		color: #737676;
+		text-align: center;
+		cursor: pointer;
+		transition: all .4s;
+	}
+
+		#register .connexion input:hover {
+			background-color: #EDEDED;
+		}
+
+#register .btnRetour {
+	position: absolute;
+	margin: 20px;
+}
