@@ -1,9 +1,4 @@
-body {
-	background-color: #FFF;
-	color: #383838;
-}
-
-container {
+#question container {
 	position: absolute;
 	display: block;
 	padding: 0 30px;
@@ -12,16 +7,16 @@ container {
 	height: calc(100% - 100px);
 }
 
+	#question container div {
+		display: inline-block;
+	}
+
 .group {
 	width: calc(100%);
 	height: 45px;
 }
 
-container div {
-	display: inline-block;
-}
-
-.nomQuestion {
+#question .nomQuestion {
 	width: calc(50% - 15px);
 	float: left;
 	padding: 0 20px;
@@ -29,14 +24,14 @@ container div {
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
-.reponses {
+#question .reponses {
 	width: calc(50% - 15px);
 	float: right;
 	background-color: #FFF;
 	border-radius: 1px;
 }
 
-.ajouterReponses {
+#question .ajouterReponses {
 	width: 100%;
 	float: left;
 	padding: 0 20px;
@@ -49,8 +44,9 @@ container div {
 
 /* Liste des réponses */
 
-.listeReponses {
+#question .listeReponses {
 	width: 100%;
+	min-height: 100px;
 	max-height: 300px;
 	margin-top: 20px;
 	background-color: #FFF;
@@ -59,12 +55,12 @@ container div {
     overflow-y: scroll;
 }
 
-table {
+#question .listeReponses table {
 	width: 100%;
 	border-collapse: collapse;
 }
 
-th {
+#question .listeReponses th {
 	display: inline-block;
 	height: 50px;
 	background-color: #B8B8B8;
@@ -74,36 +70,36 @@ th {
 	border-left: 1px solid #DFDFDF;
 }
 
-tr {
+#question .listeReponses tr {
 	height: 50px;
 	width: 100%;
 }
 
-td:nth-child(1), th:nth-child(1) {
+#question .listeReponses td:nth-child(1), .listeReponses th:nth-child(1) {
 	width: calc(100% - 240px);
 	line-height: 45px;
 	padding-left: 15px;
 }
 
-td:nth-child(2), th:nth-child(2) {
+#question .listeReponses td:nth-child(2), .listeReponses th:nth-child(2) {
 	width: 180px;
 	line-height: 45px;
 	cursor: pointer;
 }
 
-td:nth-child(3), th:nth-child(3) {
+#question .listeReponses td:nth-child(3), .listeReponses th:nth-child(3) {
 	width: 60px;
 }
 
-tr:nth-child(odd) {
+#question .listeReponses tr:nth-child(odd) {
 	background-color: #FFF;
 }
 
-tr:nth-child(even) {
+#question .listeReponses tr:nth-child(even) {
 	background-color: #F7F7F7;
 }
 
-td {
+#question .listeReponses td {
 	display: inline-block;
 	height: 50px;
 	line-height: 45px;
@@ -112,7 +108,7 @@ td {
 	overflow: hidden;
 }
 
-.supprimerReponse {
+#question .supprimerReponse {
 	color: #FFF;
 	background-color: #E74C3C;
 	text-align: center;

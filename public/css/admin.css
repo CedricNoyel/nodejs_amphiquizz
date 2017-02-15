@@ -1,9 +1,4 @@
-body {
-	background-color: #FFF;
-	color: #383838;
-}
-
-container {
+#admin container {
 	position: absolute;
 	display: block;
 	padding: 30px;
@@ -11,7 +6,7 @@ container {
 	width: 100%;
 }
 
-table {
+#admin table {
 	border-collapse: collapse;
 	width: 800px;
 	position: relative;
@@ -21,12 +16,12 @@ table {
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
-tr {
+#admin tr {
 	vertical-align: middle;
 	text-align: center;
 }
 
-th {
+#admin th {
 	background-color: #B8B8B8;
 	color: #FFF;
 	text-transform: uppercase;
@@ -34,49 +29,40 @@ th {
 	border-left: 1px solid #DFDFDF;
 }
 
-tr:nth-child(even) {
+#admin tr:nth-child(even) {
     background-color: #F7F7F7;
 }
 
-td {
+#admin td {
 	border-right: 1px solid #DFDFDF;
 	border-left: 1px solid #DFDFDF;
 }
 
-tbody tr {
+#admin tbody tr {
 	cursor: pointer;
 	transition: all .4s;
 }
 
-tbody tr:hover {
+#admin tbody tr:hover {
 	background-color: #DFDFDF;
 	transition: all .4s;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
-tr {
+#admin tr {
 	height: 50px;
 	width: 100%;
 }
 
-table .complet {
+#admin table .complet {
 	color: #2ECC71;
 }
 
-table .imcomplet {
+#admin table .imcomplet {
 	color: #E74C3C;
 }
 
-.boutonContainer {
+#admin .boutonContainer {
 	width: 800px;
 	margin: auto;
 }
-
-
-
-
-
-
-
-
-

@@ -1,62 +1,62 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <%- include('./partials/head'); %>
-</head>
+	<head>
+	    <%- include('./partials/head'); %>
+	</head>
 
-<body>
-	<header>
-    	<%- include('./partials/header') -%>
-	</header>
-	<container>
-		<table>
-			<thead><tr><th>nom du questionnaire</th> <th>nombres <br>de questions</th><th>etat</th></tr></thead>
-			<tbody>	    <!--	QUESTIONNAIRES	-->	</tbody>
-	    </table>
+	<body id="admin">
+		<header>
+	    	<%- include('./partials/header') -%>
+		</header>
+		<container>
+			<table>
+				<thead><tr><th>nom du questionnaire</th> <th>nombres <br>de questions</th><th>etat</th></tr></thead>
+				<tbody>	    <!--	QUESTIONNAIRES	-->	</tbody>
+		    </table>
 
-	    <div class="boutonContainer">
-	    	<button class="bouton" type="button" id='addQuestionnaire' >Nouveau questionnaire</button>
-	    	<button class="bouton" type="button" id='fastQuestion' >Question rapide</button>
-	    </div>
-	</container>
-</body>
+		    <div class="boutonContainer">
+		    	<button class="bouton" type="button" id='addQuestionnaire' >Nouveau questionnaire</button>
+		    	<button class="bouton" type="button" id='fastQuestion' >Question rapide</button>
+		    </div>
+		</container>
+	</body>
 
-<script>
-    // Affichage d'un questionnaire
-	function quest_show(id_questionnaire){
-		document.location.href=  "./questionnaire/" + id_questionnaire;
-	};
+	<script>
+	    // Affichage d'un questionnaire
+		function quest_show(id_questionnaire){
+			document.location.href=  "./questionnaire/" + id_questionnaire;
+		};
 
-$(document).ready(function() {
+	$(document).ready(function() {
 
-	// Show questionnary
-	var quest = <%- JSON.stringify(data) %>;
-	for(var i in quest){
-		if (quest[i].ETAT_QUESTIONNAIRE == "Valide"){
-			var s = '<tr onclick="quest_show(\'' + quest[i].ID_QUESTIONNAIRE + '\');" ><td>' + quest[i].NOM_QUESTIONNAIRE + '</td><td>' + quest[i].nb_questions + '</td> <td class="complet">' + quest[i].ETAT_QUESTIONNAIRE + '</td></tr>';
-		} else {
-			var s = '<tr onclick="quest_show(\'' + quest[i].ID_QUESTIONNAIRE + '\');" ><td>' + quest[i].NOM_QUESTIONNAIRE + '</td><td>' + quest[i].nb_questions + '</td> <td class="imcomplet">' + quest[i].ETAT_QUESTIONNAIRE + '</td></tr>';
+		// Show questionnary
+		var quest = <%- JSON.stringify(data) %>;
+		for(var i in quest){
+			if (quest[i].ETAT_QUESTIONNAIRE == "Valide"){
+				var s = '<tr onclick="quest_show(\'' + quest[i].ID_QUESTIONNAIRE + '\');" ><td>' + quest[i].NOM_QUESTIONNAIRE + '</td><td>' + quest[i].nb_questions + '</td> <td class="complet">' + quest[i].ETAT_QUESTIONNAIRE + '</td></tr>';
+			} else {
+				var s = '<tr onclick="quest_show(\'' + quest[i].ID_QUESTIONNAIRE + '\');" ><td>' + quest[i].NOM_QUESTIONNAIRE + '</td><td>' + quest[i].nb_questions + '</td> <td class="imcomplet">' + quest[i].ETAT_QUESTIONNAIRE + '</td></tr>';
+			}
+			$('table').append(s);
 		}
-		$('table').append(s);
-	}
 
-    // Ajout d'un questionnaire
-    $('#addQuestionnaire').click(function(){
-    	var nom_questionnaire = '';
-    	socket.emit('req_add_questionnaire', nom_questionnaire);
-    	socket.on('res_add_questionnaire', function(id_quest){
-			document.location.href = './questionnaire/'+ id_quest;
-    	});
-    });
+	    // Ajout d'un questionnaire
+	    $('#addQuestionnaire').click(function(){
+	    	var nom_questionnaire = '';
+	    	socket.emit('req_add_questionnaire', nom_questionnaire);
+	    	socket.on('res_add_questionnaire', function(id_quest){
+				document.location.href = './questionnaire/'+ id_quest;
+	    	});
+	    });
 
 
-	$('#fastQuestion').click(function(){
-		var questionnaire_name = "Questionnaire rapide";
-		socket.emit('req_fastquestion_add', questionnaire_name);
-		socket.on('res_fastquestion_add', function(id_question){
-			document.location.href=  "./fastquestion/" + id_question;
+		$('#fastQuestion').click(function(){
+			var questionnaire_name = "Questionnaire rapide";
+			socket.emit('req_fastquestion_add', questionnaire_name);
+			socket.on('res_fastquestion_add', function(id_question){
+				document.location.href=  "./fastquestion/" + id_question;
+			});
 		});
 	});
-});
-</script>
+	</script>
 </html>
