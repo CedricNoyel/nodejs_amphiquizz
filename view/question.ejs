@@ -16,7 +16,7 @@
 
 			<div class="nomQuestion">
 				<div class="group">
-					<input class="textField" name="nom" type="text" id="question" required>
+					<input class="textField" name="nom" type="text" id="nomQuestion" required>
 					<span class="highlight"></span>
 					<span class="bar"></span>
 					<label>Question</label>
@@ -62,6 +62,7 @@
 		// FIN INIT
 	});
 
+
 	$('#btnSupprimerQuestion').click(function(){
 		info("Voulez-vous vraiment supprimer la question sélectionnée ainsi que toutes les réponses liées ?", "yesCancel", function(res){
 			if (res){
@@ -97,29 +98,29 @@
 	});
 
 	function loadAnswers(){
+		var question = <%- JSON.stringify(question) %>;
+		console.log(question[0].NOM_QUESTION);
+		var reponses = <%- JSON.stringify(reponses) %>;
+		console.log(reponses);
+
 		$('tbody tr').remove();
-		socket.emit('req_question_reponse', ID_QUESTION);
-		socket.on('res_question_reponse', function(question, reponses){
-			ID_QUESTIONNAIRE = question[0].ID_QUESTIONNAIRE;
-			$('#question').val(question[0].NOM_QUESTION);
+		ID_QUESTIONNAIRE = question[0].ID_QUESTIONNAIRE;
+		$('#nomQuestion').val(question[0].NOM_QUESTION);
 
-			for (var i in reponses)
-			{
-				var row = $('<tr id=answer'+ reponses[i].ID_REPONSE +'>');
-				var column1 = $('<td>'),
-					column2 = $('<td>');
-				column1.append(reponses[i].NOM_REPONSE);
+		for (var i in reponses)
+		{
+			var row = $('<tr id=answer'+ reponses[i].ID_REPONSE +'>');
+			var column1 = $('<td>'), column2 = $('<td>');
+			column1.append(reponses[i].NOM_REPONSE);
+			var isChecked = " ";
+			if (question[0].ID_REPONSE_BONNE == reponses[i].ID_REPONSE)
+				isChecked = " checked ";
+			column2.append('<div class="radio"><input onclick="radioClicked('+ reponses[i].ID_REPONSE +')" type="radio"'+ isChecked +'name="bonneReponse"><label class="radio-label"></label></div>');
 
-				var isChecked = " ";
-				if (question[0].ID_REPONSE_BONNE == reponses[i].ID_REPONSE)
-					isChecked = " checked ";
-				column2.append('<div class="radio"><input onclick="radioClicked('+ reponses[i].ID_REPONSE +')" type="radio"'+ isChecked +'name="bonneReponse"><label class="radio-label"></label></div>');
-
-				$(row).append(column1, column2);
-				row.append('<td onclick="delAnswer('+ reponses[i].ID_REPONSE +')" class="supprimerReponse">✖</td>')
-				$('tbody').append(row);
-			}
-		});
+			$(row).append(column1, column2);
+			row.append('<td onclick="delAnswer('+ reponses[i].ID_REPONSE +')" class="supprimerReponse">✖</td>')
+			$('tbody').append(row);
+		}
 	}
 
 	function delAnswer(id_answer){
