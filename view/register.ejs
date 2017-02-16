@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
+
+    <head>
+        <%- include('./partials/head'); %>
+    </head>
     <body id="register">
 		<div class="btnRetour">
 			<button onclick="location.href='/';">Retour</button>
@@ -36,7 +40,7 @@
                     <input class="textField" name="password2" type="password" id="password2" required>
                     <span class="highlight"></span>
                     <span class="bar"></span>
-                    <label>Confirmation Mot de passe</label>
+                    <label>Confirmation mot de passe</label>
                 </div>
                 <div class="connexion">
                     <input type="submit" value="Inscription" id="submitRegister" />
