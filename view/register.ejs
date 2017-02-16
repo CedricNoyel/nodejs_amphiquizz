@@ -1,11 +1,10 @@
-<!-- register.html -->
-
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
-    <head>
-        <%- include('./partials/head'); %> 
-    </head>
-    <body>
+    <body id="register">
+		<div class="btnRetour">
+			<button onclick="location.href='/';">Retour</button>
+		</div>
+    
         <img src="img/logoAQ.png" alt="Logo" class="logo">
         <form action='/register' method='POST'>
             <div class="container">
@@ -41,14 +40,12 @@
                 </div>
                 <div class="connexion">
                     <input type="submit" value="Inscription" id="submitRegister" />
-                    <a href="/">Retour</a>
                 </div>
                 <p id="erreurLogin" ><p>
             </div>
         </form>
     </body>
 </html>
-
 
 <script>
 

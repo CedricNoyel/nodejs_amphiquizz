@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <%- include('./partials/head'); %> 
-</head>
-		<script>
-			$(function() {
-                $("#sortable").sortable({
-                    start: function(event, ui) {
-                        ui.item.bind("click.prevent",
-                            function(event) { event.preventDefault(); });
-                    },
-                    stop: function(event, ui) {
-                        setTimeout(function(){ui.item.unbind("click.prevent");}, 300);
-                    }
-                    });
-                $("#sortable").disableSelection();
-            });
-		</script>
-	<body>
-	<header>
-    	<%- include('./partials/header') -%> 
-	</header>
+	<head>
+	    <%- include('./partials/head'); %>
+	</head>
+	<script>
+		$(function() {
+            $("#sortable").sortable({
+                start: function(event, ui) {
+                    ui.item.bind("click.prevent",
+                        function(event) { event.preventDefault(); });
+                },
+                stop: function(event, ui) {
+                    setTimeout(function(){ui.item.unbind("click.prevent");}, 300);
+                }
+                });
+            $("#sortable").disableSelection();
+        });
+	</script>
+	<body id="question">
+		<header>
+	    	<%- include('./partials/header') -%>
+		</header>
 		<container>
 			<div class="btnRetour">
 				<button type="button" id="btnRetour" >Retour</button>
@@ -118,7 +118,7 @@
 			for (var i in reponses)
 			{
 				var row = $('<tr id=answer'+ reponses[i].ID_REPONSE +'>');
-				var column1 = $('<td>'), 
+				var column1 = $('<td>'),
 					column2 = $('<td>');
 				column1.append(reponses[i].NOM_REPONSE);
 
@@ -147,7 +147,7 @@
 
 	$('#sortable tr td:nth-child(2)').click(function(event) {
             $(this).children('.radio').children('input').prop('checked', true);
-    });	
+    });
 
 
 	</script>

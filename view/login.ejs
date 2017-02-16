@@ -1,33 +1,36 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
     <head>
-        <%- include('./partials/head'); %> 
+        <%- include('./partials/head'); %>
     </head>
 
-    <body>
+    <body id="login">
+		<div class="register">
+			<button onclick="location.href='/register';">Créer un compte</button>
+		</div>
+
         <img src="img/logoAQ.png" alt="Logo" class="logo">
         <form action='/login' method='POST'>
-            <div class="container">
-                <div class="group">
-                    <input class="textField" name="login" type="text" id="login" required>
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>Login</label>
-                </div>
-                
-                <div class="group">
-                    <input class="textField" name="mdp" type="password" id="mdp" required>
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>Mot de passe</label>
-                </div>
-
-                <div class="connexion">
-                    <input type="submit" value="Connexion" />
-                    <a href="/register">Creer un compte</a>
-                </div>
-                <p id="erreurLogin"></p>
+            <div class="group">
+                <input class="textField" name="login" type="text" id="login" required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Login</label>
             </div>
+
+            <div class="group">
+                <input class="textField" name="mdp" type="password" id="mdp" required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Mot de passe</label>
+            </div>
+            
+            <div class="connexion">
+                <input type="submit" value="Connexion" />
+                <a href="/register">Creer un compte</a>
+            </div>
+            <p id="erreurLogin"></p>
+
         </form>
     </body>
 </html>

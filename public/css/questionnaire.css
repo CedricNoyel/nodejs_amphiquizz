@@ -1,9 +1,4 @@
-body {
-	background-color: #FFF;
-	color: #383838;
-}
-
-container {
+#questionnaire container {
 	position: absolute;
 	display: block;
 	padding: 0 30px;
@@ -12,17 +7,17 @@ container {
 	height: calc(100% - 100px);
 }
 
-container div {
-	display: inline-block;
-}
+	#questionnaire container div {
+		display: inline-block;
+	}
 
 /* Liste des questions */
 
-.listeQuestions {
+#questionnaire .listeQuestions {
 	width: calc(50% - 15px);
 }
 
-ol {
+#questionnaire ol {
 	display: inline-block;
 	width: 100%;
 	float: left;
@@ -33,7 +28,7 @@ ol {
 	overflow-y: auto;
 }
 
-ol li {
+#questionnaire ol li {
 	background-color: #FFF;
 	width: 100%;
 	min-width: 550px;
@@ -45,37 +40,37 @@ ol li {
 	overflow-x: scroll;
 }
 
-li:nth-child(even) {
+#questionnaire li:nth-child(even) {
     background-color: #F7F7F7;
 }
 
-li:hover {
+#questionnaire li:hover {
 	border-width: 10px;
 	transition: border-width .3s;
 }
 
-.listeQuestions .incomplet {
+#questionnaire .listeQuestions .incomplet {
 	border-left: 3px solid #E74C3C;
 }
 
-.listeQuestions .complet {
+#questionnaire .listeQuestions .complet {
 	border-left: 3px solid #2ECC71;
 }
 
 /* Right part */
 
-.rightSide {
+#questionnaire .rightSide {
     width: calc(50% - 15px);
     float: right;
 }
 
 /* Infos du questionnaire */
 
-.infosQuestionnaire {
+#questionnaire .infosQuestionnaire {
 	width: 100%;
 }
 
-.nomQuestionnaire {
+#questionnaire .nomQuestionnaire {
 	width: 100%;
 	padding: 0 20px 20px;
 	background-color: #FFF;
@@ -83,7 +78,7 @@ li:hover {
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
-.nomQuestionnaire button {
+#questionnaire .nomQuestionnaire button {
 	float: right;
 	margin: 20px 0 0 20px;
 }
@@ -94,7 +89,7 @@ li:hover {
 	padding-top: 30px 0 0;
 }
 
-.boutonContainer {
+#questionnaire .boutonContainer {
 	width: 100%;
 	float: right;
 	background-color: #FFF;
@@ -102,7 +97,7 @@ li:hover {
 	/* box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); */
 }
 
-.boutonContainer div {
+#questionnaire .boutonContainer div {
 	width: 100%;
 }
 
@@ -110,6 +105,7 @@ li:hover {
 
 .historiqueQuestionnaire {
     width: 100%;
+	min-height: 100px;
 	max-height: 300px;
 	margin-top: 20px;
 	background-color: #FFF;
@@ -118,49 +114,49 @@ li:hover {
 	overflow-y: scroll;
 }
 
-table {
+.historiqueQuestionnaire table {
 	width: 100%;
 	border-collapse: collapse;
 }
 
-th {
+.historiqueQuestionnaire th {
 	height: 50px;
 	background-color: #B8B8B8;
 	color: #FFF;
 	text-transform: uppercase;
 }
 
-tr {
+.historiqueQuestionnaire tr {
 	height: 50px;
 	width: 100%;
 	cursor: pointer;
 }
 
-td:nth-child(1) {
+.historiqueQuestionnaire td:nth-child(1) {
 	width: 40px;
 	padding-left: 15px;
 }
 
-tr:nth-child(odd) {
+.historiqueQuestionnaire tr:nth-child(odd) {
 	background-color: #FFF;
 }
 
-tr:nth-child(even) {
+.historiqueQuestionnaire tr:nth-child(even) {
 	background-color: #F7F7F7;
 }
 
-tr:hover {
+.historiqueQuestionnaire tr:hover {
 	background-color: #DFDFDF;
 	transition: all .4s;
 }
 
-td {
+.historiqueQuestionnaire td {
 	height: 50px;
 	line-height: 45px;
 	overflow: hidden;
 }
 
-.supprimerReponse {
+.historiqueQuestionnaire .supprimerReponse {
 	color: #FFF;
 	background-color: #E74C3C;
 	text-align: center;

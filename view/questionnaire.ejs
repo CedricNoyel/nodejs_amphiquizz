@@ -1,12 +1,12 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 	<head>
-    	<%- include('./partials/head'); %> 
+    	<%- include('./partials/head'); %>
 	</head>
 
-	<body>
+	<body id="questionnaire">
 		<header>
-	    	<%- include('./partials/header') -%> 
+	    	<%- include('./partials/header') -%>
 		</header>
 
 		<container>
@@ -46,13 +46,13 @@
 							</tr>
 						</thead>
 						<tbody id="listSession">
-						<!-- 
+						<!--
 						-->
 						</tbody>
 					</table>
                 </div>
 			</div>
-			
+
 		</container>
 	</body>
 
@@ -65,14 +65,14 @@
 
     // ======= HISTO SESSIONS =======
 	var sessions = <%- JSON.stringify(sessions) %>;
-	
+
 	var k = 0;
 	for (var i in sessions)
 	{
 		k++;
 		var date = new Date(sessions[i].DATE_SESSION);
 		var ligne = $('<tr id="session'+sessions[i].ID_SESSION+'"><td onclick="clickSessionHisto('+sessions[i].ID_SESSION+')">'+ k +'</td><td onclick="clickSessionHisto('+sessions[i].ID_SESSION+')">' + date.toString().substr(4, 17) + '</td><td class="supprimerReponse" onclick="delSession('+sessions[i].ID_SESSION+')">✖</td></tr>');
-			$('#listSession').prepend(ligne);	
+			$('#listSession').prepend(ligne);
 	}
 	// ======= FIN HISTO SESSIONS =======
 
@@ -84,7 +84,7 @@
 
 	NOM_QUESTIONNAIRE = questionnaire[0].NOM_QUESTIONNAIRE;
     $('.titre').append(NOM_QUESTIONNAIRE);
-    
+
 	$('#nom').val(NOM_QUESTIONNAIRE);
 	if(questionnaire[0].ETAT_QUESTIONNAIRE=='Invalide'){
 		$('#launchQuestionnaire').attr("disabled", true);
@@ -101,7 +101,7 @@
 	}
 
 	// ======= FIN QUESTIONS QUESTIONNAIRE =======
-	
+
 	// Click ajouter question
     $('#addQuestion').click(function(){
     	socket.emit('req_add_question', ID_QUESTIONNAIRE);
@@ -148,10 +148,10 @@
 		socket.emit('req_launch_questionnaire', ID_QUESTIONNAIRE);
 		socket.on('res_launch_questionnaire', function(id_session){
 			document.location.href='../launched/' + id_session;
-		});	
+		});
 	});
 
-	
+
 	function clickSessionHisto(idSession){
 		// alert("Vous allez etre redirigé vers l'historique sélectioné pour la session : " + idSession);
 		socket.emit('req_export_data', ID_QUESTIONNAIRE, idSession);
@@ -180,7 +180,7 @@
 				obje["ID"]=dataEleve[i];
 				datajsonexport.push(obje);
 			}
-			
+
 			for(i in datajsonexport)
 			{
 				for(j in data)
@@ -188,15 +188,15 @@
 					if(datajsonexport[i].ID==data[j].ID_ELEVE)
 					{
 						var Questions = data[j].Question;
-						
+
 						datajsonexport[i][Questions] = data[j].Reponse;
 						datajsonexport[i]["Telephone"] = data[j].Numtel;
 					}
 				}
 			}
-			
+
 			console.log(JSONToCSVConvertor(JSON.stringify(datajsonexport),"ExportAmphiquizz",true));
-		
+
 		});
 	}
 
@@ -211,7 +211,7 @@
 			} else {
 
 			}
-			
+
 		});
 	}
 

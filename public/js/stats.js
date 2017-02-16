@@ -12,15 +12,14 @@ function drawChart(listeReponses, result) {
 	data.addColumn('number', 'Nombre');
 
 	var rowsa = new Array();
-	for (var k=0; k<listeReponses.length; k++)
-	{
+	for (var k=0; k<listeReponses.length; k++) {
 		// console.log(listeReponses[k] + " - " + result[k].NB_SMS);
 		if (result[k] != null)
-			rowsa.push(new Array(listeReponses[k], result[k].NB_SMS));
+			rowsa.push(new Array(listeReponses[k], result[k].NB_SMS);
 		else
 			rowsa.push(new Array(listeReponses[k], 0));
-
 	}
+
 	data.addRows(rowsa);
 
 	// Set pie chart options
@@ -28,7 +27,6 @@ function drawChart(listeReponses, result) {
 		title : 'Stats',
 		width : 500,
 		height : 400,
-		// is3D : true,
 		legend : 'none',
 		pieSliceText : 'label',
 		tooltip: { trigger: 'selection' },
@@ -46,7 +44,11 @@ function drawChart(listeReponses, result) {
 		width : 500,
 		height : 400,
 		legend: 'none',
-		colors: ['#8f8f8f']
+		colors: ['#8f8f8f'],
+		format: 'decimal',
+		vAxis: {
+        	viewWindow: { min: 0 }
+        }
 	};
 
 	// Instantiate and draw our chart, passing in some options.
@@ -54,5 +56,3 @@ function drawChart(listeReponses, result) {
 	columnchart.draw(data, columnchart_options);
 
 }
-
-

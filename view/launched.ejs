@@ -1,18 +1,12 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-		<title>AmphiQuizz - Questionnaire en cours</title>
-		<script src="../../js/jquery.js"></script>
-		<script src="../../js/jquery-ui.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
+		<%- include('./partials/head'); %>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script src="../../js/stats.js"></script>
-		<link rel="stylesheet" type="text/css" href="../../css/commun.css"/>
-		<link rel="stylesheet" type="text/css" href="../../css/diapo.css"/>
 	</head>
 
-	<body>
+	<body id="launched">
 		<div class="blocQuestion">
 			<button type="button" id="btnQuitterDiapo" class="bouton suppr" >Quitter</button>
 
@@ -48,7 +42,7 @@
 	var displayStat = false;
 	var listeReponses;
 	var q;
-    	
+
     var pos_id_session = document.URL.lastIndexOf('/');
     var id_session = document.URL.substr(pos_id_session+1);
 
@@ -75,7 +69,7 @@
 			});
 		});
 
-		jQuery(window).bind("beforeunload", function() { 
+		jQuery(window).bind("beforeunload", function() {
 				socket.emit('req_stop_questionnaire', id_session);
 		    }
 		)
@@ -105,7 +99,7 @@
 		$('#ButtonStats').click(function(){
 			verifStat==false?verifStat=true:verifStat=false; // false : stats afficher
 		});
-		
+
 		// ========= FUNCTIONS ========= //
 		function loadQuestion(numQuestion, nbQuestions){
 			$('.listeReponses').empty();
@@ -134,7 +128,7 @@
 		}
 
 		function showStats(){
-		
+
 			socket.emit('req_stats_question', id_session, idQuestion);
 			socket.on('res_stats_question', function(result){
 				google.charts.load('current', {'packages':['corechart']});
@@ -151,7 +145,7 @@
 			if (numQuestion < nbQuestion){
 				numQuestion++;
 				loadQuestion(numQuestion, nbQuestion);
-				$('.listeReponses').show();			
+				$('.listeReponses').show();
 			}
 			refreshDisplayPrevNext();
 		}
@@ -160,34 +154,33 @@
 			$('.stats').hide();
 			if (numQuestion > 1){
 				numQuestion--;
-				loadQuestion(numQuestion, nbQuestion);	
-				$('.listeReponses').show();			
+				loadQuestion(numQuestion, nbQuestion);
+				$('.listeReponses').show();
 			}
 			refreshDisplayPrevNext();
 		}
 
 		function refreshDisplayPrevNext(){
 			// Bouton précédent
-			if (numQuestion<=1) $('#previousQuestion').attr("disabled", true); 
+			if (numQuestion<=1) $('#previousQuestion').attr("disabled", true);
 			else $('#previousQuestion').attr("disabled", false);
 			// Bouton suivant
 			if (numQuestion>=nbQuestion) $('#nextQuestion').attr("disabled", true);
 			else $('#nextQuestion').attr("disabled", false);
 		}
-		
-	function actualise(){
-		if (!verifStat){
-			showStats();
-			$("#showAnswer").hide();
+
+		function actualise(){
+			if (!verifStat){
+				showStats();
+				$("#showAnswer").hide();
+			}
+			setTimeout(actualise, 5000);
 		}
-		setTimeout(actualise, 5000);	
-	}
-	
-	
-	actualise();
-	
+
+		actualise();
+
 	});
-	
+
 
 	</script>
 </html>

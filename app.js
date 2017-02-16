@@ -1,17 +1,17 @@
 // app.js
 
 // ======== GLOBAL VAR ========
-global.NUM_SMS = "0769110568";
-global.FAKE_SMS = true;
+global.NUM_SMS = "0769110568"; // Numéro de la carte SIM du module
+global.FAKE_SMS = true; // Simulation de reception de SMS
 global.SMS_MODULE =  false; // Désactiver pour test sans le module
 global.DISPLAY_SMS = true; // Afficher dans la console les SMS reçus
-global.DEBUG = true;
+global.DEBUG = true; // Affichage dans la console
 global.session = false; // false => no session running
 global.currentQuestion = false;
 
 // ======== IMPORT MODULE ========
 var express = require('express');
-var app = express(); 
+var app = express();
 var http = require('http').Server(app);
 var bodyParser = require('body-parser');
 var session = require('express-session');
@@ -64,7 +64,7 @@ if (global.DEBUG) {
 		console.log("CurrentQuestion : " + global.currentQuestion);
 	}, 4000);
 }
-// ===== SERVER ====== 
+// ===== SERVER ======
 http.listen(8080,function(){
     console.log('\n' + "=== App Started on PORT 8080 ===".green + '\n');
 });
