@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<%- include('./partials/head'); %>
-	</head>
-
     <body id="register">
 		<div class="btnRetour">
 			<button onclick="location.href='/';">Retour</button>
 		</div>
-
+    
         <img src="img/logoAQ.png" alt="Logo" class="logo">
         <form action='/register' method='POST'>
             <div class="container">
@@ -45,7 +41,21 @@
                 <div class="connexion">
                     <input type="submit" value="Inscription" id="submitRegister" />
                 </div>
+                <p id="erreurLogin" ><p>
             </div>
         </form>
     </body>
 </html>
+
+<script>
+
+$(document).ready(function(){
+
+    // If error on creating account
+    var erreur = <%- JSON.stringify(erreur) %>;
+    if (erreur){
+        notif("Le mot de passe ne correspond pas", "#E74C3C");
+        $('#erreurLogin').append("Impossible de créer le compte, vérfiez vos identifiants et essayez de changer de login");
+    }
+});
+</script>

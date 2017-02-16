@@ -24,10 +24,25 @@
                 <span class="bar"></span>
                 <label>Mot de passe</label>
             </div>
-
+            
             <div class="connexion">
-                <input type="submit" value="Connexion"/>
+                <input type="submit" value="Connexion" />
+                <a href="/register">Creer un compte</a>
             </div>
+            <p id="erreurLogin"></p>
+
         </form>
     </body>
 </html>
+
+<script>
+
+    // If login or password wrong
+    var erreur = <%- JSON.stringify(erreur) %>;
+    if (erreur){
+        notif("Les identifiants sont incorrects", "#E74C3C");
+        $('#erreurLogin').append('Les identifiants sont incorrects');
+    }
+
+
+</script>
