@@ -57,9 +57,7 @@
     var ID_QUESTION = document.URL.substr(pos_id_quest+1);
 
 	$(document).ready(function() {
-		// INIT (demande question et reponses)
 		loadAnswers();
-		// FIN INIT
 	});
 
 
@@ -73,8 +71,7 @@
 	});
 
 	$('#btnSauvegarderQuestion').click(function(){
-		socket.emit('req_save_question', ID_QUESTION, $('#question').val());
-		// document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
+		socket.emit('req_save_question', ID_QUESTION, $('#nomQuestion').val());
 	});
 
 	$('#btnRetour').click(function(){
@@ -99,9 +96,7 @@
 
 	function loadAnswers(){
 		var question = <%- JSON.stringify(question) %>;
-		console.log(question[0].NOM_QUESTION);
 		var reponses = <%- JSON.stringify(reponses) %>;
-		console.log(reponses);
 
 		$('tbody tr').remove();
 		ID_QUESTIONNAIRE = question[0].ID_QUESTIONNAIRE;

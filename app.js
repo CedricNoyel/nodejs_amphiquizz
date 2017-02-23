@@ -45,7 +45,7 @@ var functions = require('./lib/functions');
 var io_route = require('./lib/sockets')(http);
 var sms = require('./lib/sms')("test");
 
-// ============ SESSION CHECK ============
+// ============ SESSION QUESTIONNAIRE CHECK ============
 functions.isAnySessionOpen(function(res){
 	if (res !== false){
 		for (var sess in res) { // Si plusieurs sessions actives
@@ -64,6 +64,15 @@ if (global.DEBUG) {
 		console.log("CurrentQuestion : " + global.currentQuestion);
 	}, 4000);
 }
+
+if (global.FAKE_SMS){
+	setInterval( function(){
+		functions.requireSMS_Add("+33600100000", "A", function(res){ });
+		functions.requireSMS_Add("+33600490000", "A", function(res){ });
+		functions.requireSMS_Add("+33600006900", "B", function(res){ });
+	}, 4000);
+}
+
 // ===== SERVER ======
 http.listen(8080,function(){
     console.log('\n' + "=== App Started on PORT 8080 ===".green + '\n');

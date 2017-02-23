@@ -15,7 +15,7 @@ function drawChart(listeReponses, result) {
 	for (var k=0; k<listeReponses.length; k++) {
 		// console.log(listeReponses[k] + " - " + result[k].NB_SMS);
 		if (result[k] != null)
-			rowsa.push(new Array(listeReponses[k], result[k].NB_SMS);
+			rowsa.push(new Array(listeReponses[k], result[k].NB_SMS));
 		else
 			rowsa.push(new Array(listeReponses[k], 0));
 	}

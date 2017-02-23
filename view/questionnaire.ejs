@@ -123,6 +123,7 @@
     // Click sur sauvegarder le questionnaire
 	$('#saveQuestionnaire').click(function(){
 		if($('#nom').val()!=NOM_QUESTIONNAIRE){
+			alert()
 			socket.emit('req_save_questionnaire', ID_QUESTIONNAIRE, $('#nom').val());
 		}
 	});

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<%- include('./partials/head'); %>
+		<%- include('./partials/head'); -%>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script src="../../js/stats.js"></script>
 	</head>
@@ -30,11 +30,9 @@
 		</div>
 	</body>
 	<script>
-	var verifStat=true;
-	// Connection SOCKET
-	var socket = io.connect('http://localhost:8080');
 
-	// variables
+	
+	// Variables
 	var numQuestion = 1;
 	var idQuestion;
 	var nbQuestion;
@@ -43,61 +41,73 @@
 	var listeReponses;
 	var q;
 
-    var pos_id_session = document.URL.lastIndexOf('/');
-    var id_session = document.URL.substr(pos_id_session+1);
+    socket.on('send_stats', function(result){
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(function(){
+			drawChart(listeReponses, result);
+		});
+	});
 
     // Chargement du JS
-	$(document).ready(function(){
+	$(document).ready(function(questions){
+
 		// ========= INIT =========
-		$('#ButtonStats').attr('disabled', false)
 		$('#previousQuestion').attr("disabled", true);
 		$('.stats').hide();
 
 		// loading questions
-		socket.emit('req_question_byQuest', id_session);
-		socket.on('res_question_byQuest', function(data){
-			q = data;
-			nbQuestion = data.length;
-			loadQuestion(numQuestion, nbQuestion);
-		});
+		var idSession = <%- JSON.stringify(idSession) -%>;
+		var questions = <%- JSON.stringify(questions) -%>;
+		q = questions;
+		nbQuestion = questions.length;
+		loadQuestion(numQuestion, nbQuestion);
 
 		// ========= LEAVE EVENT ========= //
 		$('#btnQuitterDiapo').click(function(){
-			socket.emit('req_stop_questionnaire', id_session);
-			socket.on('req_stop_questionnaire', function(){
+			socket.emit('req_stop_questionnaire', idSession);
+			socket.on('res_stop_questionnaire', function(){
 				document.location.href="../../admin";
 			});
 		});
 
 		jQuery(window).bind("beforeunload", function() {
-				socket.emit('req_stop_questionnaire', id_session);
+				socket.emit('req_stop_questionnaire', idSession);
 		    }
-		)
+		);
+
 		// ========= KEY PRESS ========= //
 		$(window).keydown(function (e){
 		    if(e.keyCode == 39) // RIGHT
 				nextQuestion();
 		    else if(e.keyCode == 37) // LEFT
-		    	previousQuestion();/*
-		    else if(e.keyCode == 32) // SPACEBAR
-				$('#goodAnswer').toggleClass('goodAnswer');*/
+		    	previousQuestion();
 		});
-
 		// ========= DISPLAY NEXT AND PREV ========= //
 		$('#previousQuestion').click(function(){
 			previousQuestion();
-			verifStat=true;
 		});
 		// NEXT
 		$('#nextQuestion').click(function(){
 			nextQuestion();
-			verifStat=true;
 		});
 		$('#showAnswer').click(function(){
 			$('#goodAnswer').toggleClass('goodAnswer');
 		});
+
 		$('#ButtonStats').click(function(){
-			verifStat==false?verifStat=true:verifStat=false; // false : stats afficher
+			if (displayStat){
+				$('.stats').hide();
+				$('.listeReponses').show();
+				$('#ButtonStats').text('Stats');
+				displayStat = false;
+				$('#showAnswer').show();
+			} else {
+				$('.stats').show();
+				$('.listeReponses').hide();
+				$('#ButtonStats').text('Réponses');
+				$('#showAnswer').hide();
+				displayStat = true;
+			}
 		});
 
 		// ========= FUNCTIONS ========= //
@@ -109,7 +119,6 @@
 			idGoodAnswer = q[numQuestion-1].ID_REPONSE_BONNE;
 			loadAnswers(idQuestion);
 		}
-
 		function loadAnswers(idQuestion){
 			// Chargement reponse par question
 			socket.emit('req_answer_by_idQuestion', idQuestion);
@@ -127,20 +136,9 @@
 			});
 		}
 
-		function showStats(){
-
-			socket.emit('req_stats_question', id_session, idQuestion);
-			socket.on('res_stats_question', function(result){
-				google.charts.load('current', {'packages':['corechart']});
-				google.charts.setOnLoadCallback(function(){
-					drawChart(listeReponses, result);
-					$('.stats').show();
-					$('.listeReponses').hide();
-				});
-			});
-		}
-
 		function nextQuestion(){
+			$('#showAnswer').show();
+			$('#ButtonStats').text('Stats');
 			$('.stats').hide();
 			if (numQuestion < nbQuestion){
 				numQuestion++;
@@ -151,6 +149,8 @@
 		}
 
 		function previousQuestion(){
+			$('#showAnswer').show();
+			$('#ButtonStats').text('Stats');
 			$('.stats').hide();
 			if (numQuestion > 1){
 				numQuestion--;
@@ -169,18 +169,7 @@
 			else $('#nextQuestion').attr("disabled", false);
 		}
 
-		function actualise(){
-			if (!verifStat){
-				showStats();
-				$("#showAnswer").hide();
-			}
-			setTimeout(actualise, 5000);
-		}
-
-		actualise();
-
 	});
-
 
 	</script>
 </html>
