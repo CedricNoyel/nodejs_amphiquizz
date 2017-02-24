@@ -19,7 +19,6 @@
 					<span class="bar"></span>
 					<label>Question</label>
 				</div>
-				<!-- <button class="bouton suppr" id="btnSupprimerQuestion" type="button">Supprimer</button> -->
 				<button class="bouton" id="launchQuestionnaire" type="button">Lancer</button>
 			</div>
 
@@ -51,12 +50,9 @@
 
 	<script>
 
-$(document).ready(function(){
-
-	var ID_QUESTION;
-
-    var pos_id_quest = document.URL.lastIndexOf('/');
-    var ID_QUESTION = document.URL.substr(pos_id_quest+1);
+$(document).ready(function(){ 
+	var ID_QUESTION = <%- JSON.stringify(idQuestion) -%>;
+	var ID_QUESTIONNAIRE = <%- JSON.stringify(idQuestionnaire) -%>;
 
 	$('#oui_non').click(function(){
 		$("#rep_A").val("Oui");
@@ -73,16 +69,11 @@ $(document).ready(function(){
 
 	$('#launchQuestionnaire').click(function(){
 		if (saveQuestion()){
-			socket.emit('req_id_questionnaire_by_id_question', ID_QUESTION);
-			socket.on('res_id_questionnaire_by_id_question', function(idquestionnaire){
-				socket.emit('req_launch_questionnaire', idquestionnaire);
-				socket.on('res_launch_questionnaire', function(id_session){
-					alert(id_session);
-		    		document.location.href='../launched/' + id_session;
-				});
+			socket.emit('req_launch_questionnaire', ID_QUESTIONNAIRE);
+			socket.on('res_launch_questionnaire', function(id_session){
+	    		document.location.href='../launched/' + id_session;
 			});
 		}
-
 	});
 
 	function saveQuestion(){
@@ -107,16 +98,8 @@ $(document).ready(function(){
 		} else notif("Veuillez indiquer le champ \"Question\"", "#E74C3C");
 	}
 	return false;
-});
 
-    function notif(text, color) {
-		$('.pop').remove();
-		pop = $('<div/>').addClass('pop').text(text).css({color: '#FFF', backgroundColor: color });
-		$('body').append(pop);
-		setTimeout(function (argument) {
-			$(pop).fadeOut('200');
-		}, 2000);
-	}
+});
 
 	</script>
 	</body>

@@ -8,6 +8,7 @@ global.DISPLAY_SMS = true; // Afficher dans la console les SMS reçus
 global.DEBUG = true; // Affichage dans la console
 global.session = false; // false => no session running
 global.currentQuestion = false;
+global.PORT = 8080;
 
 // ======== IMPORT MODULE ========
 var express = require('express');
@@ -50,8 +51,7 @@ functions.isAnySessionOpen(function(res){
 	if (res !== false){
 		for (var sess in res) { // Si plusieurs sessions actives
 			dataAccess.reqStopSession(res[sess].ID_SESSION, function(){
-				if (global.DEBUG) {
-						console.log("Une session de questionnaire est active au lancement, réinitialisation de son status actif ID_SESSION: " + res[sess].ID_SESSION);
+				if (global.DEBUG) {	console.log("Une session de questionnaire est active au lancement, réinitialisation de son status actif ID_SESSION: " + res[sess].ID_SESSION);
 				}
 			});
 		}
@@ -67,13 +67,13 @@ if (global.DEBUG) {
 
 if (global.FAKE_SMS){
 	setInterval( function(){
-		functions.requireSMS_Add("+33600100000", "A", function(res){ });
+		functions.requireSMS_Add("+33600490000", "b", function(res){ });
 		functions.requireSMS_Add("+33600490000", "A", function(res){ });
-		functions.requireSMS_Add("+33600006900", "B", function(res){ });
+		functions.requireSMS_Add("+33600490000", "&", function(res){ });
 	}, 4000);
 }
 
 // ===== SERVER ======
-http.listen(8080,function(){
-    console.log('\n' + "=== App Started on PORT 8080 ===".green + '\n');
+http.listen(global.PORT,function(){
+    console.log(('\n' + "=== App Started on PORT " + global.PORT + " ===" + '\n').green);
 });

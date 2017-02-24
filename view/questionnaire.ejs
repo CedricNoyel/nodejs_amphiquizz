@@ -55,16 +55,14 @@
 
 		</container>
 	</body>
-
-
 <script>
-    var pos_id_quest = document.URL.lastIndexOf('/');
-    var ID_QUESTIONNAIRE = document.URL.substr(pos_id_quest+1);
     var NOM_QUESTIONNAIRE;
-
+	var sessions = <%- JSON.stringify(sessions) -%>;
+	var questionnaire = <%- JSON.stringify(questionnaire) -%>;
+	var questions = <%- JSON.stringify(questions) -%>;
+	var ID_QUESTIONNAIRE = questionnaire[0].ID_QUESTIONNAIRE;
 
     // ======= HISTO SESSIONS =======
-	var sessions = <%- JSON.stringify(sessions) %>;
 
 	var k = 0;
 	for (var i in sessions)
@@ -79,8 +77,6 @@
 
 	// ======= QUESTIONS QUESTIONNAIRE =======
 
-	var questionnaire = <%- JSON.stringify(questionnaire) %>;
-	var questions = <%- JSON.stringify(questions) %>;
 
 	NOM_QUESTIONNAIRE = questionnaire[0].NOM_QUESTIONNAIRE;
     $('.titre').append(NOM_QUESTIONNAIRE);
@@ -122,10 +118,8 @@
 
     // Click sur sauvegarder le questionnaire
 	$('#saveQuestionnaire').click(function(){
-		if($('#nom').val()!=NOM_QUESTIONNAIRE){
-			alert()
+		if($('#nom').val()!=NOM_QUESTIONNAIRE)
 			socket.emit('req_save_questionnaire', ID_QUESTIONNAIRE, $('#nom').val());
-		}
 	});
 
 	// Click sur une question
@@ -134,24 +128,11 @@
 	};
 
 	$('#launchQuestionnaire').click(function(){
-		/*
-		info("Souhaitez-vous récupérer le nom des votants ?", "yesNo", function(res){
-			var anonyme;
-			if (res == 'no') anonyme = true; // ANONYME
-			else if (res=="yes") anonyme = false; // NON ANONYME
-			else return; // on execute pas la suite
-			socket.emit('req_launch_questionnaire', ID_QUESTIONNAIRE, anonyme);
-			socket.on('res_launch_questionnaire', function(id_session){
-				document.location.href='../launched/' + id_session;
-			});
-		});
-		*/
 		socket.emit('req_launch_questionnaire', ID_QUESTIONNAIRE);
 		socket.on('res_launch_questionnaire', function(id_session){
 			document.location.href='../launched/' + id_session;
 		});
 	});
-
 
 	function clickSessionHisto(idSession){
 		// alert("Vous allez etre redirigé vers l'historique sélectioné pour la session : " + idSession);
@@ -195,9 +176,7 @@
 					}
 				}
 			}
-
-			console.log(JSONToCSVConvertor(JSON.stringify(datajsonexport),"ExportAmphiquizz",true));
-
+			console.log(JSONToCSVConvertor(JSON.stringify(datajsonexport),"ExportAmphiquizz",true)); // Lance le téléchargement
 		});
 	}
 
@@ -205,18 +184,13 @@
 		info("Voulez-vous vraiment supprimer l'historique sélectionné ?", "yesCancel", function(res){
 			if (res){
 				socket.emit('req_del_session', idSession);
-					socket.on('res_del_session', function(res){
-						idSession = "#session"+idSession
-						$(idSession).remove();
-					});
-			} else {
-
+				socket.on('res_del_session', function(res){
+					idSession = "#session"+idSession
+					$(idSession).remove();
+				});
 			}
-
 		});
 	}
 
-
 </script>
-
 </html>
