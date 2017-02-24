@@ -65,13 +65,16 @@ if (global.DEBUG) {
 	}, 4000);
 }
 
+
 if (global.FAKE_SMS){
 	setInterval( function(){
 		functions.requireSMS_Add("+33600490000", "b", function(res){ });
 		functions.requireSMS_Add("+33600490000", "A", function(res){ });
-		functions.requireSMS_Add("+33600490000", "&", function(res){ });
+		functions.requireSMS_Add("+33600490300", "A", function(res){ });
+		if (global.DEBUG) functions.requireSMS_Add("+33600490000", "&", function(res){ }); // Invalid content
 	}, 4000);
 }
+
 
 // ===== SERVER ======
 http.listen(global.PORT,function(){
