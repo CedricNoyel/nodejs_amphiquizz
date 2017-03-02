@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<%- include('./partials/head'); -%>
-		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<script src="https://www.gstatic.com/charts/loader.js"></script>
 		<script src="../../js/stats.js"></script>
 	</head>
 
@@ -12,6 +12,10 @@
 
 			<h2 id="numQuestion" class="numQuestion"></h2>
 			<h1 id="nomQuestion" class="question"></h1>
+
+			<div>
+				<p id="nbAnswer"></p>
+			</div>
 
 			<ol class="listeReponses" type="A">
 			</ol>
@@ -42,6 +46,12 @@
 	var q;
 
     socket.on('send_stats', function(result){
+    	var nbAnswer = 0;
+    	for(var rep in result){
+    		nbAnswer += result[rep].NB_SMS;
+    	}
+    	console.log(result)
+    	$('#nbAnswer').text(nbAnswer + " personnes ont répondu");
 		google.charts.load('current', {'packages':['corechart']});
 		google.charts.setOnLoadCallback(function(){
 			drawChart(listeReponses, result);

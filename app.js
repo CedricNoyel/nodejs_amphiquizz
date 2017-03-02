@@ -8,6 +8,7 @@ global.DISPLAY_SMS = true; // Afficher dans la console les SMS reçus
 global.DEBUG = true; // Affichage dans la console
 global.session = false; // false => no session running
 global.currentQuestion = false;
+global.appelEnCours = false;
 global.PORT = 8080;
 
 // ======== IMPORT MODULE ========
@@ -60,18 +61,32 @@ functions.isAnySessionOpen(function(res){
 
 if (global.DEBUG) {
 	setInterval(function(){
-		console.log("CurrentSession : " + global.session);
-		console.log("CurrentQuestion : " + global.currentQuestion);
+		console.log("CurrentSession : " + global.session + " - CurrentQuestion : " + global.currentQuestion + " - AppelEncours : " + global.appelEnCours);
 	}, 4000);
 }
 
 
 if (global.FAKE_SMS){
 	setInterval( function(){
-		functions.requireSMS_Add("+33600490000", "b", function(res){ });
-		functions.requireSMS_Add("+33600490000", "A", function(res){ });
-		functions.requireSMS_Add("+33600490300", "A", function(res){ });
-		if (global.DEBUG) functions.requireSMS_Add("+33600490000", "&", function(res){ }); // Invalid content
+		if (global.currentQuestion !== false) { // TEST SMS QUESTIONNAIRE
+			functions.requireSMS_Add("+33600490000", "b", function(res){ });
+			functions.requireSMS_Add("+33600490020", "b", function(res){ });
+			functions.requireSMS_Add("+33600490009", "A", function(res){ });
+			functions.requireSMS_Add("+33600490010", "A", function(res){ });
+			functions.requireSMS_Add("+33600490000", "&", function(res){ }); // Invalid content
+			functions.requireSMS_Add("+33600490300", "Z", function(res){ });
+		} else if (global.appelEnCours !== false) { // TEST APPEL
+			functions.requireSMS_Add("+33600490020", "b", function(res){ });
+			functions.requireSMS_Add("+33600490300", "NOYEL", function(res){ });
+			functions.requireSMS_Add("+33600490300", "CEDric", function(res){ });
+			functions.requireSMS_Add("+33600490300", "6ASJJ", function(res){ });
+			functions.requireSMS_Add("+33600490300", "KINGSLEY-BALANDRA", function(res){ });
+			functions.requireSMS_Add("+33600490300", "NOYEL_dsq", function(res){ });
+			functions.requireSMS_Add("+33600490300", "noyel", function(res){ });
+			functions.requireSMS_Add("+33600490300", ".fqfsjq", function(res){ });
+			functions.requireSMS_Add("+33600490300", "?cwx", function(res){ });
+		}
+
 	}, 4000);
 }
 
