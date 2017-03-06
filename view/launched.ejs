@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<%- include('./partials/head'); -%>
-		<script src="https://www.gstatic.com/charts/loader.js"></script>
+		<script type="text/javascript" src="../../js/Chart.min.js"></script>
 		<script src="../../js/stats.js"></script>
 	</head>
 
@@ -19,10 +19,16 @@
 
 			<ol class="listeReponses" type="A">
 			</ol>
-
+			<!--
 			<div class="stats">
 				<div id="pieChart"></div>
 				<div id="columnChart"></div>
+			</div>
+			-->
+
+			<div class="stats">
+				<iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; top: 0px; left: 0px; bottom: 0px; right: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
+			    <canvas width="270" height="125" id='myChart' style="display: block; width: 270px; height: 120px;"></canvas>
 			</div>
 
 			<div class="commands">
@@ -45,18 +51,26 @@
 	var listeReponses;
 	var q;
 
+	
+
+	// google.charts.load('current', {'packages':['corechart']});
     socket.on('send_stats', function(result){
     	var nbAnswer = 0;
+
+    	// Nombre de réponses
     	for(var rep in result){
     		nbAnswer += result[rep].NB_SMS;
     	}
-    	$('#nbAnswer').text(nbAnswer + " personnes ont répondu");
+    	if (nbAnswer == 0) $('#nbAnswer').text("Personne n'a répondu");
+    	else if (nbAnswer == 1) $('#nbAnswer').text("1 réponse");
+    	else $('#nbAnswer').text(nbAnswer + " réponses");
 
-		google.charts.load('current', {'packages':['corechart']});
-		google.charts.setOnLoadCallback(function(){
-			drawChart(listeReponses, result);
+		// google.charts.setOnLoadCallback(function(){
+		drawChart(listeReponses, result);
+		// });
+		
+
 		});
-	});
 
     // Chargement du JS
 	$(document).ready(function(questions){
@@ -94,10 +108,12 @@
 		});
 		// ========= DISPLAY NEXT AND PREV ========= //
 		$('#previousQuestion').click(function(){
+			$('#nbAnswer').empty();
 			previousQuestion();
 		});
 		// NEXT
 		$('#nextQuestion').click(function(){
+			$('#nbAnswer').empty();
 			nextQuestion();
 		});
 		$('#showAnswer').click(function(){

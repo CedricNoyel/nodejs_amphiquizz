@@ -2,23 +2,81 @@
 // Callback that creates and populates a data table,
 // instantiates the pie chart, passes in the data and
 // draws it.
+console.log("stats.js ok")
+
 function drawChart(listeReponses, result) {
 	console.log(listeReponses);
 	console.log(result);
+
+
+	var canvas = document.getElementById('myChart');
+
+	var letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+	var labels = new Array();
+	var rowsa = new Array();
+	var nbReponse = new Array();
+
+	// REMPLISSAGE DES LETTRES SOUS LE GRAPHE
+	for (var k=0; k<listeReponses.length; k++) {
+		labels.push(letters[k]);
+		// console.log(listeReponses[k] + " - " + result[k].NB_SMS);
+		if (result[k] != null)
+			rowsa.push(new Array(letters[k], result[k].NB_SMS));
+		else
+			rowsa.push(new Array(letters[k], 0));
+	}
+	// FIN REMPLISSAGE DES LETTRES SOUS LE GRAPHE
+
+	for (var k=0; k<listeReponses.length; k++){
+		nbReponse.push(rowsa[k][1]);
+	}
+
+	console.log("nbReponse: " + nbReponse)
+
+	var data = {
+	    labels: labels,
+	    datasets: [
+		        {
+		            label: "Nombre de réponses",
+		            backgroundColor: "rgba(255,99,132,0.2)",
+		            borderColor: "rgba(255,99,132,1)",
+		            borderWidth: 2,
+		            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+		            hoverBorderColor: "rgba(255,99,132,1)",
+		            data: nbReponse,
+		        }
+		    ]
+		};
+
+
+		var myBarChart = Chart.Bar(canvas,{
+				data:data,
+		});
+
+
+}
+/*
+function drawChart(listeReponses, result) {
+	console.log(listeReponses);
+	console.log(result);
+
+	var letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
 	// Create the data table.
 	var data = new google.visualization.DataTable();
 	data.addColumn('string', 'Réponses');
 	data.addColumn('number', 'Nombre');
 
+	// REMPLISSAGE DES LETTRES SOUS LE GRAPHE
 	var rowsa = new Array();
 	for (var k=0; k<listeReponses.length; k++) {
 		// console.log(listeReponses[k] + " - " + result[k].NB_SMS);
 		if (result[k] != null)
-			rowsa.push(new Array(listeReponses[k], result[k].NB_SMS));
+			rowsa.push(new Array(letters[k], result[k].NB_SMS));
 		else
-			rowsa.push(new Array(listeReponses[k], 0));
+			rowsa.push(new Array(letters[k], 0));
 	}
+	// FIN REMPLISSAGE DES LETTRES SOUS LE GRAPHE
 
 	data.addRows(rowsa);
 
@@ -56,3 +114,4 @@ function drawChart(listeReponses, result) {
 	columnchart.draw(data, columnchart_options);
 
 }
+*/
