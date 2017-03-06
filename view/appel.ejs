@@ -35,7 +35,10 @@ $(document).ready(function() {
 	$('#StopCall').hide();
 
 	$('#btnRetour').click(function(){
-		document.location.href = '../admin';
+		socket.emit('req_stop_call');
+		socket.on('res_stop_call', function(data){
+			document.location.href = '../admin';
+		});
 	});
 
 	$('#StartCall').click(function(){

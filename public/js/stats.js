@@ -3,8 +3,8 @@
 // instantiates the pie chart, passes in the data and
 // draws it.
 function drawChart(listeReponses, result) {
-	//console.log(listeReponses);
-	//console.log(result);
+	console.log(listeReponses);
+	console.log(result);
 
 	// Create the data table.
 	var data = new google.visualization.DataTable();

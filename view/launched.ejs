@@ -50,8 +50,8 @@
     	for(var rep in result){
     		nbAnswer += result[rep].NB_SMS;
     	}
-    	console.log(result)
     	$('#nbAnswer').text(nbAnswer + " personnes ont répondu");
+
 		google.charts.load('current', {'packages':['corechart']});
 		google.charts.setOnLoadCallback(function(){
 			drawChart(listeReponses, result);

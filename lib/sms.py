@@ -5,7 +5,7 @@ import sys
 
 PORT = '/dev/ttyUSB0'
 BAUDRATE = 115200
-PIN = 1234 
+PIN = 1234
 
 from gsmmodem.modem import GsmModem
 
