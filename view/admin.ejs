@@ -17,6 +17,7 @@
 		    <div class="boutonContainer">
 		    	<button class="bouton" type="button" id='addQuestionnaire' >Nouveau questionnaire</button>
 		    	<button class="bouton" type="button" id='fastQuestion' >Question rapide</button>
+		    	<button class="bouton" type="button" id='FaireAppel' >Faire l'appel</button>
 		    </div>
 		</container>
 	</body>
@@ -56,6 +57,10 @@
 			socket.on('res_fastquestion_add', function(id_question){
 				document.location.href=  "./fastquestion/" + id_question;
 			});
+		});
+
+		$('#FaireAppel').click(function(){
+				document.location.href=  "./appel";			
 		});
 	});
 	</script>
