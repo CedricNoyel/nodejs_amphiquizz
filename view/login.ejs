@@ -12,7 +12,7 @@
         <img src="img/logoAQ.png" alt="Logo" class="logo">
         <form action='/login' method='POST'>
             <div class="group">
-                <input class="textField" name="login" type="text" id="login" required>
+                <input class="textField" name="login" id="identifiant" onBlur="checkExistLogin();" required>
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Login</label>
@@ -28,7 +28,6 @@
             <div class="connexion">
                 <input type="submit" value="Connexion" />
             </div>
-            <p id="erreurLogin"></p>
 
         </form>
     </body>
@@ -36,12 +35,19 @@
 
 <script>
 
-    // If login or password wrong
-    var erreur = <%- JSON.stringify(erreur) %>;
-    if (erreur){
-        notif("Les identifiants sont incorrects", "#E74C3C");
-        $('#erreurLogin').append('Les identifiants sont incorrects');
-    }
+    $(document).ready(function(){
 
+        // If login or password wrong
+        var erreur = <%- JSON.stringify(erreur) %>;
+        if (erreur){
+            notif("Login ou mot de passe incorrects", "#E74C3C");
+        }
+
+    });
+    
+    socket.on('res_exist_login', function(loginExist){
+        if (loginExist === false)
+            notif("Cet identifiant n'éxiste pas", "#E74C3C");
+    });
 
 </script>

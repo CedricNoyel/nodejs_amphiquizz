@@ -5,7 +5,7 @@ global.NUM_SMS = "0769110568"; // Numéro de la carte SIM du module
 global.FAKE_SMS = false; // Simulation de reception de SMS
 global.SMS_MODULE =  true; // Désactiver pour test sans le module
 global.DISPLAY_SMS = true; // Afficher dans la console les SMS reçus
-global.DEBUG = false; // Affichage dans la console
+global.DEBUG = true; // Affichage dans la console
 global.session = false; // false => no session running
 global.currentQuestion = false;
 global.appelEnCours = false;

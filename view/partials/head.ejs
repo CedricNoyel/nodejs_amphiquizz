@@ -10,4 +10,13 @@
 <script>
 	// Connection SOCKET
 	var socket = io.connect('http://localhost:8080');
+
+    function checkExistLogin()
+    {
+    	var identifiant = $('#identifiant').val();
+        if ( identifiant != ""){
+            socket.emit('req_exist_login', identifiant);
+        }
+    }
+
 </script>
