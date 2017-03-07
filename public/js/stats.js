@@ -2,14 +2,14 @@
 // Callback that creates and populates a data table,
 // instantiates the pie chart, passes in the data and
 // draws it.
-console.log("stats.js ok")
+console.log("stats.js | LOADED");
 
 function drawChart(listeReponses, result) {
 	console.log(listeReponses);
 	console.log(result);
 
 
-	var canvas = document.getElementById('myChart');
+	var ctx;
 
 	var letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 	var labels = new Array();
@@ -36,24 +36,37 @@ function drawChart(listeReponses, result) {
 	var data = {
 	    labels: labels,
 	    datasets: [
-		        {
-		            label: "Nombre de réponses",
-		            backgroundColor: "rgba(255,99,132,0.2)",
-		            borderColor: "rgba(255,99,132,1)",
-		            borderWidth: 2,
-		            hoverBackgroundColor: "rgba(255,99,132,0.4)",
-		            hoverBorderColor: "rgba(255,99,132,1)",
-		            data: nbReponse,
-		        }
-		    ]
-		};
+			{
+	            label: "Nombre de réponses",
+	            backgroundColor: "rgba(255,99,132,0.2)",
+	            borderColor: "rgba(255,99,132,1)",
+	            borderWidth: 2,
+	            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+	            hoverBorderColor: "rgba(255,99,132,1)",
+	            data: nbReponse
+			}
+		]
+	};
 
+	var options = {
 
-		var myBarChart = Chart.Bar(canvas,{
-				data:data,
-		});
+	}
 
+	// ctx = document.getElementById('pieChart');
 
+	// var myPieChart = new Chart(ctx, {
+	// 	type: 'pie',
+	// 	data: data,
+	// 	options: options
+	// });
+
+	ctx = document.getElementById('barChart');
+
+	var myBarChart = new Chart(ctx, {
+		type: 'bar',
+		data: data,
+		options: options
+	});
 }
 /*
 function drawChart(listeReponses, result) {

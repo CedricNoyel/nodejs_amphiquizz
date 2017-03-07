@@ -8,40 +8,31 @@
 
 	<body id="launched">
 		<div class="blocQuestion">
-			<button type="button" id="btnQuitterDiapo" class="bouton suppr" >Quitter</button>
+			<button type="button" id="btnQuitterDiapo" class="bouton suppr">Quitter</button>
+			<div type="button" id="nbReponses" class="bouton">Aucune réponses</div>
 
 			<h2 id="numQuestion" class="numQuestion"></h2>
 			<h1 id="nomQuestion" class="question"></h1>
 
-			<div>
-				<p id="nbAnswer"></p>
-			</div>
-
 			<ol class="listeReponses" type="A">
 			</ol>
-			<!--
-			<div class="stats">
-				<div id="pieChart"></div>
-				<div id="columnChart"></div>
-			</div>
-			-->
 
 			<div class="stats">
-				<iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; top: 0px; left: 0px; bottom: 0px; right: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
-			    <canvas width="270" height="125" id='myChart' style="display: block; width: 270px; height: 120px;"></canvas>
+				<%# <canvas id="pieChart"></canvas>%>
+				<canvas id="barChart"></canvas>
 			</div>
+		</div>
 
-			<div class="commands">
-				<button type="button" id="nextQuestion" class="bouton">></button>
-				<button type="button" id="showAnswer" class="bouton">Réponse</button>
-				<button type="button" id="ButtonStats" class="bouton">Stats</button>
-				<button type="button" id="previousQuestion" class="bouton"><</button>
-			</div>
+		<div class="commands">
+			<button type="button" id="nextQuestion" class="bouton">></button>
+			<button type="button" id="showAnswer" class="bouton">Réponse</button>
+			<button type="button" id="ButtonStats" class="bouton">Afficher les stats</button>
+			<button type="button" id="previousQuestion" class="bouton"><</button>
 		</div>
 	</body>
 	<script>
 
-	
+
 	// Variables
 	var numQuestion = 1;
 	var idQuestion;
@@ -51,7 +42,7 @@
 	var listeReponses;
 	var q;
 
-	
+
 
 	// google.charts.load('current', {'packages':['corechart']});
     socket.on('send_stats', function(result){
@@ -61,14 +52,14 @@
     	for(var rep in result){
     		nbAnswer += result[rep].NB_SMS;
     	}
-    	if (nbAnswer == 0) $('#nbAnswer').text("Personne n'a répondu");
-    	else if (nbAnswer == 1) $('#nbAnswer').text("1 réponse");
-    	else $('#nbAnswer').text(nbAnswer + " réponses");
+    	if (nbAnswer == 0) $('#nbReponses').text("Aucune réponses");
+    	else if (nbAnswer == 1) $('#nbReponses').text("1 réponse");
+    	else $('#nbReponses').text(nbAnswer + " réponses");
 
 		// google.charts.setOnLoadCallback(function(){
 		drawChart(listeReponses, result);
 		// });
-		
+
 
 		});
 
