@@ -41,7 +41,8 @@
 								<th>Réponses possibles</th><th>Bonne réponse</th><th></th>
 							</tr>
 						</thead>
-						<tbody id='sortable'>		<!-- REPONSES -->		</tbody>
+						<tbody>		<!-- REPONSES -->		</tbody>
+						<!-- <tbody id='sortable'></tbody> -->
 					</table>
 				</div>
 			</div>
@@ -129,10 +130,12 @@
 		socket.emit('edit_answer', id_bonne_reponse, ID_QUESTION, ID_QUESTIONNAIRE);
 	}
 
+	// SWAP ANSWER
+	/*
 	$('#sortable tr td:nth-child(2)').click(function(event) {
-            $(this).children('.radio').children('input').prop('checked', true);
+           $(this).children('.radio').children('input').prop('checked', true);
     });
-
+	*/
 
 	</script>
 </html>
