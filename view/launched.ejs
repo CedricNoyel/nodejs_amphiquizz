@@ -9,7 +9,7 @@
 	<body id="launched">
 		<div class="blocQuestion">
 			<button type="button" id="btnQuitterDiapo" class="bouton suppr">Quitter</button>
-			<div type="button" id="nbReponses" class="bouton">Aucune réponses</div>
+			<div type="button" id="nbReponses" class="bouton">Aucune réponse</div>
 
 			<h2 id="numQuestion" class="numQuestion"></h2>
 			<h1 id="nomQuestion" class="question"></h1>
@@ -17,17 +17,17 @@
 			<ol class="listeReponses" type="A">
 			</ol>
 
+			<div class="commands">
+				<button type="button" id="nextQuestion" class="bouton">></button>
+				<button type="button" id="showAnswer" class="bouton">Réponse</button>
+				<button type="button" id="ButtonStats" class="bouton">Afficher les stats</button>
+				<button type="button" id="previousQuestion" class="bouton"><</button>
+			</div>
+
 			<div class="stats">
 				<%# <canvas id="pieChart"></canvas>%>
 				<canvas id="barChart"></canvas>
 			</div>
-		</div>
-
-		<div class="commands">
-			<button type="button" id="nextQuestion" class="bouton">></button>
-			<button type="button" id="showAnswer" class="bouton">Réponse</button>
-			<button type="button" id="ButtonStats" class="bouton">Afficher les stats</button>
-			<button type="button" id="previousQuestion" class="bouton"><</button>
 		</div>
 	</body>
 	<script>
@@ -41,27 +41,7 @@
 	var displayStat = false;
 	var listeReponses;
 	var q;
-
-
-
-	// google.charts.load('current', {'packages':['corechart']});
-    socket.on('send_stats', function(result){
-    	var nbAnswer = 0;
-
-    	// Nombre de réponses
-    	for(var rep in result){
-    		nbAnswer += result[rep].NB_SMS;
-    	}
-    	if (nbAnswer == 0) $('#nbReponses').text("Aucune réponses");
-    	else if (nbAnswer == 1) $('#nbReponses').text("1 réponse");
-    	else $('#nbReponses').text(nbAnswer + " réponses");
-
-		// google.charts.setOnLoadCallback(function(){
-		drawChart(listeReponses, result);
-		// });
-
-
-		});
+	var myBarChart;
 
     // Chargement du JS
 	$(document).ready(function(questions){
@@ -69,6 +49,58 @@
 		// ========= INIT =========
 		$('#previousQuestion').attr("disabled", true);
 		$('.stats').hide();
+
+		// DRAW chart
+
+		var data = {
+		    labels: ["A", "B", "C"],
+			// labels: ["January", "February", "March", "April", "May", "June", "July"],
+		    datasets: [
+				{
+		            label: "Nombre de réponses",
+					backgroundColor: [
+		                'rgba(255, 99, 132, 0.2)',
+		                'rgba(54, 162, 235, 0.2)',
+		                'rgba(255, 206, 86, 0.2)',
+		                'rgba(75, 192, 192, 0.2)',
+		                'rgba(153, 102, 255, 0.2)',
+		                'rgba(255, 159, 64, 0.2)'
+		            ],
+		            borderColor: [
+		                'rgba(255,99,132,1)',
+		                'rgba(54, 162, 235, 1)',
+		                'rgba(255, 206, 86, 1)',
+		                'rgba(75, 192, 192, 1)',
+		                'rgba(153, 102, 255, 1)',
+		                'rgba(255, 159, 64, 1)'
+		            ],
+		            borderWidth: 2,
+		            data: []
+					// data: [65, 59, 80, 81, 56, 55, 40]
+				}
+			]
+		};
+
+		var options = {
+			// animation : false,
+			responsive : true,
+			scales: {
+		        yAxes: [{
+		            ticks: {
+		                min: 0,
+						stepSize: 10
+		            }
+		        }]
+		    }
+		};
+
+		ctx = document.getElementById('barChart');
+
+		myBarChart = new Chart(ctx, {
+			type: 'bar',
+			data: data,
+			options: options
+		});
 
 		// loading questions
 		var idSession = <%- JSON.stringify(idSession) -%>;
@@ -185,6 +217,25 @@
 			else $('#nextQuestion').attr("disabled", false);
 		}
 
+	});
+
+	socket.on('send_stats', function(result){
+    	var nbAnswer = 0;
+
+    	// Nombre de réponses
+    	for(var rep in result){
+    		nbAnswer += result[rep].NB_SMS;
+    	}
+    	if (nbAnswer == 0) $('#nbReponses').text("Aucune réponse");
+    	else if (nbAnswer == 1) $('#nbReponses').text("1 réponse");
+    	else $('#nbReponses').text(nbAnswer + " réponses");
+
+		console.log(listeReponses);
+		console.log(result);
+		
+		myBarChart.data.datasets[0].data = updateChart(listeReponses, result);
+		myBarChart.update();
+;
 	});
 
 	</script>

@@ -64,15 +64,16 @@ if (global.DEBUG) {
 		console.log("CurrentSession : " + global.session + " - CurrentQuestion : " + global.currentQuestion + " - AppelEncours : " + global.appelEnCours);
 	}, 4000);
 }
-
+var numtel = 33600490000;
 
 if (global.FAKE_SMS){
 	setInterval( function(){
+		numtel++;
 		if (global.currentQuestion !== false) { // TEST SMS QUESTIONNAIRE
-			functions.requireSMS_Add("+33600490000", "b", function(res){ });
-			functions.requireSMS_Add("+33600490020", "b", function(res){ });
-			functions.requireSMS_Add("+33600490009", "A", function(res){ });
-			functions.requireSMS_Add("+33600490010", "A", function(res){ });
+			functions.requireSMS_Add("+" + numtel, "B", function(res){ });
+			functions.requireSMS_Add("+33600490020", "B", function(res){ });
+			functions.requireSMS_Add("+33636490020", "C", function(res){ });
+			functions.requireSMS_Add("+33634490020", "A", function(res){ });
 			functions.requireSMS_Add("+33600490000", "&", function(res){ }); // Invalid content
 			functions.requireSMS_Add("+33600490300", "Z", function(res){ });
 		} else if (global.appelEnCours !== false) { // TEST APPEL
