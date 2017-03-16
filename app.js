@@ -75,6 +75,7 @@ if (global.FAKE_SMS){
 			functions.requireSMS_Add("+33600490010", "A", function(res){ });
 			functions.requireSMS_Add("+33600490000", "&", function(res){ }); // Invalid content
 			functions.requireSMS_Add("+33600490300", "Z", function(res){ });
+			functions.requireSMS_Add("+33600490300", "E", function(res){ });
 		} else if (global.appelEnCours !== false) { // TEST APPEL
 			functions.requireSMS_Add("+33600490020", "b", function(res){ });
 			functions.requireSMS_Add("+33600490300", "NOYEL", function(res){ });
