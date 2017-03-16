@@ -15,11 +15,11 @@
 			</div>
 
 			<div class="btn">
-				<button type="button" id="StartCall" >Demarrer l'appel</button>
+				<button type="button" id="StartCall" >Démarrer l'appel</button>
 			</div>
 
 			<div class="btn">
-				<button type="button" id="StopCall" >Arreter l'appel</button>
+				<button type="button" id="StopCall" >Arrêter l'appel</button>
 			</div>
 
 			<p id="nbNoms"></p>
@@ -42,12 +42,12 @@ $(document).ready(function() {
 	});
 
 	$('#StartCall').click(function(){
-		var currentdate = new Date(); 
+		var currentdate = new Date();
 		var date = currentdate.getFullYear() + "-"
-            + (currentdate.getMonth()+1)  + "-" 
+            + (currentdate.getMonth()+1)  + "-"
             + currentdate.getDate() + " "
-            + currentdate.getHours() + ":"  
-            + currentdate.getMinutes() + ":" 
+            + currentdate.getHours() + ":"
+            + currentdate.getMinutes() + ":"
             + currentdate.getSeconds();
 
 		socket.emit('req_start_call', date);

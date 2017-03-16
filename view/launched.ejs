@@ -20,12 +20,11 @@
 			<div class="commands">
 				<button type="button" id="nextQuestion" class="bouton">></button>
 				<button type="button" id="showAnswer" class="bouton">Réponse</button>
-				<button type="button" id="ButtonStats" class="bouton">Afficher les stats</button>
+				<button type="button" id="buttonStats" class="bouton" href="#stats">Afficher les stats</button>
 				<button type="button" id="previousQuestion" class="bouton"><</button>
 			</div>
 
-			<div class="stats">
-				<%# <canvas id="pieChart"></canvas>%>
+			<div class="stats" name="stats">
 				<canvas id="barChart"></canvas>
 			</div>
 		</div>
@@ -50,7 +49,7 @@
 		$('#previousQuestion').attr("disabled", true);
 		$('.stats').hide();
 
-		// DRAW chart
+		// Init Chart
 
 		var data = {
 		    labels: ["A", "B", "C"],
@@ -82,8 +81,39 @@
 		};
 
 		var options = {
-			// animation : false,
-			responsive : true,
+			responsive: true,
+			events: false,
+		    tooltips: {
+		        enabled: false
+		    },
+		    hover: {
+		        animationDuration: 0
+		    },
+		    animation: {
+				duration: 500,
+	            easing: "easeOutQuart",
+	            onComplete: function () {
+	                var ctx = this.chart.ctx;
+	                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
+	                ctx.textAlign = 'center';
+	                ctx.textBaseline = 'bottom';
+
+	                this.data.datasets.forEach(function (dataset) {
+	                    for (var i = 0; i < dataset.data.length; i++) {
+	                        var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+	                            scale_max = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._yScale.maxHeight;
+	                        ctx.fillStyle = '#444';
+	                        var y_pos = model.y - 5;
+	                        // Make sure data value does not get overflown and hidden
+	                        // when the bar's value is too close to max value of scale
+	                        // Note: The y value is reverse, it counts from top down
+	                        if ((scale_max - model.y) / scale_max >= 0.93)
+	                            y_pos = model.y + 20;
+	                        ctx.fillText(dataset.data[i], model.x, y_pos);
+	                    }
+	                });
+	            }
+		    },
 			scales: {
 		        yAxes: [{
 		            ticks: {
@@ -91,11 +121,15 @@
 						stepSize: 10
 		            }
 		        }]
-		    }
+		    },
+			legend: {
+				display: false
+			}
 		};
 
 		ctx = document.getElementById('barChart');
 
+		// Drawing Chart
 		myBarChart = new Chart(ctx, {
 			type: 'bar',
 			data: data,
@@ -143,18 +177,25 @@
 			$('#goodAnswer').toggleClass('goodAnswer');
 		});
 
-		$('#ButtonStats').click(function(){
+		// Display stats
+		function scrollToAnchor(name) {
+		    var elem = $("div[name='"+ name +"']");
+		    $('html,body').animate({scrollTop: elem.offset().top},'slow');
+		}
+
+		$('#buttonStats').click(function(){
 			if (displayStat){
 				$('.stats').hide();
 				$('.listeReponses').show();
-				$('#ButtonStats').text('Stats');
+				$('#buttonStats').text('Afficher les stats');
 				displayStat = false;
 				$('#showAnswer').show();
 			} else {
 				$('.stats').show();
-				$('#ButtonStats').text('Cacher les stats');
+				$('#buttonStats').text('Masquer les stats');
 				$('#showAnswer').hide();
 				displayStat = true;
+				scrollToAnchor('stats');
 			}
 		});
 
@@ -232,7 +273,7 @@
 
 		console.log(listeReponses);
 		console.log(result);
-		
+
 		myBarChart.data.datasets[0].data = updateChart(listeReponses, result);
 		myBarChart.update();
 ;
