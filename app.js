@@ -74,7 +74,9 @@ if (global.FAKE_SMS){
 			functions.requireSMS_Add("+33600490020", "B", function(res){ });
 			functions.requireSMS_Add("+33636490020", "C", function(res){ });
 			functions.requireSMS_Add("+33634490020", "A", function(res){ });
-			functions.requireSMS_Add("+33600490000", "&", function(res){ }); // Invalid content
+			// functions.requireSMS_Add("+33600490000", "E", function(res){ });
+			functions.requireSMS_Add("+33600490000", "F", function(res){ });
+			functions.requireSMS_Add("+33600490000", "D", function(res){ }); // Invalid content
 			functions.requireSMS_Add("+33600490300", "Z", function(res){ });
 		} else if (global.appelEnCours !== false) { // TEST APPEL
 			functions.requireSMS_Add("+33600490020", "b", function(res){ });

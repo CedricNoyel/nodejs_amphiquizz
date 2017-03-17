@@ -46,14 +46,14 @@
 	$(document).ready(function(questions){
 
 		// ========= INIT =========
-		$('#previousQuestion').attr("disabled", true);
 		$('.stats').hide();
 
 		// Init Chart
 
+		console.log(listeReponses);
+
 		var data = {
-		    labels: ["A", "B", "C"],
-			// labels: ["January", "February", "March", "April", "May", "June", "July"],
+		    labels: [],
 		    datasets: [
 				{
 		            label: "Nombre de réponses",
@@ -75,7 +75,6 @@
 		            ],
 		            borderWidth: 2,
 		            data: []
-					// data: [65, 59, 80, 81, 56, 55, 40]
 				}
 			]
 		};
@@ -141,6 +140,12 @@
 		var questions = <%- JSON.stringify(questions) -%>;
 		q = questions;
 		nbQuestion = questions.length;
+
+		$('#previousQuestion').attr("disabled", true);
+		if (questions.length == 1) {
+			$('#nextQuestion').attr("disabled", true);
+		}
+		
 		loadQuestion(numQuestion, nbQuestion);
 
 		// ========= LEAVE EVENT ========= //
@@ -226,8 +231,8 @@
 		}
 
 		function nextQuestion(){
+			$('#nbReponses').text('Aucune réponse');
 			$('#showAnswer').show();
-			$('#ButtonStats').text('Stats');
 			$('.stats').hide();
 			if (numQuestion < nbQuestion){
 				numQuestion++;
@@ -238,8 +243,8 @@
 		}
 
 		function previousQuestion(){
+			$('#nbReponses').text('Aucune réponse');
 			$('#showAnswer').show();
-			$('#ButtonStats').text('Stats');
 			$('.stats').hide();
 			if (numQuestion > 1){
 				numQuestion--;
@@ -271,9 +276,10 @@
     	else if (nbAnswer == 1) $('#nbReponses').text("1 réponse");
     	else $('#nbReponses').text(nbAnswer + " réponses");
 
-		console.log(listeReponses);
-		console.log(result);
+		// console.log(listeReponses);
+		// console.log(result);
 
+		myBarChart.data.labels = nbLabels(listeReponses);
 		myBarChart.data.datasets[0].data = updateChart(listeReponses, result);
 		myBarChart.update();
 ;

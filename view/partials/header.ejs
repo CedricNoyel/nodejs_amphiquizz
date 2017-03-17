@@ -15,8 +15,8 @@
 		document.location.href = '/logout';
 	});
 
-    socket.on('message', function(message){
-		notif(message, "#39CA74");
+    socket.on('message', function(message, color="#39CA74"){
+		notif(message, color);
     });
 
 </script>

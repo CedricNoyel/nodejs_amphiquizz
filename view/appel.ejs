@@ -16,6 +16,7 @@
 
 			<button type="button" class="bouton" id="startCall">Démarrer l'appel</button>
 			<button type="button" class="bouton suppr" id="stopCall" style="display:none;">Arrêter l'appel</button>
+
 			<div type="button" id="nbEleve" class="bouton">Aucune réponse</div>
 
 			<div class="listeEleves">
@@ -50,7 +51,7 @@ $(document).ready(function() {
 		});
 	});
 
-	$('stopCall').click(function(){
+	$('#stopCall').click(function(){
 		socket.emit('req_stop_call');
 		socket.on('res_stop_call', function(data){
 			$('#startCall').show();
