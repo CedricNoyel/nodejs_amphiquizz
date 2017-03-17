@@ -86,8 +86,14 @@ if (global.FAKE_SMS){
 			functions.requireSMS_Add("+33600490300", "noyel", function(res){ });
 			functions.requireSMS_Add("+33600490300", ".fqfsjq", function(res){ });
 			functions.requireSMS_Add("+33600490300", "?cwx", function(res){ });
-		}
 
+			functions.requireSMS_Add("+33600490300", "NOYEL", function(res){ });
+			functions.requireSMS_Add("+33600490300", "sfv", function(res){ });
+			functions.requireSMS_Add("+33600490300", "NOYtbertbEL", function(res){ });
+			functions.requireSMS_Add("+33600490300", "NOYzerzerfEL", function(res){ });
+			functions.requireSMS_Add("+33600490300", "azef", function(res){ });
+			functions.requireSMS_Add("+33600490300", "NOYzergergEL", function(res){ });
+		}
 	}, 4000);
 }
 

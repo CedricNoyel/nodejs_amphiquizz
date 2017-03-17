@@ -4,7 +4,7 @@
 	    <%- include('./partials/head'); -%>
 	</head>
 
-	<body id="admin">
+	<body id="appel">
 		<header>
 	    	<%- include('./partials/header') -%>
 		</header>
@@ -14,26 +14,19 @@
 				<button type="button" id="btnRetour" >Retour</button>
 			</div>
 
-			<div class="btn">
-				<button type="button" id="StartCall" >Démarrer l'appel</button>
+			<button type="button" class="bouton" id="startCall">Démarrer l'appel</button>
+			<button type="button" class="bouton suppr" id="stopCall" style="display:none;">Arrêter l'appel</button>
+			<div type="button" id="nbEleve" class="bouton">Aucune réponse</div>
+
+			<div class="listeEleves">
+				<ul></ul>
 			</div>
-
-			<div class="btn">
-				<button type="button" id="StopCall" >Arrêter l'appel</button>
-			</div>
-
-			<p id="nbNoms"></p>
-
-			<table id='tableName'></table>
-
 		</container>
 	</body>
 
 	<script>
 
 $(document).ready(function() {
-	$('#StopCall').hide();
-
 	$('#btnRetour').click(function(){
 		socket.emit('req_stop_call');
 		socket.on('res_stop_call', function(data){
@@ -41,10 +34,10 @@ $(document).ready(function() {
 		});
 	});
 
-	$('#StartCall').click(function(){
+	$('#startCall').click(function(){
 		var currentdate = new Date();
 		var date = currentdate.getFullYear() + "-"
-            + (currentdate.getMonth()+1)  + "-"
+            + (currentdate.getMonth() + 1)  + "-"
             + currentdate.getDate() + " "
             + currentdate.getHours() + ":"
             + currentdate.getMinutes() + ":"
@@ -52,38 +45,36 @@ $(document).ready(function() {
 
 		socket.emit('req_start_call', date);
 		socket.on('res_start_call', function(data){
-			$('#StartCall').hide();
-			$('#StopCall').show();
+			$('#startCall').hide();
+			$('#stopCall').show();
 		});
 	});
 
-	$('#StopCall').click(function(){
+	$('stopCall').click(function(){
 		socket.emit('req_stop_call');
 		socket.on('res_stop_call', function(data){
-			$('#StartCall').show();
-			$('#StopCall').hide();
+			$('#startCall').show();
+			$('#stopCall').hide();
 		});
 	});
 
 	socket.on('req_add_name', function(data){
-		AfficheNbReponses(data);
-		RemplirNoms(data);
+		afficheNbReponses(data);
+		ajouterEleve(data);
 	});
 
-	function AfficheNbReponses(data){
-		if (data.length == 0) $('#nbNoms').text("Il n'y a pas de réponse");
-		else if (data.length == 1) $('#nbNoms').text("Il y a 1 réponse");
-		else $('#nbNoms').text("Il y a " + data.length + " réponses");
+	function afficheNbReponses(data){
+		if (data.length == 0) $('#nbEleve').text("Il n'y a pas d'élèves");
+		else if (data.length == 1) $('#nbEleve').text("Il y a 1 élève");
+		else $('#nbEleve').text("Il y a " + data.length + " élèves");
 	}
 
-	function RemplirNoms(data){
-		$('#tableName').empty();
+	function ajouterEleve(data){
+		$('.listeEleves ul').empty();
 		for (var a in data){
-			$('#tableName').append("<tr><td></td><td>" + data[a].VALEUR_SMS + "</td></tr>");
+			$('.listeEleves ul').append("<li>" + data[a].VALEUR_SMS + "</li>");
 		}
 	}
-
 });
-
 	</script>
 </html>
