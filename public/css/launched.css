@@ -1,17 +1,17 @@
-#launched {
-	background-color: #F7F7F7;
-}
-
 #launched .bouton {
 	margin-right: 20px;
 	margin-left: 0;
 }
 
+#launched #nbReponses {
+	line-height: 50px;
+	background-color: #FFF;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	cursor: default;
+}
+
 #launched .blocQuestion {
-	display: inline-block;
-	width: calc(100% - 60px);
-	height: calc(100% - 60px);
-	margin: 30px 0 0 30px;
+	margin: 30px;
 	background-color: #FFF;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
@@ -57,16 +57,12 @@ li {
 	height: 90px;
 }
 
-.nbReponses {
-	line-height: 50px;
-	background-color: #FFF;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-}
-
 .stats {
-	height: calc(100% - 250px);
+	width: 90%;
+	margin: auto;
 }
 
-.stats div {
+.stats canvas {
+	width: 45%;
 	display: inline-block;
 }

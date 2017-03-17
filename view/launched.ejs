@@ -8,40 +8,30 @@
 
 	<body id="launched">
 		<div class="blocQuestion">
-			<button type="button" id="btnQuitterDiapo" class="bouton suppr" >Quitter</button>
+			<button type="button" id="btnQuitterDiapo" class="bouton suppr">Quitter</button>
+			<div type="button" id="nbReponses" class="bouton">Aucune réponse</div>
 
 			<h2 id="numQuestion" class="numQuestion"></h2>
 			<h1 id="nomQuestion" class="question"></h1>
 
-			<div>
-				<p id="nbAnswer"></p>
-			</div>
-
 			<ol class="listeReponses" type="A">
 			</ol>
-			<!--
-			<div class="stats">
-				<div id="pieChart"></div>
-				<div id="columnChart"></div>
-			</div>
-			-->
-
-			<div class="stats">
-				<iframe class="chartjs-hidden-iframe" style="display: block; overflow: hidden; border: 0px none; margin: 0px; top: 0px; left: 0px; bottom: 0px; right: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;" tabindex="-1"></iframe>
-			    <canvas width="270" height="125" id='myChart' style="display: block; width: 270px; height: 120px;"></canvas>
-			</div>
 
 			<div class="commands">
 				<button type="button" id="nextQuestion" class="bouton">></button>
 				<button type="button" id="showAnswer" class="bouton">Réponse</button>
-				<button type="button" id="ButtonStats" class="bouton">Stats</button>
+				<button type="button" id="buttonStats" class="bouton" href="#stats">Afficher les stats</button>
 				<button type="button" id="previousQuestion" class="bouton"><</button>
+			</div>
+
+			<div class="stats" name="stats">
+				<canvas id="barChart"></canvas>
 			</div>
 		</div>
 	</body>
 	<script>
 
-	
+
 	// Variables
 	var numQuestion = 1;
 	var idQuestion;
@@ -50,40 +40,112 @@
 	var displayStat = false;
 	var listeReponses;
 	var q;
-
-	
-
-	// google.charts.load('current', {'packages':['corechart']});
-    socket.on('send_stats', function(result){
-    	var nbAnswer = 0;
-
-    	// Nombre de réponses
-    	for(var rep in result){
-    		nbAnswer += result[rep].NB_SMS;
-    	}
-    	if (nbAnswer == 0) $('#nbAnswer').text("Personne n'a répondu");
-    	else if (nbAnswer == 1) $('#nbAnswer').text("1 réponse");
-    	else $('#nbAnswer').text(nbAnswer + " réponses");
-
-		// google.charts.setOnLoadCallback(function(){
-		drawChart(listeReponses, result);
-		// });
-		
-
-		});
+	var myBarChart;
 
     // Chargement du JS
 	$(document).ready(function(questions){
 
 		// ========= INIT =========
-		$('#previousQuestion').attr("disabled", true);
 		$('.stats').hide();
+
+		// Init Chart
+
+		console.log(listeReponses);
+
+		var data = {
+		    labels: [],
+		    datasets: [
+				{
+		            label: "Nombre de réponses",
+					backgroundColor: [
+		                'rgba(255, 99, 132, 0.2)',
+		                'rgba(54, 162, 235, 0.2)',
+		                'rgba(255, 206, 86, 0.2)',
+		                'rgba(75, 192, 192, 0.2)',
+		                'rgba(153, 102, 255, 0.2)',
+		                'rgba(255, 159, 64, 0.2)'
+		            ],
+		            borderColor: [
+		                'rgba(255,99,132,1)',
+		                'rgba(54, 162, 235, 1)',
+		                'rgba(255, 206, 86, 1)',
+		                'rgba(75, 192, 192, 1)',
+		                'rgba(153, 102, 255, 1)',
+		                'rgba(255, 159, 64, 1)'
+		            ],
+		            borderWidth: 2,
+		            data: []
+				}
+			]
+		};
+
+		var options = {
+			responsive: true,
+			events: false,
+		    tooltips: {
+		        enabled: false
+		    },
+		    hover: {
+		        animationDuration: 0
+		    },
+		    animation: {
+				duration: 500,
+	            easing: "easeOutQuart",
+	            onComplete: function () {
+	                var ctx = this.chart.ctx;
+	                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
+	                ctx.textAlign = 'center';
+	                ctx.textBaseline = 'bottom';
+
+	                this.data.datasets.forEach(function (dataset) {
+	                    for (var i = 0; i < dataset.data.length; i++) {
+	                        var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+	                            scale_max = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._yScale.maxHeight;
+	                        ctx.fillStyle = '#444';
+	                        var y_pos = model.y - 5;
+	                        // Make sure data value does not get overflown and hidden
+	                        // when the bar's value is too close to max value of scale
+	                        // Note: The y value is reverse, it counts from top down
+	                        if ((scale_max - model.y) / scale_max >= 0.93)
+	                            y_pos = model.y + 20;
+	                        ctx.fillText(dataset.data[i], model.x, y_pos);
+	                    }
+	                });
+	            }
+		    },
+			scales: {
+		        yAxes: [{
+		            ticks: {
+		                min: 0,
+						stepSize: 10
+		            }
+		        }]
+		    },
+			legend: {
+				display: false
+			}
+		};
+
+		ctx = document.getElementById('barChart');
+
+		// Drawing Chart
+		myBarChart = new Chart(ctx, {
+			type: 'bar',
+			data: data,
+			options: options
+		});
 
 		// loading questions
 		var idSession = <%- JSON.stringify(idSession) -%>;
 		var questions = <%- JSON.stringify(questions) -%>;
 		q = questions;
 		nbQuestion = questions.length;
+
+		$('#previousQuestion').attr("disabled", true);
+		if (questions.length == 1) {
+			$('#nextQuestion').attr("disabled", true);
+		}
+		
 		loadQuestion(numQuestion, nbQuestion);
 
 		// ========= LEAVE EVENT ========= //
@@ -120,18 +182,25 @@
 			$('#goodAnswer').toggleClass('goodAnswer');
 		});
 
-		$('#ButtonStats').click(function(){
+		// Display stats
+		function scrollToAnchor(name) {
+		    var elem = $("div[name='"+ name +"']");
+		    $('html,body').animate({scrollTop: elem.offset().top},'slow');
+		}
+
+		$('#buttonStats').click(function(){
 			if (displayStat){
 				$('.stats').hide();
 				$('.listeReponses').show();
-				$('#ButtonStats').text('Stats');
+				$('#buttonStats').text('Afficher les stats');
 				displayStat = false;
 				$('#showAnswer').show();
 			} else {
 				$('.stats').show();
-				$('#ButtonStats').text('Cacher les stats');
+				$('#buttonStats').text('Masquer les stats');
 				$('#showAnswer').hide();
 				displayStat = true;
+				scrollToAnchor('stats');
 			}
 		});
 
@@ -162,8 +231,8 @@
 		}
 
 		function nextQuestion(){
+			$('#nbReponses').text('Aucune réponse');
 			$('#showAnswer').show();
-			$('#ButtonStats').text('Stats');
 			$('.stats').hide();
 			if (numQuestion < nbQuestion){
 				numQuestion++;
@@ -174,8 +243,8 @@
 		}
 
 		function previousQuestion(){
+			$('#nbReponses').text('Aucune réponse');
 			$('#showAnswer').show();
-			$('#ButtonStats').text('Stats');
 			$('.stats').hide();
 			if (numQuestion > 1){
 				numQuestion--;
@@ -194,6 +263,26 @@
 			else $('#nextQuestion').attr("disabled", false);
 		}
 
+	});
+
+	socket.on('send_stats', function(result){
+    	var nbAnswer = 0;
+
+    	// Nombre de réponses
+    	for(var rep in result){
+    		nbAnswer += result[rep].NB_SMS;
+    	}
+    	if (nbAnswer == 0) $('#nbReponses').text("Aucune réponse");
+    	else if (nbAnswer == 1) $('#nbReponses').text("1 réponse");
+    	else $('#nbReponses').text(nbAnswer + " réponses");
+
+		// console.log(listeReponses);
+		// console.log(result);
+
+		myBarChart.data.labels = nbLabels(listeReponses);
+		myBarChart.data.datasets[0].data = updateChart(listeReponses, result);
+		myBarChart.update();
+;
 	});
 
 	</script>

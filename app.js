@@ -2,7 +2,7 @@
 
 // ======== GLOBAL VAR ========
 global.NUM_SMS = "0769110568"; // Numéro de la carte SIM du module
-global.FAKE_SMS = false; // Simulation de reception de SMS
+global.FAKE_SMS = true; // Simulation de reception de SMS
 global.SMS_MODULE =  true; // Désactiver pour test sans le module
 global.DISPLAY_SMS = true; // Afficher dans la console les SMS reçus
 global.DEBUG = true; // Affichage dans la console
@@ -64,16 +64,19 @@ if (global.DEBUG) {
 		console.log("CurrentSession : " + global.session + " - CurrentQuestion : " + global.currentQuestion + " - AppelEncours : " + global.appelEnCours);
 	}, 4000);
 }
-
+var numtel = 33600490000;
 
 if (global.FAKE_SMS){
 	setInterval( function(){
+		numtel++;
 		if (global.currentQuestion !== false) { // TEST SMS QUESTIONNAIRE
-			functions.requireSMS_Add("+33600490000", "b", function(res){ });
-			functions.requireSMS_Add("+33600490020", "b", function(res){ });
-			functions.requireSMS_Add("+33600490009", "A", function(res){ });
-			functions.requireSMS_Add("+33600490010", "A", function(res){ });
-			functions.requireSMS_Add("+33600490000", "&", function(res){ }); // Invalid content
+			functions.requireSMS_Add("+" + numtel, "B", function(res){ });
+			functions.requireSMS_Add("+33600490020", "B", function(res){ });
+			functions.requireSMS_Add("+33636490020", "C", function(res){ });
+			functions.requireSMS_Add("+33634490020", "A", function(res){ });
+			// functions.requireSMS_Add("+33600490000", "E", function(res){ });
+			functions.requireSMS_Add("+33600490000", "F", function(res){ });
+			functions.requireSMS_Add("+33600490000", "D", function(res){ }); // Invalid content
 			functions.requireSMS_Add("+33600490300", "Z", function(res){ });
 			functions.requireSMS_Add("+33600490300", "E", function(res){ });
 		} else if (global.appelEnCours !== false) { // TEST APPEL
@@ -86,8 +89,14 @@ if (global.FAKE_SMS){
 			functions.requireSMS_Add("+33600490300", "noyel", function(res){ });
 			functions.requireSMS_Add("+33600490300", ".fqfsjq", function(res){ });
 			functions.requireSMS_Add("+33600490300", "?cwx", function(res){ });
-		}
 
+			functions.requireSMS_Add("+33600490300", "NOYEL", function(res){ });
+			functions.requireSMS_Add("+33600490300", "sfv", function(res){ });
+			functions.requireSMS_Add("+33600490300", "NOYtbertbEL", function(res){ });
+			functions.requireSMS_Add("+33600490300", "NOYzerzerfEL", function(res){ });
+			functions.requireSMS_Add("+33600490300", "azef", function(res){ });
+			functions.requireSMS_Add("+33600490300", "NOYzergergEL", function(res){ });
+		}
 	}, 4000);
 }
 

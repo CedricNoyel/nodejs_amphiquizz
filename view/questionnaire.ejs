@@ -28,13 +28,9 @@
 							<label>Nom du questionnaire</label>
 						</div>
 						<div class="boutonContainer">
-							<div>
-							</div>
-							<div>
-								<button id='delQuestionnaire' class="bouton suppr" type="button">Supprimer</button>
-								<button id='saveQuestionnaire' class="bouton save" type="button">Enregistrer</button>
-								<button id='launchQuestionnaire' class="bouton launch" type="button">Lancer le questionnaire</button>
-							</div>
+							<button id='delQuestionnaire' class="bouton suppr" type="button">Supprimer</button>
+							<button id='saveQuestionnaire' class="bouton save" type="button">Enregistrer</button>
+							<button id='launchQuestionnaire' class="bouton launch" type="button">Lancer le questionnaire</button>
 						</div>
 					</div>
 				</div>
@@ -65,8 +61,7 @@
     // ======= HISTO SESSIONS =======
 
 	var k = 0;
-	for (var i in sessions)
-	{
+	for (var i in sessions) {
 		k++;
 		var date = new Date(sessions[i].DATE_SESSION);
 		var ligne = $('<tr id="session'+sessions[i].ID_SESSION+'"><td onclick="clickSessionHisto('+sessions[i].ID_SESSION+')">'+ k +'</td><td onclick="clickSessionHisto('+sessions[i].ID_SESSION+')">' + date.toString().substr(4, 17) + '</td><td class="supprimerReponse" onclick="delSession('+sessions[i].ID_SESSION+')">✖</td></tr>');
@@ -90,7 +85,7 @@
 	var etat_question;
 	for(var i in questions) {
 		etat_question =  "class='incomplet'>";
-		if (questions[i].ETAT_QUESTION==1) etat_question = "class='complet'>";
+		if (questions[i].ETAT_QUESTION == 1) etat_question = "class='complet'>";
 
 		var liString = "<li onclick='affQuestion("+ questions[i].ID_QUESTION +");' id='"+ questions[i].ID_QUESTION +"' "+ etat_question + " " + questions[i].NOM_QUESTION + "</li>";
 		$('#sortable').append(liString);
@@ -194,12 +189,12 @@
 		});
 	}
 
-	
+
     $(function() {
         $("#sortable").sortable();
         $("#sortable").disableSelection();
     });
-    
+
     $(function() {
         $("#sortable").sortable({
             start: function(event, ui) {
