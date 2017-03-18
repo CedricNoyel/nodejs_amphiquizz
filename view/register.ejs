@@ -57,8 +57,25 @@
         // If error on creating account
         var erreur = <%- JSON.stringify(erreur) %>;
         if (erreur){
-            notif("Le mot de passe ne correspond pas", "#E74C3C");
+            notif("Les mots de passe ne correspondent pas", "#E74C3C");
         }
+
+        $('#password1').on('blur', function(){
+            var password1 = $('#password1').val();
+            var password2 = $('#password2').val();
+            if (password1.length!=0 && password2.length!=0 && password1!=password2){
+                notif("Les mots de passe ne correspondent pas", "#E74C3C");
+            }
+        });
+
+        $('#password2').on('blur', function(){
+            var password1 = $('#password1').val();
+            var password2 = $('#password2').val();
+            if (password1.length!=0 && password2.length!=0 && password1!=password2){
+                notif("Les mots de passe ne correspondent pas", "#E74C3C");
+            }
+        });
+
     });
 
     socket.on('res_exist_login', function(loginExist){

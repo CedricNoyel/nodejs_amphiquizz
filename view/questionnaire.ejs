@@ -133,6 +133,7 @@
 		// alert("Vous allez etre redirigé vers l'historique sélectioné pour la session : " + idSession);
 		socket.emit('req_export_data', ID_QUESTIONNAIRE, idSession);
 		socket.on('res_export_data', function(data){
+			console.log(data)
 			var dataQuestions = new Array();
 			var dataEleve = new Array();
 			var datajsonexport = new Array();

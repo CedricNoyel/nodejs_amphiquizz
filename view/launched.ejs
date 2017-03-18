@@ -9,7 +9,6 @@
 	<body id="launched">
 		<div class="blocQuestion">
 			<button type="button" id="btnQuitterDiapo" class="bouton suppr">Quitter</button>
-			<div type="button" id="nbReponses" class="bouton">Aucune réponse</div>
 
 			<h2 id="numQuestion" class="numQuestion"></h2>
 			<h1 id="nomQuestion" class="question"></h1>
@@ -22,6 +21,7 @@
 				<button type="button" id="showAnswer" class="bouton">Réponse</button>
 				<button type="button" id="buttonStats" class="bouton" href="#stats">Afficher les stats</button>
 				<button type="button" id="previousQuestion" class="bouton"><</button>
+				<div type="button" id="nbReponses" class="bouton">Aucune réponse</div>
 			</div>
 
 			<div class="stats" name="stats">
@@ -81,38 +81,6 @@
 
 		var options = {
 			responsive: true,
-			events: false,
-		    tooltips: {
-		        enabled: false
-		    },
-		    hover: {
-		        animationDuration: 0
-		    },
-		    animation: {
-				duration: 500,
-	            easing: "easeOutQuart",
-	            onComplete: function () {
-	                var ctx = this.chart.ctx;
-	                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
-	                ctx.textAlign = 'center';
-	                ctx.textBaseline = 'bottom';
-
-	                this.data.datasets.forEach(function (dataset) {
-	                    for (var i = 0; i < dataset.data.length; i++) {
-	                        var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
-	                            scale_max = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._yScale.maxHeight;
-	                        ctx.fillStyle = '#444';
-	                        var y_pos = model.y - 5;
-	                        // Make sure data value does not get overflown and hidden
-	                        // when the bar's value is too close to max value of scale
-	                        // Note: The y value is reverse, it counts from top down
-	                        if ((scale_max - model.y) / scale_max >= 0.93)
-	                            y_pos = model.y + 20;
-	                        ctx.fillText(dataset.data[i], model.x, y_pos);
-	                    }
-	                });
-	            }
-		    },
 			scales: {
 		        yAxes: [{
 		            ticks: {
@@ -194,11 +162,9 @@
 				$('.listeReponses').show();
 				$('#buttonStats').text('Afficher les stats');
 				displayStat = false;
-				$('#showAnswer').show();
 			} else {
 				$('.stats').show();
 				$('#buttonStats').text('Masquer les stats');
-				$('#showAnswer').hide();
 				displayStat = true;
 				scrollToAnchor('stats');
 			}
@@ -232,7 +198,7 @@
 
 		function nextQuestion(){
 			$('#nbReponses').text('Aucune réponse');
-			$('#showAnswer').show();
+			$('#buttonStats').text('Afficher les stats');
 			$('.stats').hide();
 			if (numQuestion < nbQuestion){
 				numQuestion++;
@@ -244,7 +210,7 @@
 
 		function previousQuestion(){
 			$('#nbReponses').text('Aucune réponse');
-			$('#showAnswer').show();
+			$('#buttonStats').text('Afficher les stats');
 			$('.stats').hide();
 			if (numQuestion > 1){
 				numQuestion--;
@@ -276,13 +242,9 @@
     	else if (nbAnswer == 1) $('#nbReponses').text("1 réponse");
     	else $('#nbReponses').text(nbAnswer + " réponses");
 
-		// console.log(listeReponses);
-		// console.log(result);
-
 		myBarChart.data.labels = nbLabels(listeReponses);
 		myBarChart.data.datasets[0].data = updateChart(listeReponses, result);
 		myBarChart.update();
-;
 	});
 
 	</script>

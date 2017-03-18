@@ -76,6 +76,7 @@
 	});
 
 	$('#btnRetour').click(function(){
+		socket.emit('req_save_question', ID_QUESTION, $('#nomQuestion').val());
 		document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
 	});
 

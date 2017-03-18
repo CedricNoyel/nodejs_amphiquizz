@@ -65,9 +65,9 @@ $(document).ready(function() {
 	});
 
 	function afficheNbReponses(data){
-		if (data.length == 0) $('#nbEleve').text("Il n'y a pas d'élèves");
-		else if (data.length == 1) $('#nbEleve').text("Il y a 1 élève");
-		else $('#nbEleve').text("Il y a " + data.length + " élèves");
+		if (data.length == 0) $('#nbEleve').text("Aucun élève n'a répondu");
+		else if (data.length == 1) $('#nbEleve').text("1 élève a répondu");
+		else $('#nbEleve').text(data.length + " élèves ont répondu");
 	}
 
 	function ajouterEleve(data){
