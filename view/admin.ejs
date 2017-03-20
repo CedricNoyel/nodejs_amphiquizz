@@ -9,10 +9,12 @@
 	    	<%- include('./partials/header') -%>
 		</header>
 		<container>
-			<table>
-				<thead><tr><th>nom du questionnaire</th> <th>nombres <br>de questions</th><th>etat</th></tr></thead>
-				<tbody>	    <!--	QUESTIONNAIRES	-->	</tbody>
-		    </table>
+			<div class="listeQuestionnaire">
+				<table>
+					<thead><tr><th>nom du questionnaire</th> <th>nombre <br>de questions</th><th>état</th></tr></thead>
+					<tbody>	    <!--	QUESTIONNAIRES	-->	</tbody>
+			    </table>
+			</div>
 
 		    <div class="boutonContainer">
 		    	<button class="bouton" type="button" id='addQuestionnaire' >Nouveau questionnaire</button>
@@ -60,7 +62,7 @@
 		});
 
 		$('#FaireAppel').click(function(){
-				document.location.href=  "./appel";			
+				document.location.href=  "./appel";
 		});
 	});
 	</script>
