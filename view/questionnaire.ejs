@@ -14,8 +14,7 @@
 				<button type="button" onclick="document.location.href='../../admin'">Retour</button>
 			</div>
 			<div class="listeQuestions">
-				<ol id="sortable">
-				</ol>
+				<ol></ol>
 				<button class="bouton" type="button" id="addQuestion">Ajouter une question</button>
 			</div>
 			<div class="rightSide">
@@ -37,18 +36,12 @@
 				<div class="historiqueQuestionnaire">
                     <table>
 						<thead>
-							<tr>
-								<th colspan="3">Historique des questionnaires</th>
-							</tr>
+							<tr><th colspan="3">Historique des questionnaires</th></tr>
 						</thead>
-						<tbody id="listSession">
-						<!--
-						-->
-						</tbody>
+						<tbody id="listSession"></tbody>
 					</table>
                 </div>
 			</div>
-
 		</container>
 	</body>
 <script>
@@ -64,113 +57,101 @@
 	for (var i in sessions) {
 		k++;
 		var date = new Date(sessions[i].DATE_SESSION);
-		var ligne = $('<tr id="session'+sessions[i].ID_SESSION+'"><td onclick="clickSessionHisto('+sessions[i].ID_SESSION+')">'+ k +'</td><td onclick="clickSessionHisto('+sessions[i].ID_SESSION+')">' + date.toString().substr(4, 17) + '</td><td class="supprimerReponse" onclick="delSession('+sessions[i].ID_SESSION+')">✖</td></tr>');
+		var ligne = $('<tr id="session' + sessions[i].ID_SESSION + '"><td onclick="clickSessionHisto(' + sessions[i].ID_SESSION + ')">' + k + '</td><td onclick="clickSessionHisto(' + sessions[i].ID_SESSION + ')">' + date.toString().substr(4, 17) + '</td><td class="supprimerReponse" onclick="delSession(' + sessions[i].ID_SESSION + ')">✖</td></tr>');
 			$('#listSession').prepend(ligne);
 	}
-	// ======= FIN HISTO SESSIONS =======
-
 
 	// ======= QUESTIONS QUESTIONNAIRE =======
-
-
 	NOM_QUESTIONNAIRE = questionnaire[0].NOM_QUESTIONNAIRE;
     $('.titre').append(NOM_QUESTIONNAIRE);
 
 	$('#nom').val(NOM_QUESTIONNAIRE);
-	if(questionnaire[0].ETAT_QUESTIONNAIRE=='Invalide'){
+	if(questionnaire[0].ETAT_QUESTIONNAIRE == 'Invalide'){
 		$('#launchQuestionnaire').attr("disabled", true);
 		$('#statsQuestionnaire').attr("disabled", true);
 	}
 
 	var etat_question;
 	for(var i in questions) {
-		etat_question =  "class='incomplet'>";
+		etat_question = "class='incomplet'>";
 		if (questions[i].ETAT_QUESTION == 1) etat_question = "class='complet'>";
 
-		var liString = "<li onclick='affQuestion("+ questions[i].ID_QUESTION +");' id='"+ questions[i].ID_QUESTION +"' "+ etat_question + " " + questions[i].NOM_QUESTION + "</li>";
-		$('#sortable').append(liString);
+		var liString = "<li onclick='affQuestion(" + questions[i].ID_QUESTION + ");' id='" + questions[i].ID_QUESTION + "' " + etat_question + " " + questions[i].NOM_QUESTION + "</li>";
+		$('.listeQuestions ol').append(liString);
 	}
 
 	// ======= FIN QUESTIONS QUESTIONNAIRE =======
 
 	// Click ajouter question
-    $('#addQuestion').click(function(){
+    $('#addQuestion').click(function() {
     	socket.emit('req_add_question', ID_QUESTIONNAIRE);
-    	socket.on('res_add_question', function(id_question){
+    	socket.on('res_add_question', function(id_question) {
     		document.location.href='../../question/' + id_question;
     	});
 	});
 
     // Click sur supprimer le questionnaire
-    $('#delQuestionnaire').click(function(){
-		info("Voulez-vous vraiment supprimer le questionnaire ?", "yesCancel", function(res){
+    $('#delQuestionnaire').click(function() {
+		info("Voulez-vous vraiment supprimer le questionnaire ?", "yesCancel", function(res) {
 			if (res) {
 	    		socket.emit('req_del_questionnaire', ID_QUESTIONNAIRE);
 	    		document.location.href='../../admin';
-			} else { }
+			}
 		});
     });
 
     // Click sur sauvegarder le questionnaire
-	$('#saveQuestionnaire').click(function(){
-		if($('#nom').val()!=NOM_QUESTIONNAIRE)
+	$('#saveQuestionnaire').click(function() {
+		if($('#nom').val() != NOM_QUESTIONNAIRE)
 			socket.emit('req_save_questionnaire', ID_QUESTIONNAIRE, $('#nom').val());
 	});
 
 	// Click sur une question
-	function affQuestion(id_question){
-    	document.location.href='../../question/' + id_question;
+	function affQuestion(id_question) {
+    	document.location.href = '../../question/' + id_question;
 	};
 
-	$('#launchQuestionnaire').click(function(){
+	$('#launchQuestionnaire').click(function() {
 		socket.emit('req_launch_questionnaire', ID_QUESTIONNAIRE);
-		socket.on('res_launch_questionnaire', function(id_session){
-			document.location.href='../launched/' + id_session;
+		socket.on('res_launch_questionnaire', function(id_session) {
+			document.location.href = '../launched/' + id_session;
 		});
 	});
 
 	function clickSessionHisto(idSession){
 		// alert("Vous allez etre redirigé vers l'historique sélectioné pour la session : " + idSession);
 		socket.emit('req_export_data', ID_QUESTIONNAIRE, idSession);
-		socket.on('res_export_data', function(data){
-			console.log(data)
+		socket.on('res_export_data', function(data) {
 			var dataQuestions = new Array();
 			var dataEleve = new Array();
 			var datajsonexport = new Array();
-			for (var i in data)
-			{
-				if (dataQuestions.indexOf(data[i].Question)== -1)
+			for (var i in data) {
+				if (dataQuestions.indexOf(data[i].Question) == -1)
 					dataQuestions.push(data[i].Question);
 			}
-			for (var i in data)
-			{
-				if (dataEleve.indexOf(data[i].ID_ELEVE)== -1)
+			for (var i in data) {
+				if (dataEleve.indexOf(data[i].ID_ELEVE) == -1)
 					dataEleve.push(data[i].ID_ELEVE);
 			}
-			for(var i in dataEleve)
-			{
+			for(var i in dataEleve) {
 				var obje = new Object();
-				for(var j in dataQuestions)
-				{
-					obje[dataQuestions[j]]="";
+				for(var j in dataQuestions) {
+					obje[dataQuestions[j]] = "";
 				}
-				obje["Telephone"]="";
-				obje["name"]=""; // NOM ELEVE
-				obje["ID"]=dataEleve[i];
+				obje["Telephone"] = "";
+				obje["name"] = ""; // NOM ELEVE
+				obje["ID"] = dataEleve[i];
 				datajsonexport.push(obje);
 			}
 
-			for(i in datajsonexport)
-			{
-				for(j in data)
-				{
-					if(datajsonexport[i].ID==data[j].ID_ELEVE)
-					{
+			for(i in datajsonexport) {
+				for(j in data) {
+					if(datajsonexport[i].ID == data[j].ID_ELEVE) {
 						var Questions = data[j].Question;
 
 						datajsonexport[i][Questions] = data[j].Reponse;
 						datajsonexport[i]["Telephone"] = data[j].Numtel;
-						data[j].NOM_ELEVE==null?datajsonexport[i]["name"] = "":datajsonexport[i]["name"] = data[j].NOM_ELEVE; // NOM ELEVE
+						data[j].NOM_ELEVE == null ? datajsonexport[i]["name"] = "" : datajsonexport[i]["name"] = data[j].NOM_ELEVE; // NOM ELEVE
 					}
 				}
 			}
@@ -178,36 +159,17 @@
 		});
 	}
 
-	function delSession(idSession){
-		info("Voulez-vous vraiment supprimer l'historique sélectionné ?", "yesCancel", function(res){
-			if (res){
+	function delSession(idSession) {
+		info("Voulez-vous vraiment supprimer l'historique sélectionné ?", "yesCancel", function(res) {
+			if (res) {
 				socket.emit('req_del_session', idSession);
-				socket.on('res_del_session', function(res){
-					idSession = "#session"+idSession
+				socket.on('res_del_session', function(res) {
+					idSession = "#session" + idSession
 					$(idSession).remove();
 				});
 			}
 		});
 	}
-
-
-    $(function() {
-        $("#sortable").sortable();
-        $("#sortable").disableSelection();
-    });
-
-    $(function() {
-        $("#sortable").sortable({
-            start: function(event, ui) {
-                ui.item.bind("click.prevent",
-                    function(event) { event.preventDefault(); });
-            },
-            stop: function(event, ui) {
-                setTimeout(function(){ui.item.unbind("click.prevent");}, 300);
-            }
-            });
-        $("#sortable").disableSelection();
-    });
 
 </script>
 </html>

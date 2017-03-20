@@ -36,13 +36,8 @@
 				</div>
 				<div class="listeReponses">
 					<table>
-						<thead>
-							<tr>
-								<th>Réponses possibles</th><th>Bonne réponse</th><th></th>
-							</tr>
-						</thead>
+						<thead><tr><th>Réponses possibles</th><th>Bonne réponse</th><th></th></tr></thead>
 						<tbody>		<!-- REPONSES -->		</tbody>
-						<!-- <tbody id='sortable'></tbody> -->
 					</table>
 				</div>
 			</div>
@@ -61,8 +56,11 @@
 		loadAnswers();
 	});
 
+	$('#btnRetour').click(function() {
+		document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
+	});
 
-	$('#btnSupprimerQuestion').click(function(){
+	$('#btnSupprimerQuestion').click(function() {
 		info("Voulez-vous vraiment supprimer la question sélectionnée ainsi que toutes les réponses liées ?", "yesCancel", function(res){
 			if (res){
 				socket.emit('del_question', ID_QUESTION);
@@ -71,7 +69,7 @@
 		});
 	});
 
-	$('#btnSauvegarderQuestion').click(function(){
+	$('#btnSauvegarderQuestion').click(function() {
 		socket.emit('req_save_question', ID_QUESTION, $('#nomQuestion').val());
 	});
 
@@ -81,13 +79,13 @@
 	});
 
 	$('#btnAjouterReponse').click(function(){
+
 		var reponse = $('#nom').val();
 		$('#nom').val('');
-		if (reponse.length != 0)
-		{
+		if (reponse.length != 0) {
 			socket.emit('req_add_answer', reponse, ID_QUESTION);
     		socket.off('res_add_answer');
-			socket.on('res_add_answer', function(id_reponse){
+			socket.on('res_add_answer', function(id_reponse) {
 				var reponse_id = "answer" + id_reponse;
 				$('tbody').append("<tr id='" + reponse_id + "'><td>"+ reponse +"</td>" +
 															  "<td><div class='radio'><input onclick='radioClicked("+ id_reponse +")' type='radio' name='bonneReponse' /><label class='radio-label'></label></div></td>" +
@@ -96,7 +94,7 @@
 		}
 	});
 
-	function loadAnswers(){
+	function loadAnswers() {
 		var question = <%- JSON.stringify(question) %>;
 		var reponses = <%- JSON.stringify(reponses) %>;
 
@@ -104,8 +102,7 @@
 		ID_QUESTIONNAIRE = question[0].ID_QUESTIONNAIRE;
 		$('#nomQuestion').val(question[0].NOM_QUESTION);
 
-		for (var i in reponses)
-		{
+		for (var i in reponses) {
 			var row = $('<tr id=answer'+ reponses[i].ID_REPONSE +'>');
 			var column1 = $('<td>'), column2 = $('<td>');
 			column1.append(reponses[i].NOM_REPONSE);
@@ -120,14 +117,14 @@
 		}
 	}
 
-	function delAnswer(id_answer){
+	function delAnswer(id_answer) {
 		info("Voulez-vous vraiment supprimer la réponse sélectionnée ?", "yesCancel", function(res){
 			socket.emit('del_answer', id_answer);
 			$("#answer"+ id_answer).remove();
 		});
 	}
 
-	function radioClicked(id_bonne_reponse){
+	function radioClicked(id_bonne_reponse) {
 		socket.emit('edit_answer', id_bonne_reponse, ID_QUESTION, ID_QUESTIONNAIRE);
 	}
 

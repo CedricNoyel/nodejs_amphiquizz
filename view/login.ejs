@@ -5,8 +5,9 @@
     </head>
 
     <body id="login">
-		<div class="register">
-			<button onclick="location.href='/register';">Créer un compte</button>
+		<div class="buttonContainer">
+			<button onclick="location.href='/register';" class="bouton register">Créer un compte</button>
+			<button class="bouton suppr shutdown">Éteindre le système</button>
 		</div>
 
         <img src="img/logoAQ.png" alt="Logo" class="logo">
@@ -24,11 +25,10 @@
                 <span class="bar"></span>
                 <label>Mot de passe</label>
             </div>
-            
+
             <div class="connexion">
                 <input type="submit" value="Connexion" />
             </div>
-
         </form>
     </body>
 </html>
@@ -39,17 +39,22 @@
 
         // If login or password wrong
         var erreur = <%- JSON.stringify(erreur) %>;
-        if (erreur){
+        if (erreur)
             notif("Login ou mot de passe incorrects", "#E74C3C");
-        }
 
     });
-    
+
     socket.on('res_exist_login', function(loginExist){
         if (loginExist === false)
             notif("Cet identifiant n'éxiste pas", "#E74C3C");
     });
 
-    // socket.emit('req_sys_shutdown');
+	$('.shutdown').click(function() {
+		info("Voulez-vous vraiment éteindre le système ?", "yesCancel", function(res) {
+			if (res) {
+				socket.emit('req_sys_shutdown');
+			}
+		});
+	});
 
 </script>

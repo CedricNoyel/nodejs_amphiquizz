@@ -10,7 +10,7 @@
 		</header>
 		<container>
 			<div class="btnRetour">
-				<button type="button" id="backButton">Retour</button>
+				<button type="button" id="btnRetour">Retour</button>
 			</div>
 			<div class="nomQuestion">
 				<div class="group">
@@ -23,47 +23,55 @@
 			</div>
 
 			<div class="reponses">
-				<div class="ajouterReponses">
-					<div class="group">
-						<input class="textField" name="nom" type="text" id="rep_A" value="" required>
-						<span class="highlight"></span>
-						<span class="bar"></span>
-						<label>Réponse A</label>
+				<div class="ajouterReponse">
+					<div class="choixReponse">
+						<div class='radio'>
+							<input type='radio' name='radioAnswer' value="A" checked/>
+							<label class='radio-label'></label>
+						</div>
+						<div class='radio'>
+							<input type='radio' name='radioAnswer' value="B"/>
+							<label class='radio-label'></label>
+						</div>
 					</div>
+					<div class="nomReponse">
+						<div class="group">
+							<input class="textField" name="nom" type="text" id="repA" value="" required>
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label>Réponse A</label>
+						</div>
 
-					<div class="group">
-						<input class="textField" name="nom" type="text" id="rep_B" value="" required>
-						<span class="highlight"></span>
-						<span class="bar"></span>
-						<label>Réponse B</label>
+						<div class="group">
+							<input class="textField" name="nom" type="text" id="repB" value="" required>
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label>Réponse B</label>
+						</div>
+
+						<button class="bouton" id="btnOuiNon" type="button">Oui / Non</button>
+						<button id='saveQuestion' class="bouton save" type="button">Enregistrer</button>
 					</div>
-					<div>
-						<p>Bonne réponse :</p>
-						<input type="radio" name="radioAnswer" value="A"> A<br>
-  						<input type="radio" name="radioAnswer" value="B"> B<br>
-					</div>
-					<button class="bouton" id="oui_non" type="button">Oui / Non</button>
-					<button id='saveQuestion' class="bouton save" type="button">Enregistrer</button>
 				</div>
 			</div>
 		</container>
 
 	<script>
 
-$(document).ready(function(){ 
+$(document).ready(function(){
 	var ID_QUESTION = <%- JSON.stringify(idQuestion) -%>;
 	var ID_QUESTIONNAIRE = <%- JSON.stringify(idQuestionnaire) -%>;
 
-	$('#oui_non').click(function(){
-		$("#rep_A").val("Oui");
-		$("#rep_B").val("Non");
+	$('#btnOuiNon').click(function(){
+		$("#repA").val("Oui");
+		$("#repB").val("Non");
 	});
 
 	$('#saveQuestion').click(function(){
 		saveQuestion();
 	});
 
-	$('#backButton').click(function(){
+	$('#btnRetour').click(function(){
 		saveQuestion();
 		document.location.href='../../admin';
 	});
@@ -77,23 +85,22 @@ $(document).ready(function(){
 		}
 	});
 
-	function saveQuestion(){
-		if ( $('#question').val() ){
-			if ( $('#rep_A').val() ){
-				if ( $('#rep_B').val() ){
-					if ( $("input[name='radioAnswer']:checked").val() )
-					{
+	function saveQuestion() {
+		if ( $('#question').val() ) {
+			if ( $('#repA').val() ) {
+				if ( $('#repB').val() ) {
+					if ( $("input[name='radioAnswer']:checked").val() ) {
 						var questionName = $('#question').val();
-						var answer_A = $('#rep_A').val();
-						var answer_B = $('#rep_B').val();
+						var answer_A = $('#repA').val();
+						var answer_B = $('#repB').val();
 						var goodAnswer = $("input[name='radioAnswer']:checked").val(); // A or B
 
 						socket.emit('req_addQuestionRapide', ID_QUESTION, questionName, answer_A, answer_B, goodAnswer);
 						socket.on('req_addQuestionRapide', function(){ });
 						notif("La question a été enregistrée", "#2ECC71");
+
 						return true;
-					}
-					else notif("Veuillez choisir une bonne réponse", "#E74C3C");
+					} else notif("Veuillez choisir une bonne réponse", "#E74C3C");
 				} else notif("Veuillez indiquer le champ \"Réponse B\"", "#E74C3C");
 			} else notif("Veuillez indiquer le champ \"Réponse A\"", "#E74C3C");
 		} else notif("Veuillez indiquer le champ \"Question\"", "#E74C3C");
