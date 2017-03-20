@@ -9,7 +9,6 @@
 	<body id="launched">
 		<div class="blocQuestion">
 			<button type="button" id="btnQuitterDiapo" class="bouton suppr">Quitter</button>
-			<div type="button" id="nbReponses" class="bouton">Aucune réponse</div>
 
 			<h2 id="numQuestion" class="numQuestion"></h2>
 			<h1 id="nomQuestion" class="question"></h1>
@@ -22,6 +21,7 @@
 				<button type="button" id="showAnswer" class="bouton">Réponse</button>
 				<button type="button" id="buttonStats" class="bouton" href="#stats">Afficher les stats</button>
 				<button type="button" id="previousQuestion" class="bouton"><</button>
+				<div type="button" id="nbReponses" class="bouton">Aucune réponse</div>
 			</div>
 
 			<div class="stats" name="stats">
@@ -162,11 +162,9 @@
 				$('.listeReponses').show();
 				$('#buttonStats').text('Afficher les stats');
 				displayStat = false;
-				$('#showAnswer').show();
 			} else {
 				$('.stats').show();
 				$('#buttonStats').text('Masquer les stats');
-				$('#showAnswer').hide();
 				displayStat = true;
 				scrollToAnchor('stats');
 			}
@@ -200,7 +198,7 @@
 
 		function nextQuestion(){
 			$('#nbReponses').text('Aucune réponse');
-			$('#showAnswer').show();
+			$('#buttonStats').text('Afficher les stats');
 			$('.stats').hide();
 			if (numQuestion < nbQuestion){
 				numQuestion++;
@@ -212,7 +210,7 @@
 
 		function previousQuestion(){
 			$('#nbReponses').text('Aucune réponse');
-			$('#showAnswer').show();
+			$('#buttonStats').text('Afficher les stats');
 			$('.stats').hide();
 			if (numQuestion > 1){
 				numQuestion--;
@@ -244,13 +242,9 @@
     	else if (nbAnswer == 1) $('#nbReponses').text("1 réponse");
     	else $('#nbReponses').text(nbAnswer + " réponses");
 
-		// console.log(listeReponses);
-		// console.log(result);
-
 		myBarChart.data.labels = nbLabels(listeReponses);
 		myBarChart.data.datasets[0].data = updateChart(listeReponses, result);
 		myBarChart.update();
-;
 	});
 
 	</script>

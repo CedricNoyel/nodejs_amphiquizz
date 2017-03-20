@@ -13,6 +13,7 @@
 			<div class="btnRetour">
 				<button type="button" id="btnRetour" >Retour</button>
 			</div>
+			<button type="button" class="bouton" id="export" disabled>Exporter</button>
 
 			<button type="button" class="bouton" id="startCall">Démarrer l'appel</button>
 			<button type="button" class="bouton suppr" id="stopCall" style="display:none;">Arrêter l'appel</button>
@@ -28,6 +29,8 @@
 	<script>
 
 $(document).ready(function() {
+	var listeNom;
+
 	$('#btnRetour').click(function(){
 		socket.emit('req_stop_call');
 		socket.on('res_stop_call', function(data){
@@ -36,6 +39,7 @@ $(document).ready(function() {
 	});
 
 	$('#startCall').click(function(){
+		$('#export').attr("disabled", true);
 		var currentdate = new Date();
 		var date = currentdate.getFullYear() + "-"
             + (currentdate.getMonth() + 1)  + "-"
@@ -56,18 +60,20 @@ $(document).ready(function() {
 		socket.on('res_stop_call', function(data){
 			$('#startCall').show();
 			$('#stopCall').hide();
+			$('#export').attr("disabled", false);
 		});
 	});
 
 	socket.on('req_add_name', function(data){
+		listeNom = data;
 		afficheNbReponses(data);
 		ajouterEleve(data);
 	});
 
 	function afficheNbReponses(data){
-		if (data.length == 0) $('#nbEleve').text("Il n'y a pas d'élèves");
-		else if (data.length == 1) $('#nbEleve').text("Il y a 1 élève");
-		else $('#nbEleve').text("Il y a " + data.length + " élèves");
+		if (data.length == 0) $('#nbEleve').text("Aucun élève n'a répondu");
+		else if (data.length == 1) $('#nbEleve').text("1 élève a répondu");
+		else $('#nbEleve').text(data.length + " élèves ont répondu");
 	}
 
 	function ajouterEleve(data){
@@ -76,6 +82,10 @@ $(document).ready(function() {
 			$('.listeEleves ul').append("<li>" + data[a].VALEUR_SMS + "</li>");
 		}
 	}
+
+	$('#export').on('click', function(){
+		console.log(JSONToCSVConvertor(JSON.stringify(listeNom),"Appel_ExportAmphiquizz",true)); // Lance le téléchargement
+	});
 });
 	</script>
 </html>

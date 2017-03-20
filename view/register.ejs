@@ -55,14 +55,48 @@
     $(document).ready(function(){
 
         // If error on creating account
-        var erreur = <%- JSON.stringify(erreur) %>;
-        if (erreur){
-            notif("Le mot de passe ne correspond pas", "#E74C3C");
+        var data = <%- JSON.stringify(data) %>;
+        if (data){
+            console.log(data[1]);
+            if (data[0]==1)
+                notif("L'identifiant est déjà utilisé", "#E74C3C");
+            else if (data[0]==2)
+                notif("Le mot de passe est trop court", "#E74C3C");
+            else if (data[0]==3)
+                notif("L'identifiant est trop court", "#E74C3C");
+            else if (data[0]==4)
+                notif("Le prénom est trop court", "#E74C3C");
+            else if (data[0]==5)
+                notif("Le prénom est trop court", "#E74C3C");
+
         }
+
+        $('#password1').on('blur', function(){
+            var password1 = $('#password1').val();
+            var password2 = $('#password2').val();
+            if (password1.length < 6)
+                notif("Le mot de passe est trop court", "#E74C3C")
+            if (password1.length!=0 && password2.length!=0 && password1!=password2){
+                notif("Les mots de passe ne correspondent pas", "#E74C3C");
+            }
+        });
+
+        $('#password2').on('blur', function(){
+            var password1 = $('#password1').val();
+            var password2 = $('#password2').val();
+            if (password2.length < 6)
+                notif("Le mot de passe est trop court", "#E74C3C")
+            if (password1.length!=0 && password2.length!=0 && password1!=password2){
+                notif("Les mots de passe ne correspondent pas", "#E74C3C");
+            }
+        });
+
     });
 
     socket.on('res_exist_login', function(loginExist){
-        if (loginExist === true)
+        if (loginExist === true){
             notif("Cet identifiant existe déjà", "#E74C3C");
+            
+        }
     });
 </script>

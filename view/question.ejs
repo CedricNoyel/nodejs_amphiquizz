@@ -73,7 +73,13 @@
 		socket.emit('req_save_question', ID_QUESTION, $('#nomQuestion').val());
 	});
 
-	$('#btnAjouterReponse').click(function() {
+	$('#btnRetour').click(function(){
+		socket.emit('req_save_question', ID_QUESTION, $('#nomQuestion').val());
+		document.location.href = '../questionnaire/' + ID_QUESTIONNAIRE;
+	});
+
+	$('#btnAjouterReponse').click(function(){
+
 		var reponse = $('#nom').val();
 		$('#nom').val('');
 		if (reponse.length != 0) {
