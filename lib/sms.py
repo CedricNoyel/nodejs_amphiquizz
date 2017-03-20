@@ -19,7 +19,6 @@ def rm_accents(s):
 def handleSms(sms):
     print(u'{0}\t{1}\t{2}\n'.format(sms.number, sms.time, rm_accents(sms.text)))
     sys.stdout.flush()
-    
 
 def main():
     # time.sleep(5)
