@@ -52,7 +52,7 @@
 	$('.shutdown').click(function() {
 		info("Voulez-vous vraiment éteindre le système ?", "yesCancel", function(res) {
 			if (res) {
-				//socket.emit('req_sys_shutdown');
+				socket.emit('req_sys_shutdown');
 				notif("Arrêt du système...","#E74C3C");
 			}
 		});
