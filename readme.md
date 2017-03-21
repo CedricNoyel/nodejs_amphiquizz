@@ -1,15 +1,16 @@
 
 Le développement suit un modèle MVC
 
-# Require
+# Dependances
+
 Git du projet: https://github.com/cedricouf/nodejs_amphiquizz
-python
-nodejs
-gsmmodem
-pm2 (module node)
-mysql server
-mysql client
-npm : sudo apt-get install npm
+		
+	sudo apt-get install python	
+	sudo apt-get install nodejs
+	sudo apt-get install npm
+	pip install python-gsmmodem
+	mysql server 5.5
+	mysql client
 
 # Config GSMMODEM:
 On execute la commande a chaque lancement de l'application dans le code : 
