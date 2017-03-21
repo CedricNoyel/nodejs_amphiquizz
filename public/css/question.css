@@ -118,18 +118,18 @@
 
 /* RADIO BUTTONS */
 
-.radio input[type="radio"] {
+#question .radio input[type="radio"] {
 	margin-left: 85px;
 	height: 50px;
 	opacity: 0;
 	cursor: pointer;
 }
 
-.radio input[type="radio"] + .radio-label {
+#question .radio input[type="radio"] + .radio-label {
 	position: relative;
 }
 
-.radio input[type="radio"] + .radio-label:before {
+#question .radio input[type="radio"] + .radio-label:before {
 	content: '';
 	background: #F4F4F4;
 	border: 1px solid #b4b4b4;
@@ -142,21 +142,21 @@
 	transition: all 250ms ease;
 }
 
-.radio input[type="radio"]:checked + .radio-label:before {
+#question .radio input[type="radio"]:checked + .radio-label:before {
 	background-color: #2ECC71;
 	box-shadow: inset 0 0 0 4px #f4f4f4;
 }
 
-.radio input[type="radio"]:focus + .radio-label:before {
+#question .radio input[type="radio"]:focus + .radio-label:before {
 	border-color: #2ECC71;
 }
 
-.radio input[type="radio"]:disabled + .radio-label:before {
+#question .radio input[type="radio"]:disabled + .radio-label:before {
 	box-shadow: inset 0 0 0 4px #F4F4F4;
 	border-color: #b4b4b4;
 	background: #b4b4b4;
 }
 
-.radio input[type="radio"] + .radio-label:empty:before {
+#question .radio input[type="radio"] + .radio-label:empty:before {
 	margin-right: 0;
 }
