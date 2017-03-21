@@ -56,7 +56,6 @@ function info(text, button="yesCancel", callback) {
 					.text('Oui')
 					.click(function(event) {
 						$('.info').fadeOut('fast');
-						notif("Question supprimée !", "#E54D42");
 						callback(true);
 					});
 
