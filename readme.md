@@ -12,7 +12,9 @@ mysql client
 npm : sudo apt-get install npm
 
 # Config GSMMODEM:
-On execute la commande a chaque lancement de l'application dans le code : usb_modeswitch -b2 -W -v 12d1 -p 1446 -n --message-content 555342437f0000000002000080000a11062000000000000100000000000000
+On execute la commande a chaque lancement de l'application dans le code : 
+
+	usb_modeswitch -b2 -W -v 12d1 -p 1446 -n --message-content 555342437f0000000002000080000a11062000000000000100000000000000
 Permet d'enlever le dongle du "Storage mode". "1446" correspond à l'ID du module SMS, celui-ci doit ensuite changer pour devenir généralement 14ac ou 1506 pour que le dongle marche correctement.
 
 Dans /etc/usb_modeswitch.conf:
@@ -29,8 +31,12 @@ Dans /etc/usb_modeswitch.conf:
 	MessageContent="55534243123456780000000000000a11062000000000000100000000000000"
 
 # Launch app
-simple: node app.js
-Sur server raspberry: pm2 start app.js  (Moteur de )
+simple: 
+	
+	node app.js
+Sur server raspberry: 
+	
+	pm2 start app.js  (Moteur de )
 
 
 # Config db
