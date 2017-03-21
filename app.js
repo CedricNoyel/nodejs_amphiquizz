@@ -1,17 +1,16 @@
 // app.js
 
 // ======== GLOBAL VAR ========
-global.NUM_SMS = "0769110568"; // Numéro de la carte SIM du module
 global.FAKE_SMS = false; // Simulation de reception de SMS
-global.SMS_MODULE =  true; // Désactiver pour test sans le module
+global.SMS_MODULE =  true; // Si true, le module doit être branché
 global.DISPLAY_SMS = true; // Afficher dans la console les SMS reçus
+global.PORT = 8080; // Port d'écoute
+global.DEBUG = false; // Pleins de trucs dans la console
 
 
-global.DEBUG = false; // Affichage dans la console
-global.session = false; // false => no session running
-global.currentQuestion = false;
-global.appelEnCours = false;
-global.PORT = 8080;
+global.session = false; // INITIALISATION NE PAS MODIFIER
+global.currentQuestion = false; // INITIALISATION NE PAS MODIFIER
+global.appelEnCours = false; // INITIALISATION NE PAS MODIFIER
 
 // ======== IMPORT MODULE ========
 var express = require('express');
