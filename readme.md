@@ -53,6 +53,9 @@ Les routes sont configurées dans ./lib/router.js
 
 # Sockets: Communication vue / server
 Tous les événements relatifs aux sockets sont gérés dans le fichier ./lib/socket.js
+La connexion socket des vues se trouve dans ./view/partials/head.ejs
+	
+	var socket = io.connect('http://localhost:8080');
 
 # Les vues
 Les vues sont dans ./view et sont gérées avec le moteur de template EJS. le dossier ./view/partials correspond aux includes effectuées dan les autres fichiers de vues
