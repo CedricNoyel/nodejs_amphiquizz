@@ -60,24 +60,25 @@ La connexion socket des vues se trouve dans ./view/partials/head.ejs
 # Les vues
 Les vues sont dans ./view et sont gérées avec le moteur de template EJS. le dossier ./view/partials correspond aux includes effectuées dan les autres fichiers de vues
 
-admin.ejs -> Page après s'être connécté (affichage de la liste des questionnares)
-appel.ejs -> Page pour faire l'appel
-questionnaire.ejs -> Listes des questions du questionnaire
-questions.ejs -> Listes des réponses pour chaque question
-launched.ejs -> Page affiché au clic sur "Lancer le questionnaire" (Affichage du "diapo")
-register.ejs -> Création de compte
+	admin.ejs -> Page après s'être connécté (affichage de la liste des questionnares)
+	appel.ejs -> Page pour faire l'appel
+	questionnaire.ejs -> Listes des questions du questionnaire
+	questions.ejs -> Listes des réponses pour chaque question
+	launched.ejs -> Page affiché au clic sur "Lancer le questionnaire" (Affichage du "diapo")
+	register.ejs -> Création de compte
 
 # Réception des sms
 Configuration et reception dans ./lib/sms.py puis transfert à sms.js
 
 # Variables globales
-FAKE_SMS = false; 		  -> true si vous voulez simuler une reception de SMS
-SMS_MODULE =  true; 	  	  -> true: quand on test avec module(redemarrage auto si le module n'est pas trouvé) - - - false: quant on test sans module
-DISPLAY_SMS = true;       	  -> afficher les sms dans la console
-PORT = 8080; 			  -> port d'écoute de l'application
-DEBUG = false; 			  -> affichage d'éléments dans la console
+	FAKE_SMS = false; 		  -> true si vous voulez simuler une reception de SMS
+	SMS_MODULE =  true; 	  	  -> true: quand on test avec module(redemarrage auto si le module n'est pas trouvé) - - - false: quant on test sans module
+	DISPLAY_SMS = true;       	  -> afficher les sms dans la console
+	PORT = 8080; 			  -> port d'écoute de l'application
+	DEBUG = false; 			  -> affichage d'éléments dans la console
 
 // Ne pas modifier les variables suivantes
-session = false;          -> prend l'id du questionnaire en cours (lorsqu'il y en a un)
-currentQuestion = false;  -> prend l'id question lorsque le questionnaire est lancé
-appelEnCours = false;	  -> passe a true lorsqu'un apel est lancé
+
+	session = false;          -> prend l'id du questionnaire en cours (lorsqu'il y en a un)
+	currentQuestion = false;  -> prend l'id question lorsque le questionnaire est lancé
+	appelEnCours = false;	  -> passe a true lorsqu'un apel est lancé
